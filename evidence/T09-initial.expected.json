@@ -1,0 +1,224 @@
+{
+  "attempts": [
+    {
+      "coverage_status": "UNKNOWN",
+      "evidence_refs": [
+        "SYN_EVIDENCE_SYN_SOURCE_A_1"
+      ],
+      "expected_members": null,
+      "failure_facts": [],
+      "identity_status": "UNKNOWN",
+      "key": [
+        "SYN_JOB",
+        "SYN_RUN",
+        "SYN_ATTEMPT_0"
+      ],
+      "known_members": 2,
+      "lifecycle": "UNKNOWN",
+      "terminal_evidence_ref": null,
+      "terminated_members": 0
+    }
+  ],
+  "counts": {
+    "accepted": 2,
+    "arrivals": 3,
+    "duplicates": 0,
+    "invalid": 1
+  },
+  "diagnostics": [
+    {
+      "arrival_index": 2,
+      "code": "CONFLICT"
+    }
+  ],
+  "events": [
+    {
+      "arrival_index": 1,
+      "source_key": [
+        "SYN_SOURCE_A",
+        "SYN_EPOCH_0",
+        0
+      ],
+      "type": "CONFLICT_EVENT",
+      "variant_hashes": [
+        "cb2784d974100d95efdbedf35cb6c896d8eeae002d67b01d01cdc04eb6de088a",
+        "e67934ee09a5ba1020f7d977b978693407df416ccd76f7771ff856b28259ceaf"
+      ]
+    },
+    {
+      "arrival_index": 3,
+      "record": {
+        "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "event_id": "evt_abdf18c377c464ae642cdfad3b40422d00332895d2cf74426e670895c10ce8a1",
+        "event_type": "SNAPSHOT",
+        "evidence_ref": "SYN_EVIDENCE_SYN_SOURCE_A_1",
+        "identity": {
+          "attempt_id": "SYN_ATTEMPT_0",
+          "boot_id": "SYN_BOOT_A",
+          "gpu_uuids": [
+            "SYN_GPU_A"
+          ],
+          "host_id": "SYN_HOST_A",
+          "job_id": "SYN_JOB",
+          "local_rank": 0,
+          "pid": 101,
+          "pid_namespace_id": "SYN_NS_A",
+          "process_start_ticks": 10,
+          "rank": 0,
+          "run_id": "SYN_RUN",
+          "scope": "worker",
+          "start_ticks_hz": 100,
+          "world_size": 1
+        },
+        "origin": "SYNTHETIC",
+        "payload": {
+          "device_samples": [],
+          "process_presence": "OBSERVED",
+          "progress": null
+        },
+        "schema_version": "0.1",
+        "source_cursor": "SYN_CURSOR_1",
+        "source_epoch": "SYN_EPOCH_0",
+        "source_id": "SYN_SOURCE_A",
+        "source_seq": 1,
+        "time": {
+          "event_clock_domain_id": "SYN_CLOCK_B",
+          "event_monotonic_ns": 0,
+          "event_time_utc": "2026-10-15T00:00:00Z",
+          "observed_clock_domain_id": "SYN_CLOCK_A",
+          "observed_monotonic_ns": 3000000,
+          "observed_time_utc": "2026-10-15T00:00:00Z",
+          "uncertainty_ms": 0
+        },
+        "unknown_reasons": {
+          "payload.progress": "not_supplied"
+        }
+      },
+      "type": "NORMALIZED_EVENT"
+    }
+  ],
+  "exits": [],
+  "input_integrity": "UNKNOWN",
+  "processes": [
+    {
+      "coverage_status": "UNKNOWN",
+      "device_samples": [],
+      "evidence_refs": [],
+      "identity": {
+        "attempt_id": "SYN_ATTEMPT_0",
+        "boot_id": "SYN_BOOT_A",
+        "gpu_uuids": [
+          "SYN_GPU_A"
+        ],
+        "host_id": "SYN_HOST_A",
+        "job_id": "SYN_JOB",
+        "local_rank": 0,
+        "pid": 100,
+        "pid_namespace_id": "SYN_NS_A",
+        "process_start_ticks": 10,
+        "rank": 0,
+        "run_id": "SYN_RUN",
+        "scope": "worker",
+        "start_ticks_hz": 100,
+        "world_size": 1
+      },
+      "identity_status": "UNKNOWN",
+      "key": [
+        "SYN_JOB",
+        "SYN_RUN",
+        "SYN_ATTEMPT_0",
+        "worker",
+        "SYN_HOST_A",
+        "SYN_BOOT_A",
+        "SYN_NS_A",
+        100,
+        10
+      ],
+      "last_observed_age_ms": null,
+      "lifecycle": "UNKNOWN",
+      "process_presence": "UNKNOWN",
+      "progress": null,
+      "terminal_evidence_refs": []
+    },
+    {
+      "coverage_status": "UNKNOWN",
+      "device_samples": [],
+      "evidence_refs": [
+        "SYN_EVIDENCE_SYN_SOURCE_A_1"
+      ],
+      "identity": {
+        "attempt_id": "SYN_ATTEMPT_0",
+        "boot_id": "SYN_BOOT_A",
+        "gpu_uuids": [
+          "SYN_GPU_A"
+        ],
+        "host_id": "SYN_HOST_A",
+        "job_id": "SYN_JOB",
+        "local_rank": 0,
+        "pid": 101,
+        "pid_namespace_id": "SYN_NS_A",
+        "process_start_ticks": 10,
+        "rank": 0,
+        "run_id": "SYN_RUN",
+        "scope": "worker",
+        "start_ticks_hz": 100,
+        "world_size": 1
+      },
+      "identity_status": "COMPLETE",
+      "key": [
+        "SYN_JOB",
+        "SYN_RUN",
+        "SYN_ATTEMPT_0",
+        "worker",
+        "SYN_HOST_A",
+        "SYN_BOOT_A",
+        "SYN_NS_A",
+        101,
+        10
+      ],
+      "last_observed_age_ms": null,
+      "lifecycle": "UNKNOWN",
+      "process_presence": "UNKNOWN",
+      "progress": null,
+      "terminal_evidence_refs": []
+    }
+  ],
+  "runs": [
+    {
+      "coverage_status": "UNKNOWN",
+      "evidence_refs": [
+        "SYN_EVIDENCE_SYN_SOURCE_A_1"
+      ],
+      "expected_members": null,
+      "failure_facts": [],
+      "final_attempt_id": null,
+      "identity_status": "UNKNOWN",
+      "key": [
+        "SYN_JOB",
+        "SYN_RUN"
+      ],
+      "known_members": 2,
+      "lifecycle": "UNKNOWN",
+      "terminal_evidence_ref": null,
+      "terminated_members": 0
+    }
+  ],
+  "schema_version": "0.1",
+  "sources": [
+    {
+      "coverage_status": "UNKNOWN",
+      "history": [
+        "CONFLICT"
+      ],
+      "last_record_age_ms": 0.0,
+      "last_successful_read_monotonic_ns": 0,
+      "producer_liveness": "UNKNOWN",
+      "read_status": "OK",
+      "sequence_gap": false,
+      "source_epoch": "SYN_EPOCH_0",
+      "source_id": "SYN_SOURCE_A",
+      "source_mode": "EVENT_DRIVEN",
+      "status": "CONFLICT"
+    }
+  ]
+}

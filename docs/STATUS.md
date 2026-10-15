@@ -1,3 +1,24 @@
+# PR #12 R1 最小修正（2026-10-15，Asia/Shanghai）
+
+- 用户明确要求直接执行 [审核评论6190850559](https://github.com/Zwhao0/20261015/pull/12#issuecomment-6190850559)；被审HEAD `4624b7dc1f45e0ed1cfafd313966289840cd4bed`，tree `62f22a5442949e57380a6d4cbe895af2d3418eba`；main仍 `801fd156c2d39f696efa38811b0c0b433209b2d3`。在原分支/原Draft PR追加，不合并、不强推、不进入M1-C2。
+- 修复：complete成员清单仅接受attempt作用域且成员为worker；聚合器收取manifests时再次核对identity/payload两处attempt scope。其余进程退出和最终Attempt证明规则不变。
+- 实际反例：修复前新增8项回归在原代码上FAIL/exit1（18个子断言失败），包括伪完整清单+全员0+FINAL_ATTEMPT被误判COMPLETED。修复后8项及全部52项PASS/exit0，0失败/0错误/0跳过；保留局部IDENTITY和合法Attempt清单正例，并单独验证绕过输入校验后聚合器仍拒绝局部清单。
+- [本轮原始失败/恢复/内容哈希证据](../evidence/README.md)已保存；原44项测试、T01～T14全部golden/哈希清单、M0原文及既有失败文件逐字不变。文档检查与功能结果分开；新HEAD/tree/双job新CI发布后以PR #12描述和Issue #11为准，旧44项CI不替代本次52项。
+- 独立审核已发现R1，核心语义验收仍待修复提交复审；本节的PASS仅指实际测试，不能宣布M1-C1最终验收通过。无业务代码修改、低开销、MoE及DP/PP/TP/EP适配是已登记的后续要求，本次未实现或验证现场能力，不扩展schema或改冻结M0文档。本轮未委派子智能体。
+- 恢复：先读上述审核及PR #12最新head/diff/Checks，再读本节和M1_C1_OFFLINE；保留原44项历史证据，按README命令运行52项全套和独立文档检查，等待ChatGPT复审。
+
+# M1-C1 当前执行状态（2026-10-15，Asia/Shanghai）
+
+- 用户已在本Codex会话明确授权“启动 M1-C1 离线开发”。[Issue #11](https://github.com/Zwhao0/20261015/issues/11)；PR #10已合并，开发起点 main `801fd156c2d39f696efa38811b0c0b433209b2d3`、tree `1f0136752f63cc2b9bca5a2ce0e2c2bac11394e3`，分支 `codex/m1-c1-offline-replay`。
+- 仅标准库/合成数据/虚拟时间的schema 0.1离线契约、回放、三层聚合及T01～T14；不访问旧项目、H800、凭据或训练数据，不使用历史C1容器，无GPU/服务器/训练/环境或容器操作。不合并，不推进M1-C2。
+- [Draft PR #12](https://github.com/Zwhao0/20261015/pull/12) 已发布，保持Open/Draft/未合并；实现提交 `2386bf43fc54189c40513612b9c9079592b31a1b`、tree `4ed01955e92018e9de9988a2cf6057552aedbddd`。首轮 [CI run38724950172](https://github.com/Zwhao0/20261015/actions/runs/38724950172) 的unit44项与docs检查分别PASS，已读取原始日志；该结论仅对应此实现head。证据跟进提交的最终head/tree/新CI见PR，不套用旧head CI。
+- 实现及44项功能测试已集成；本地标准库unittest PASS（44项、0失败、0跳过），文档与差异检查分开保存于 [M1-C1证据](../evidence/README.md)，最终HEAD/tree/对应CI以Issue #11关联Draft PR为准；独立验收待ChatGPT检查，不自行宣布阶段通过。
+- 保留失败：子任务fixtures施工缺失14项错误、初版schema_version遗漏；首次集成T09序号冲突1失败及原fixture；首次文档检查两个证据文件尚未落盘导致exit1。恢复未放宽断言或文档检查，详情见 [使用及限制](M1_C1_OFFLINE.md)。
+- 发布失败及恢复：普通fetch未包含新分支，merge报not something we can merge（exit1）；显式fetch后ff-only同步成功，但设置跟踪因缺refspec失败（exit128）。仅追加本分支fetch refspec后跟踪成功、工作区干净；远端commit/tree一致，不强推、不改main。Git data工具发布后通过fetch/ff-only核对。
+- 恢复顺序：先核对Issue #11和本分支Draft PR真实head/tree/diff/CI，再读本节、M1_C1_OFFLINE、冻结M0_3_SLICE；保持当前改动，按M1文档分别运行功能与文档命令。仅继续本离线任务；M1-C2/现场/合并仍未授权。
+- 两个子任务分别实现契约与只读反例审查，未修改共享状态或合并；配置请求6Luna/Max但无可靠回读。未声称主智能体切换或完成外部ChatGPT独立验收。
+- 下面原M0状态及其“未授权/待审核”措辞按历史写入时间解释，全文保留，不覆盖本次明确授权。
+
 # 项目状态
 
 更新：2026-10-15（Asia/Shanghai）。当前任务：[Issue #1 — M0-Gate 正式审核记录](https://github.com/Zwhao0/20261015/issues/1)。用户明确授权“启动：Issue #1 — M0-Gate 正式审核记录”，随后明确“批准执行M0-GATE”。两条是历史执行授权；2026-10-15后续[用户最终批准记录](https://github.com/Zwhao0/20261015/issues/1#issuecomment-6190108253)已登记用户最终Gate验收批准。当前按[PR #10修正要求](https://github.com/Zwhao0/20261015/pull/10#issuecomment-6190117664)及用户“直接按照 PR #10 的新评论执行”追加最小状态修正；M1执行仍未授权。

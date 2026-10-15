@@ -1,0 +1,217 @@
+{
+  "attempts": [
+    {
+      "coverage_status": "UNKNOWN",
+      "evidence_refs": [
+        "SYN_EVIDENCE_SYN_SOURCE_A_0"
+      ],
+      "expected_members": null,
+      "failure_facts": [
+        [
+          "SYN_JOB",
+          "SYN_RUN",
+          "SYN_ATTEMPT_0",
+          "worker",
+          "SYN_HOST_A",
+          "SYN_BOOT_A",
+          "SYN_NS_A",
+          100,
+          10
+        ]
+      ],
+      "identity_status": "UNKNOWN",
+      "key": [
+        "SYN_JOB",
+        "SYN_RUN",
+        "SYN_ATTEMPT_0"
+      ],
+      "known_members": 1,
+      "lifecycle": "UNKNOWN",
+      "terminal_evidence_ref": null,
+      "terminal_evidence_refs": [],
+      "terminated_members": 0
+    }
+  ],
+  "counts": {
+    "accepted": 1,
+    "arrivals": 1,
+    "duplicates": 0,
+    "invalid": 0
+  },
+  "diagnostics": [],
+  "events": [
+    {
+      "arrival_index": 1,
+      "record": {
+        "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "event_id": "evt_a83922ba07c84a629c973557f75e4fc3f6fc984f75bc26c51bf8f6d9bffa689a",
+        "event_type": "PROCESS_EXIT",
+        "evidence_ref": "SYN_EVIDENCE_SYN_SOURCE_A_0",
+        "identity": {
+          "attempt_id": "SYN_ATTEMPT_0",
+          "boot_id": "SYN_BOOT_A",
+          "gpu_uuids": [
+            "SYN_GPU_A"
+          ],
+          "host_id": "SYN_HOST_A",
+          "job_id": "SYN_JOB",
+          "local_rank": 0,
+          "pid": 100,
+          "pid_namespace_id": "SYN_NS_A",
+          "process_start_ticks": 10,
+          "rank": 0,
+          "run_id": "SYN_RUN",
+          "scope": "worker",
+          "start_ticks_hz": 100,
+          "world_size": 1
+        },
+        "origin": "SYNTHETIC",
+        "payload": {
+          "authority": "parent_wait",
+          "exit_code": null,
+          "expected_stop": null,
+          "raw_status": 15,
+          "raw_status_format": "posix_wait",
+          "scope": "worker",
+          "signal": 15,
+          "status_kind": "SIGNALED"
+        },
+        "schema_version": "0.1",
+        "source_cursor": "SYN_CURSOR_0",
+        "source_epoch": "SYN_EPOCH_0",
+        "source_id": "SYN_SOURCE_A",
+        "source_seq": 0,
+        "time": {
+          "event_clock_domain_id": "SYN_CLOCK_A",
+          "event_monotonic_ns": 0,
+          "event_time_utc": "2026-10-15T00:00:00Z",
+          "observed_clock_domain_id": "SYN_CLOCK_A",
+          "observed_monotonic_ns": 0,
+          "observed_time_utc": "2026-10-15T00:00:00Z",
+          "uncertainty_ms": 0
+        },
+        "unknown_reasons": {
+          "payload.exit_code": "not_supplied",
+          "payload.expected_stop": "not_supplied"
+        }
+      },
+      "type": "NORMALIZED_EVENT"
+    }
+  ],
+  "exits": [
+    {
+      "evidence_refs": [
+        "SYN_EVIDENCE_SYN_SOURCE_A_0"
+      ],
+      "expected_stop": null,
+      "lifecycle": "EXITED_SIGNAL",
+      "process_key": [
+        "SYN_JOB",
+        "SYN_RUN",
+        "SYN_ATTEMPT_0",
+        "worker",
+        "SYN_HOST_A",
+        "SYN_BOOT_A",
+        "SYN_NS_A",
+        100,
+        10
+      ],
+      "root_cause": "UNKNOWN"
+    }
+  ],
+  "input_integrity": "COMPLETE",
+  "processes": [
+    {
+      "coverage_status": "UNKNOWN",
+      "device_samples": [],
+      "evidence_refs": [
+        "SYN_EVIDENCE_SYN_SOURCE_A_0"
+      ],
+      "identity": {
+        "attempt_id": "SYN_ATTEMPT_0",
+        "boot_id": "SYN_BOOT_A",
+        "gpu_uuids": [
+          "SYN_GPU_A"
+        ],
+        "host_id": "SYN_HOST_A",
+        "job_id": "SYN_JOB",
+        "local_rank": 0,
+        "pid": 100,
+        "pid_namespace_id": "SYN_NS_A",
+        "process_start_ticks": 10,
+        "rank": 0,
+        "run_id": "SYN_RUN",
+        "scope": "worker",
+        "start_ticks_hz": 100,
+        "world_size": 1
+      },
+      "identity_status": "COMPLETE",
+      "key": [
+        "SYN_JOB",
+        "SYN_RUN",
+        "SYN_ATTEMPT_0",
+        "worker",
+        "SYN_HOST_A",
+        "SYN_BOOT_A",
+        "SYN_NS_A",
+        100,
+        10
+      ],
+      "last_observed_age_ms": null,
+      "lifecycle": "EXITED_SIGNAL",
+      "process_presence": "UNKNOWN",
+      "progress": null,
+      "terminal_evidence_refs": [
+        "SYN_EVIDENCE_SYN_SOURCE_A_0"
+      ]
+    }
+  ],
+  "runs": [
+    {
+      "coverage_status": "UNKNOWN",
+      "evidence_refs": [
+        "SYN_EVIDENCE_SYN_SOURCE_A_0"
+      ],
+      "expected_members": null,
+      "failure_facts": [
+        [
+          "SYN_JOB",
+          "SYN_RUN",
+          "SYN_ATTEMPT_0",
+          "worker",
+          "SYN_HOST_A",
+          "SYN_BOOT_A",
+          "SYN_NS_A",
+          100,
+          10
+        ]
+      ],
+      "final_attempt_id": null,
+      "identity_status": "COMPLETE",
+      "key": [
+        "SYN_JOB",
+        "SYN_RUN"
+      ],
+      "known_members": 1,
+      "lifecycle": "UNKNOWN",
+      "terminal_evidence_ref": null,
+      "terminated_members": 0
+    }
+  ],
+  "schema_version": "0.1",
+  "sources": [
+    {
+      "coverage_status": "UNKNOWN",
+      "history": [],
+      "last_record_age_ms": null,
+      "last_successful_read_monotonic_ns": null,
+      "producer_liveness": "UNKNOWN",
+      "read_status": "UNKNOWN",
+      "sequence_gap": false,
+      "source_epoch": "SYN_EPOCH_0",
+      "source_id": "SYN_SOURCE_A",
+      "source_mode": "UNKNOWN",
+      "status": "UNKNOWN"
+    }
+  ]
+}

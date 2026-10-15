@@ -1,0 +1,34 @@
+{
+  "attempts": [],
+  "counts": {
+    "accepted": 0,
+    "arrivals": 4,
+    "duplicates": 0,
+    "invalid": 4
+  },
+  "diagnostics": [
+    {
+      "arrival_index": 1,
+      "code": "INVALID_RECORD"
+    },
+    {
+      "arrival_index": 2,
+      "code": "INVALID_RECORD"
+    },
+    {
+      "arrival_index": 3,
+      "code": "INVALID_RECORD"
+    },
+    {
+      "arrival_index": 4,
+      "code": "LINE_LIMIT"
+    }
+  ],
+  "events": [],
+  "exits": [],
+  "input_integrity": "UNKNOWN",
+  "processes": [],
+  "runs": [],
+  "schema_version": "0.1",
+  "sources": []
+}

@@ -1,0 +1,16 @@
+{
+  "base": "801fd156c2d39f696efa38811b0c0b433209b2d3",
+  "changed_files": 51,
+  "historical_status_handoff_suffix_unchanged": true,
+  "protected_m0_and_docs_checker_unchanged": true,
+  "result": "PASS",
+  "scan_limit": "finite patterns plus manual diff review; not comprehensive data loss prevention",
+  "sensitive_patterns": [
+    "absolute_user_path",
+    "github_token",
+    "ipv4",
+    "openai_token",
+    "private_key",
+    "real_gpu_uuid"
+  ]
+}

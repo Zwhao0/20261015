@@ -1,0 +1,90 @@
+{
+  "base_commit": "801fd156c2d39f696efa38811b0c0b433209b2d3",
+  "environment": {
+    "implementation": "CPython",
+    "os": "Darwin",
+    "os_release": "25.6.0",
+    "python": "3.9.6"
+  },
+  "failures": 0,
+  "prior_failures": [
+    {
+      "evidence": "evidence/local-initial-tests.txt",
+      "exit_code": 1,
+      "failures": 1,
+      "kind": "functional",
+      "tests": 29
+    },
+    {
+      "evidence": "evidence/local-initial-docs.txt",
+      "exit_code": 1,
+      "kind": "documents"
+    },
+    {
+      "errors": 14,
+      "evidence": "docs/M1_C1_OFFLINE.md",
+      "exit_code": 1,
+      "kind": "subtask_early_discovery",
+      "tests": 26
+    }
+  ],
+  "results": [
+    {
+      "command": "python3 -m unittest discover -s tests -v",
+      "evidence": "evidence/local-tests.txt",
+      "exit_code": 0,
+      "kind": "functional"
+    },
+    {
+      "command": "python3 scripts/check_docs.py",
+      "evidence": "evidence/local-docs.txt",
+      "exit_code": 0,
+      "kind": "documents"
+    }
+  ],
+  "scope_note": "Tests rerun on exact published implementation commit; code/fixtures unchanged by evidence follow-up. Final CI head in PR.",
+  "skipped": 0,
+  "test_count": 44,
+  "tested_commit": "2386bf43fc54189c40513612b9c9079592b31a1b",
+  "tested_content_sha256": {
+    "observatory/__init__.py": "0d3602fe36a30fca2fcd2607583346e06cbae533d20a24e943c401eb9b3c50e7",
+    "observatory/__main__.py": "8552b9d07fb49c0659689b0352505f5f6a2d38a83ab29b6ba2e177c4c99c24ec",
+    "observatory/contract.py": "6cf836871a14320a1d7551b8c337cac9cc8bc3f47d6693992ef11f2e083f9cad",
+    "observatory/engine.py": "04c0674be4c84bd612775946bd5d3d00dc94b078005a553e7d7fb8eed790d659",
+    "tests/__init__.py": "729d2aa54f53c0c54cbd381520a8b7c4c816ae4924fa9bbd732effdd5e236b8a",
+    "tests/builders.py": "dd8aefe7c1f7697b3748ec77b8bdc99b743a12e54b6037c34f2719e3ebb355fd",
+    "tests/fixtures/T01.expected.json": "7ee40f2a2ac29843105c2d5474b7505dcfd441306861e3dab8363f4bde47c3c2",
+    "tests/fixtures/T01.jsonl": "833a31f9c1ba5cd32f23bc7780816783df7b5b431f41824cae150cabfe26a7de",
+    "tests/fixtures/T02.expected.json": "14e7f2a5378976a36b88e31a8d6f629862680c07b7007a786e69222a562ed992",
+    "tests/fixtures/T02.jsonl": "8859f34f99f694edeb765d6d78c71d73143a8412b2e59779724a6f9969f5e297",
+    "tests/fixtures/T03.expected.json": "018f62edfdacde667b7edd61186838a47fc5b1bffe37ce477de58e17fe3472e6",
+    "tests/fixtures/T03.jsonl": "dd418dc05e78b89fed79d159c4947f592e6d23482953cdc957321f5e6ba66957",
+    "tests/fixtures/T04.expected.json": "82bbf6c81fa12349256ea837594cc43f9c298a8356f6d1db862353240c4d7e30",
+    "tests/fixtures/T04.jsonl": "46de87787cccc2e64897a0e54f21da95dc8f422ed56c5c9feff60ee946e6de19",
+    "tests/fixtures/T05.expected.json": "af7785531c830c86358ba0d3319bdcb9cf507575d30dd8ee4237213570df1977",
+    "tests/fixtures/T05.jsonl": "c7588c1562feca8bda69de1585fcac1d8b665bf765408b2f246f2373c2296630",
+    "tests/fixtures/T06.expected.json": "bb5ac3c44e4b90fd484a65bbba70741e095014dd59d64bea0f95471c0e143dab",
+    "tests/fixtures/T06.jsonl": "04de6975f7d99067a32fe648d19722dd936d3bdda6a36b194ba6f3880edd6fbd",
+    "tests/fixtures/T07.expected.json": "a2a4041425433bdabe426702200bcf131c297cfcbca3884994c849245d8fc758",
+    "tests/fixtures/T07.jsonl": "7a6dc6da3acd7ac33f87aad4a8c4b7f213543511cb1b1ecf881a8961dd0fb46c",
+    "tests/fixtures/T08.expected.json": "fea31bac8fe9f92ee59f2f7f2e7f35e5d58d21bd8c64f1cd9522fa37c573147a",
+    "tests/fixtures/T08.jsonl": "000d17c4b4936b606085768e0179313e7d91f68fdf9f5d3f8ed9619867eaadbf",
+    "tests/fixtures/T09.expected.json": "0ac7bd26761b30957c0e5f37fdb2d44d3ffabc78728e0340b2a185f9bacd81a3",
+    "tests/fixtures/T09.jsonl": "e60ad56633c9cf24a45e58fb67b7c888b2bebb1225c33e7b3645d4e8b97a7973",
+    "tests/fixtures/T10.expected.json": "b739e2c4c1b14732ed8de7249321cc0dfc48095a79c95bde2f4d078cabb0e6b7",
+    "tests/fixtures/T10.jsonl": "ea92a70e7e47b8489735ec8483469337b85fa7049adc6512619d58b67546095d",
+    "tests/fixtures/T11.expected.json": "2f50c9e45825ce523460a9fe90758c67b60b76bb2a6c9d798206ced09cec927b",
+    "tests/fixtures/T11.jsonl": "b79a0f65b8c41a88ad8b71e9b073eb250d2c248a11db20c435f15c7d20097f27",
+    "tests/fixtures/T12.expected.json": "078409598a6fd3587b232e2151e1953f566f1f5c87ec94f06757a09dbd828650",
+    "tests/fixtures/T12.jsonl": "3746c56ec109526d0a4639035aa329d3b2a3a2a7d8a78fa4db5dbb3ea1347ac6",
+    "tests/fixtures/T13.expected.json": "72e8d03233fac95469c53a25b6f787d1572ca3e87e22de071fc457927718c332",
+    "tests/fixtures/T13.jsonl": "3ae366718b4d09d3f9e6c754a987a9a0be865b5c2f20e7edddb7938710a4fe16",
+    "tests/fixtures/T14.expected.json": "2a36b2f34faba1536d50812a4b334ac7f91cb280d86f00a89e9963a614ba4955",
+    "tests/fixtures/T14.jsonl": "145fef445e3340682b6d1c2e35c82305fceae742ee87e5fc16f10dcee19c78d4",
+    "tests/fixtures/manifest.json": "bd78338229735f9922b8637601145370ab580855bdc12a00844ce2004316bab6",
+    "tests/test_boundaries.py": "ef1374ad4e6a91687c9b0cda2aa5f7ab9a134e30719ff15fb6508968eaab2da9",
+    "tests/test_contract.py": "b0812894932a5585775421ac35a2092ff21592215f21cb2e77f5ad55016b39c0",
+    "tests/test_replay.py": "1df744de5b426ae00f55cbcd1686051bd768e9a99acef343e72c8b247d913692"
+  },
+  "tested_tree": "4ed01955e92018e9de9988a2cf6057552aedbddd"
+}

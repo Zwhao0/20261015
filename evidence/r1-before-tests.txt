@@ -1,0 +1,235 @@
+test_aggregator_checks_scope_even_if_validation_is_bypassed (tests.test_membership_scope.MembershipScopeTests) ... test_contract_complete_members_are_workers (tests.test_membership_scope.MembershipScopeTests) ... test_contract_rejects_non_attempt_complete_claims (tests.test_membership_scope.MembershipScopeTests) ... test_launcher_complete_claim_cannot_complete_attempt_or_run (tests.test_membership_scope.MembershipScopeTests) ... test_legal_attempt_manifest_can_support_final_proof (tests.test_membership_scope.MembershipScopeTests) ... ok
+test_partial_local_identities_do_not_complete_attempt (tests.test_membership_scope.MembershipScopeTests) ... ok
+test_run_complete_claim_cannot_complete_attempt_or_run (tests.test_membership_scope.MembershipScopeTests) ... test_worker_complete_claim_cannot_complete_attempt_or_run (tests.test_membership_scope.MembershipScopeTests) ...
+======================================================================
+FAIL: test_aggregator_checks_scope_even_if_validation_is_bypassed (tests.test_membership_scope.MembershipScopeTests) (scope='worker', final_proof=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>/tests/test_membership_scope.py", line 93, in test_aggregator_checks_scope_even_if_validation_is_bypassed
+    self.assertEqual(
+AssertionError: Tuples differ: ('ATTEMPT_EXITED_OK', 'UNKNOWN') != ('UNKNOWN', 'UNKNOWN')
+
+First differing element 0:
+'ATTEMPT_EXITED_OK'
+'UNKNOWN'
+
+- ('ATTEMPT_EXITED_OK', 'UNKNOWN')
++ ('UNKNOWN', 'UNKNOWN')
+
+======================================================================
+FAIL: test_aggregator_checks_scope_even_if_validation_is_bypassed (tests.test_membership_scope.MembershipScopeTests) (scope='worker', final_proof=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>/tests/test_membership_scope.py", line 93, in test_aggregator_checks_scope_even_if_validation_is_bypassed
+    self.assertEqual(
+AssertionError: Tuples differ: ('ATTEMPT_EXITED_OK', 'COMPLETED') != ('UNKNOWN', 'UNKNOWN')
+
+First differing element 0:
+'ATTEMPT_EXITED_OK'
+'UNKNOWN'
+
+- ('ATTEMPT_EXITED_OK', 'COMPLETED')
++ ('UNKNOWN', 'UNKNOWN')
+
+======================================================================
+FAIL: test_aggregator_checks_scope_even_if_validation_is_bypassed (tests.test_membership_scope.MembershipScopeTests) (scope='launcher', final_proof=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>/tests/test_membership_scope.py", line 93, in test_aggregator_checks_scope_even_if_validation_is_bypassed
+    self.assertEqual(
+AssertionError: Tuples differ: ('ATTEMPT_EXITED_OK', 'UNKNOWN') != ('UNKNOWN', 'UNKNOWN')
+
+First differing element 0:
+'ATTEMPT_EXITED_OK'
+'UNKNOWN'
+
+- ('ATTEMPT_EXITED_OK', 'UNKNOWN')
++ ('UNKNOWN', 'UNKNOWN')
+
+======================================================================
+FAIL: test_aggregator_checks_scope_even_if_validation_is_bypassed (tests.test_membership_scope.MembershipScopeTests) (scope='launcher', final_proof=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>/tests/test_membership_scope.py", line 93, in test_aggregator_checks_scope_even_if_validation_is_bypassed
+    self.assertEqual(
+AssertionError: Tuples differ: ('ATTEMPT_EXITED_OK', 'COMPLETED') != ('UNKNOWN', 'UNKNOWN')
+
+First differing element 0:
+'ATTEMPT_EXITED_OK'
+'UNKNOWN'
+
+- ('ATTEMPT_EXITED_OK', 'COMPLETED')
++ ('UNKNOWN', 'UNKNOWN')
+
+======================================================================
+FAIL: test_aggregator_checks_scope_even_if_validation_is_bypassed (tests.test_membership_scope.MembershipScopeTests) (scope='run', final_proof=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>/tests/test_membership_scope.py", line 93, in test_aggregator_checks_scope_even_if_validation_is_bypassed
+    self.assertEqual(
+AssertionError: Tuples differ: ('ATTEMPT_EXITED_OK', 'UNKNOWN') != ('UNKNOWN', 'UNKNOWN')
+
+First differing element 0:
+'ATTEMPT_EXITED_OK'
+'UNKNOWN'
+
+- ('ATTEMPT_EXITED_OK', 'UNKNOWN')
++ ('UNKNOWN', 'UNKNOWN')
+
+======================================================================
+FAIL: test_aggregator_checks_scope_even_if_validation_is_bypassed (tests.test_membership_scope.MembershipScopeTests) (scope='run', final_proof=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>/tests/test_membership_scope.py", line 93, in test_aggregator_checks_scope_even_if_validation_is_bypassed
+    self.assertEqual(
+AssertionError: Tuples differ: ('ATTEMPT_EXITED_OK', 'COMPLETED') != ('UNKNOWN', 'UNKNOWN')
+
+First differing element 0:
+'ATTEMPT_EXITED_OK'
+'UNKNOWN'
+
+- ('ATTEMPT_EXITED_OK', 'COMPLETED')
++ ('UNKNOWN', 'UNKNOWN')
+
+======================================================================
+FAIL: test_contract_complete_members_are_workers (tests.test_membership_scope.MembershipScopeTests) (member_scope='launcher')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>/tests/test_membership_scope.py", line 63, in test_contract_complete_members_are_workers
+    validate_record(record)
+AssertionError: InvalidRecord not raised
+
+======================================================================
+FAIL: test_contract_complete_members_are_workers (tests.test_membership_scope.MembershipScopeTests) (member_scope='attempt')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>/tests/test_membership_scope.py", line 63, in test_contract_complete_members_are_workers
+    validate_record(record)
+AssertionError: InvalidRecord not raised
+
+======================================================================
+FAIL: test_contract_complete_members_are_workers (tests.test_membership_scope.MembershipScopeTests) (member_scope='run')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>/tests/test_membership_scope.py", line 63, in test_contract_complete_members_are_workers
+    validate_record(record)
+AssertionError: InvalidRecord not raised
+
+======================================================================
+FAIL: test_contract_rejects_non_attempt_complete_claims (tests.test_membership_scope.MembershipScopeTests) (scope='worker')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>/tests/test_membership_scope.py", line 56, in test_contract_rejects_non_attempt_complete_claims
+    validate_record(local_identity(scope))
+AssertionError: InvalidRecord not raised
+
+======================================================================
+FAIL: test_contract_rejects_non_attempt_complete_claims (tests.test_membership_scope.MembershipScopeTests) (scope='launcher')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>/tests/test_membership_scope.py", line 56, in test_contract_rejects_non_attempt_complete_claims
+    validate_record(local_identity(scope))
+AssertionError: InvalidRecord not raised
+
+======================================================================
+FAIL: test_contract_rejects_non_attempt_complete_claims (tests.test_membership_scope.MembershipScopeTests) (scope='run')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>/tests/test_membership_scope.py", line 56, in test_contract_rejects_non_attempt_complete_claims
+    validate_record(local_identity(scope))
+AssertionError: InvalidRecord not raised
+
+======================================================================
+FAIL: test_launcher_complete_claim_cannot_complete_attempt_or_run (tests.test_membership_scope.MembershipScopeTests) (scope='launcher', final_proof=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>/tests/test_membership_scope.py", line 31, in assert_local_claim_stays_unknown
+    self.assertEqual(
+AssertionError: Tuples differ: ('ATTEMPT_EXITED_OK', 'UNKNOWN') != ('UNKNOWN', 'UNKNOWN')
+
+First differing element 0:
+'ATTEMPT_EXITED_OK'
+'UNKNOWN'
+
+- ('ATTEMPT_EXITED_OK', 'UNKNOWN')
++ ('UNKNOWN', 'UNKNOWN')
+
+======================================================================
+FAIL: test_launcher_complete_claim_cannot_complete_attempt_or_run (tests.test_membership_scope.MembershipScopeTests) (scope='launcher', final_proof=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>/tests/test_membership_scope.py", line 31, in assert_local_claim_stays_unknown
+    self.assertEqual(
+AssertionError: Tuples differ: ('ATTEMPT_EXITED_OK', 'COMPLETED') != ('UNKNOWN', 'UNKNOWN')
+
+First differing element 0:
+'ATTEMPT_EXITED_OK'
+'UNKNOWN'
+
+- ('ATTEMPT_EXITED_OK', 'COMPLETED')
++ ('UNKNOWN', 'UNKNOWN')
+
+======================================================================
+FAIL: test_run_complete_claim_cannot_complete_attempt_or_run (tests.test_membership_scope.MembershipScopeTests) (scope='run', final_proof=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>/tests/test_membership_scope.py", line 31, in assert_local_claim_stays_unknown
+    self.assertEqual(
+AssertionError: Tuples differ: ('ATTEMPT_EXITED_OK', 'UNKNOWN') != ('UNKNOWN', 'UNKNOWN')
+
+First differing element 0:
+'ATTEMPT_EXITED_OK'
+'UNKNOWN'
+
+- ('ATTEMPT_EXITED_OK', 'UNKNOWN')
++ ('UNKNOWN', 'UNKNOWN')
+
+======================================================================
+FAIL: test_run_complete_claim_cannot_complete_attempt_or_run (tests.test_membership_scope.MembershipScopeTests) (scope='run', final_proof=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>/tests/test_membership_scope.py", line 31, in assert_local_claim_stays_unknown
+    self.assertEqual(
+AssertionError: Tuples differ: ('ATTEMPT_EXITED_OK', 'COMPLETED') != ('UNKNOWN', 'UNKNOWN')
+
+First differing element 0:
+'ATTEMPT_EXITED_OK'
+'UNKNOWN'
+
+- ('ATTEMPT_EXITED_OK', 'COMPLETED')
++ ('UNKNOWN', 'UNKNOWN')
+
+======================================================================
+FAIL: test_worker_complete_claim_cannot_complete_attempt_or_run (tests.test_membership_scope.MembershipScopeTests) (scope='worker', final_proof=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>/tests/test_membership_scope.py", line 31, in assert_local_claim_stays_unknown
+    self.assertEqual(
+AssertionError: Tuples differ: ('ATTEMPT_EXITED_OK', 'UNKNOWN') != ('UNKNOWN', 'UNKNOWN')
+
+First differing element 0:
+'ATTEMPT_EXITED_OK'
+'UNKNOWN'
+
+- ('ATTEMPT_EXITED_OK', 'UNKNOWN')
++ ('UNKNOWN', 'UNKNOWN')
+
+======================================================================
+FAIL: test_worker_complete_claim_cannot_complete_attempt_or_run (tests.test_membership_scope.MembershipScopeTests) (scope='worker', final_proof=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>/tests/test_membership_scope.py", line 31, in assert_local_claim_stays_unknown
+    self.assertEqual(
+AssertionError: Tuples differ: ('ATTEMPT_EXITED_OK', 'COMPLETED') != ('UNKNOWN', 'UNKNOWN')
+
+First differing element 0:
+'ATTEMPT_EXITED_OK'
+'UNKNOWN'
+
+- ('ATTEMPT_EXITED_OK', 'COMPLETED')
++ ('UNKNOWN', 'UNKNOWN')
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.016s
+
+FAILED (failures=18)
