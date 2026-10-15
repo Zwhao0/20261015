@@ -1,51 +1,58 @@
 # 可恢复交接
 
-## 当前入口
+## 当前入口与授权
 
-- 唯一仓库：[Zwhao0/20261015](https://github.com/Zwhao0/20261015)。任务：[Issue #1](https://github.com/Zwhao0/20261015/issues/1)。
-- 当前仅修复 M0-0 的 [ChatGPT 审核唯一必修项](https://github.com/Zwhao0/20261015/pull/2#issuecomment-6187217983)：AGENTS 两条临时限制已改为通用任务授权规则，仅同步 STATUS/HANDOFF，待 ChatGPT 复审。开发分支 `codex/m0-0-bootstrap`，[Draft PR #2](https://github.com/Zwhao0/20261015/pull/2) → main。当前仍保持 Draft，不合并、不进入 M0-1、不连接 H800、不读取连接凭据、不开发 Detector/复杂算法、不进行故障注入；阶段状态见 [STATUS](STATUS.md)。
-- 从初始 main `6e80e6ce88ca952d3fbe3f0612b36058e8bd337e` 开始，无旧项目继承。未访问 H800；本地 `服务器.md` 保持仓库外且未读取。
-- 已完成工程文档、轻量检查、正反例抽查、分支发布与 Draft PR；本地检查及首轮 CI 通过。首轮提交为 `bad23bfe5ae62d79e7495592429a5f8e30e0b915`，后续交接提交的精确 SHA/CI 结果以 PR 最新描述与 Checks 为准。
-- 终端无 GitHub 推送凭据，已通过连接的 GitHub Git data 接口发布并核对 tree；后续可沿用创建 tree → 以当前 head 为 parent 创建 commit → 非强制更新开发分支 ref → 本地 fetch/fast-forward 的路径。失败与恢复记录见 STATUS/PR，不需要访问服务器。
-- 本次未启动子智能体；主智能体实际模型/档位无可靠回读接口，未声称已核验。审核基线为 `bc560436388f7bb96864680ad64242552fb26a07`，剩余事项为本次修复的 ChatGPT 复审；新 HEAD 与对应 CI 结果见 PR 最新描述/Checks。环境事实与 M0 后续方案见 [基线](M0_BASELINE.md)，均未执行。
+- 唯一仓库：[Zwhao0/20261015](https://github.com/Zwhao0/20261015)。当前 [Issue #3](https://github.com/Zwhao0/20261015/issues/3)，母 Issue #1 继续打开。
+- 仅 M0-1 只读环境事实调查。用户在当前会话明确批准访问指定服务器信息文件及两台服务器；连接信息不进入公开仓库。只读范围不包括未知归属任务的私有数据、旧项目文件、依赖/训练环境变更或故障注入。M0-2/M0-3/M1 未执行、未授权，不自动合并。
+- M0-0 已获 [ChatGPT 第二轮 PASS](https://github.com/Zwhao0/20261015/pull/2#issuecomment-6187338743)，PR #2 已合并。当前起点 main `41a30e011b3fb0074aaef7cb8c42070aef4562b1`；旧 STATUS/HANDOFF 的 M0-0 限制仅为历史状态，已由本次正式授权更新。
+- 分支 `codex/m0-1-inventory` → main，Draft PR 发布进行中。精确 head/tree/最终 CI 由关联 Draft PR 描述及 Checks 保存；写入时尚未合并。不要将 M0-0 或某个旧 HEAD 的 PASS 套到当前提交。
+
+## 已完成、缺口与受控证据
+
+- A/B 各四次真实只读会话，2026-10-15 16:08:10～16:12:18 Asia/Shanghai。各 8×H800、Driver 580.178.04、Ubuntu 24.04；内核分别 6.8.0-146/139-generic。八条 E-A-01～04/E-B-01～04 证据含命令、UTC 起止时间、执行状态、分层退出码、脱敏摘要 SHA-256，见 [调查记录](M0_1_INVENTORY.md) 与 [基线](M0_BASELINE.md)。
+- GPU 活动存在时间变化；04 各见 8 PID/8 GPU 关联，只保留计数，不确认任务性质。默认宿主机 Python 3.12.3，无指定 Torch/框架包元数据；实际训练环境版本、启动方式、Rank/Job/Run、日志/metrics/RAS/Flight Recorder 配置与信号仍 UNKNOWN。未运行新训练/API/profiler，不是完整双机训练环境 PASS。
+- Docker 读取 permission denied，容器证据 BLOCKED；Chrony tracking exit 1/506，详细时间偏差 UNKNOWN；dpkg 混合查询非零与独立成功均保留。恢复需管理员/任务所有者明确可读环境和元数据来源，不绕过权限，不触碰旧项目。
+- 原始证据与连接解析器只在本机 Git 忽略受控目录中，权限目录 0700/文件 0600，公开仅逻辑引用 `LOCAL/<证据ID>`；公开 GitHub 无真实路径、凭据或主机身份。新本地会话向用户私下获取该索引；没有受控材料时只能核对公开摘要，不冒称重验原始输出。仅从 GitHub 恢复不提供服务器登录能力，仍需本会话同等明确授权。
+- GitHub 工具最初不可调用、终端 dry-run exit 128；工具随后恢复。发布使用 Git data：树 → 指向该树/当前 head 的 commit → 仅开发分支非强制 ref 更新 → fetch 和 staged tree 一致性校验。不能重置/强推；终端不需要配置或输出秘密。
+- 本次没有子智能体。主模型/档位要求 6.1 Sol/High，但缺少可靠回读接口，不声称核验；子智能体仅明确委派时使用 6 Luna/Max，不能未获限定权限并发访问服务器。
 
 ## 新会话恢复顺序
 
-1. 只从上述 GitHub 仓库读取 README、AGENTS、Issue #1（含评论）、当前 Draft PR（含 diff、讨论、Checks）、STATUS、HANDOFF、M0_BASELINE。
-2. 在已有 checkout 先检查 `git status --short --branch` 和 `git remote -v`；工作区非干净则保留并调查，不 reset、不覆盖。不存在 checkout 时只克隆本仓库。
-3. `git fetch origin`，确认当前 PR 的 base/head 与开发分支。干净工作区可切至 `codex/m0-0-bootstrap` 并 `git pull --ff-only`；本地无该分支时跟踪对应远端分支。若 PR 已合并/关闭/换分支，以 GitHub 最新状态为准，记录差异后再推进。
-4. 用 `git rev-parse HEAD`、`git log -3 --oneline` 核对 PR head；按 STATUS/PR 复核命令、结果与证据，不能把旧提交的 PASS 套到新提交。
-5. 只继续当前获授权的小任务。授权或证据不明时记录 `UNKNOWN` / 阻塞，禁止自动进入 M0-1 或 M1。
+1. 从唯一仓库读取 README、AGENTS、Issue #3（含评论）、关联 Draft PR（含 diff/讨论/Checks）、STATUS、HANDOFF、M0_BASELINE、M0_1_INVENTORY。必要时核对 PR #2 的已合并/独立复审证据。
+2. 先 `git status --short --branch`、`git remote -v`；非干净则保留并调查，不 reset/覆盖。只克隆本仓库，不接触旧项目。
+3. `git fetch origin main` 并获取 `codex/m0-1-inventory`；核对 PR base/head 与 main。干净工作区可跟踪分支后 `git pull --ff-only`；若远端出现新提交或 PR 已变更，核实差异再继续，不覆盖历史。
+4. `git rev-parse HEAD` / `git log -3 --oneline`；按 PR 精确 SHA/CI 和八条摘要复核。公开摘要不是原始日志；训练层 UNKNOWN/失败不能变成 PASS。
+5. 当前只允许修复 M0-1 审核指出的问题或按既有边界补证。新任务来源、管理员权限或后续阶段授权不明确时停在门禁并记录 BLOCKED/NOT_RUN。ChatGPT 独立审核与用户批准前，不开始 M0-2/M0-3/M1。
 
 ## 三类角色的上下文检查点
 
-- **ChatGPT**：从该窗口第一个用户问题计，每 5 个必须输出新窗口交接说明；上下文提前过长则提前。核实 GitHub 状态已保存，交由用户复制到新窗口，不声称能自动开窗。本仓库无法获知外部 ChatGPT 当前计数，恢复者须在自己的窗口维护。
-- **Codex 主智能体（6.1 Sol/High）**：每个小任务结束写状态；可见上下文接近约 2/3、压缩前或决策难追溯时，先更新 STATUS/HANDOFF，提交并推送安全工作，汇总 PR、commit、测试、阻塞，再恢复新会话。不把未完成工作标完成；无法精确量化上下文时提前保存。
-- **Codex 子智能体（6 Luna/Max）**：明确输入、可改范围、DoD 和证据；不改共享最终状态文件、不直接合并。上下文接近限制前交回主智能体：安全改动/提交、证据、失败、未完成项、恢复步骤；由主智能体整合并推送。配置不可用先报告，不擅自替换。
-- 若推送失败，保存 commit 和恢复命令，报告远端缺失；不得声称新会话已能从 GitHub 完整恢复。完整约束见 [AGENTS](../AGENTS.md)。
+- **ChatGPT**：从该窗口第一个用户问题计，每 5 个必须交接；上下文提前过长则提前。给出可复制说明并核实 GitHub 已保存，不能声称自动开窗。本仓库不知道外部 ChatGPT 窗口计数，Codex 聊天轮数不能替代。
+- **Codex 主智能体（要求 6.1 Sol/High）**：每个小任务更新状态；约 2/3 上下文、压缩前或决定难追溯时，先写 STATUS/HANDOFF、提交并推送安全工作，再汇总 PR/commit/测试/阻塞。不能仅靠自动压缩保存进度；未完成工作不得标完成。本次检查点：计划→A/B 平台→软件/失败诊断→八条证据整理→发布/CI。
+- **Codex 子智能体（要求 6 Luna/Max）**：仅明确委派，限定输入、可改范围、DoD、证据及访问边界；不改共享最终 STATUS/HANDOFF、不直接合并。接近限制先交回安全改动/提交、失败/风险/未完成项与恢复点，由主智能体整合推送。配置不可用记录阻塞，不擅自替换。
+- 推送失败须保存本地 commit、症状与重试方式，明确 GitHub 尚不可恢复未推送内容；不虚报完成。完整协议见 [AGENTS](../AGENTS.md)。
 
-## 每次交接的最小内容 / 可复制到 ChatGPT 新窗口
+## 可复制到 ChatGPT 新窗口
 
 ```text
 唯一仓库：https://github.com/Zwhao0/20261015
-任务：https://github.com/Zwhao0/20261015/issues/1；本次只审核/继续 M0-0。
-请先从 GitHub 读取 README、AGENTS、docs/STATUS、docs/HANDOFF、docs/M0_BASELINE 和关联 PR。
-PR URL / base / branch / HEAD SHA：<从 GitHub 复制，不猜测>
-已完成 / 未完成：<分列，注明是否已推送>
-验证：<命令、环境、提交、退出码、PASS/FAIL/NOT_RUN/INCONCLUSIVE、证据链接>
-关键决定及依据：<基线/PR 的具体位置>
-阻塞 / 风险 / UNKNOWN：<事实、影响和恢复路径>
-下一步与授权边界：<当前允许的动作；禁止自动进入后续阶段>
-ChatGPT 窗口计数：<旧窗口已计数量>；新窗口从自己的首个用户问题重新计数。
-请独立审核仓库证据；M0-Gate 仍需 ChatGPT 审核与用户最终批准。
+当前任务：https://github.com/Zwhao0/20261015/issues/3；只审核 M0-1。
+请从 GitHub 读取 README、AGENTS、docs/STATUS、docs/HANDOFF、docs/M0_BASELINE、docs/M0_1_INVENTORY 和关联 Draft PR。
+分支：codex/m0-1-inventory；base 起点 main 41a30e011b3fb0074aaef7cb8c42070aef4562b1。
+PR URL / 最新 head SHA / CI run/job：从该分支 Draft PR 描述与 Checks 核实，不猜测。
+已完成：A/B 各四次真实只读平台/元数据调查、八条脱敏证据与摘要哈希、命令/失败记录。
+未完成：容器访问 BLOCKED；训练版本/任务来源/Rank/信号配置和详细同步误差 UNKNOWN；GPU/训练/API/故障注入测试 NOT_RUN。
+验证：核对精确 head 的文档检查、哈希/敏感审查及 CI；不能用旧 HEAD 的 PASS 替代。
+私密原始证据只在授权本机，公开逻辑 LOCAL/<ID> 无登录信息；无原始材料不得冒称重验。
+请独立审核，用户批准前不得推进 M0-2/M0-3/M1；M0-Gate 仍 INCONCLUSIVE。
+ChatGPT 窗口计数：由旧 ChatGPT 窗口填写；新窗口从自己的首个用户问题重新计数。
 ```
 
 ## 阻塞报告模板
 
 ```text
 编号 / 阶段 / 日期：
-原始症状与脱敏日志位置（原始敏感证据仅存授权机器）：
-已尝试动作 / 命令 / 退出码 / 结果：
+原始症状与脱敏日志位置（原始敏感证据仅存授权位置）：
+已尝试动作 / 命令 / 退出码 / PASS-FAIL-NOT_RUN-INCONCLUSIVE：
 已保存 branch / commit / PR / 未推送内容：
 影响范围与仍可完成的安全工作：
 候选方案及依据、风险：

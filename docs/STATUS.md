@@ -1,45 +1,45 @@
 # 项目状态
 
-更新：2026-10-15（Asia/Shanghai）。任务依据：[Issue #1](https://github.com/Zwhao0/20261015/issues/1)。
+更新：2026-10-15（Asia/Shanghai）。当前任务：[Issue #3](https://github.com/Zwhao0/20261015/issues/3)，母 [Issue #1](https://github.com/Zwhao0/20261015/issues/1)。
 
-当前授权：仅修复 [ChatGPT 审核评论](https://github.com/Zwhao0/20261015/pull/2#issuecomment-6187217983) 指出的 AGENTS 生命周期规则，并更新状态/交接、验证与发布。唯一必修项已修复，待 ChatGPT 复审；PR #2 保持 Draft，不合并、不进入 M0-1；不连接 H800、不读取连接凭据、不开发 Detector/复杂算法、不进行故障注入。
+当前授权仅 M0-1：用户明确允许读取指定的仓库外服务器信息文件并访问两台服务器；实际操作限定只读、低侵入，不使用变更权限。已完成 A/B 独立平台与宿主机元数据调查，训练层仍有 UNKNOWN/访问阻塞，等待 ChatGPT 独立审核。M0-2/M0-3/M1 未授权；不合并、不故障注入、不实现采集/检测器。
 
 ## 阶段与范围
 
-| 项目 | 状态 | 说明 |
+| 项目 | 状态 | 事实与门禁 |
 | --- | --- | --- |
-| M0-0 | 已修复，待复审 | AGENTS 两条临时限制已改为通用授权规则，仅同步 STATUS/HANDOFF；尚未批准合并 |
-| M0-1 | NOT_RUN | 环境事实调查，需单独明确授权 |
-| M0-2 | NOT_RUN | 观测能力/兼容性核查；仅建立空表 |
-| M0-3 | NOT_RUN | 首个端到端切片与验收方案；仅建立待填项 |
-| M0-Gate | INCONCLUSIVE | 尚无环境/训练证据，ChatGPT 未审核、用户未批准 |
-| M1～M5 | NOT_RUN | 不在本次范围；路线见 README |
+| M0-0 | PASS，已合并 | [第二轮独立审核](https://github.com/Zwhao0/20261015/pull/2#issuecomment-6187338743)；PR #2 已于 2026-10-15 合并，main=41a30e0… |
+| M0-1 | 已采集，待独立审核；训练层 INCONCLUSIVE | 两台均真实连接；各 8×H800、Driver 580.178.04、Ubuntu 24.04；内核不同。容器访问 BLOCKED，训练版本/任务来源/实际信号仍 UNKNOWN，不能给全量 PASS |
+| M0-2 / M0-3 | NOT_RUN | 当前未授权，矩阵与切片骨架未填充为结论 |
+| M0-Gate | INCONCLUSIVE | 未完成全部 M0 材料、独立审核及用户最终批准 |
+| M1～M5 | NOT_RUN | 不在本次范围 |
 
-## 恢复锚点
+## 恢复锚点与当前交付
 
-- 初始 main：`6e80e6ce88ca952d3fbe3f0612b36058e8bd337e`，仅 README，单个提交。
-- 开发分支：`codex/m0-0-bootstrap`；[Draft PR #2](https://github.com/Zwhao0/20261015/pull/2)，base 为 main。
-- 当前 HEAD 以 GitHub PR 的 head SHA 为准；文档不嵌入自身 commit 的 SHA。恢复步骤见 [HANDOFF](HANDOFF.md)。
-- 模型配置：用户指定主智能体 6.1 Sol/High、子智能体 6 Luna/Max；本会话无可靠模型/推理档位回读接口，未声称已核验实际配置；未启动子智能体。
+- 最新 main 起点：`41a30e011b3fb0074aaef7cb8c42070aef4562b1`；开始工作前 fetch 并核对，和用户提供锚点一致。原始 main `6e80e6c…` 仅为 M0-0 历史。
+- 分支：`codex/m0-1-inventory` → main。Draft PR 发布进行中；精确 head、tree、最终 CI 以该分支关联 PR 描述为准，尚未合并。
+- [基线事实表](M0_BASELINE.md)、[M0-1 调查与证据](M0_1_INVENTORY.md)、[恢复交接](HANDOFF.md)。采集窗口 2026-10-15 16:08:10～16:12:18 UTC+08:00；8 条实际证据、完整命令、子命令退出码与公开摘要哈希已保存。
+- 模型要求为主智能体 6.1 Sol/High、子智能体 6 Luna/Max；本会话没有可靠的实际模型/推理档位回读接口，不声称核验或切换成功。本次未启动子智能体，保留条件委派/回报协议。
 
-## 验证与证据
+## 验证与边界
 
-| 检查 | 结果 | 证据/限制 |
+| 检查 | 结果 | 环境、内容、退出码与证据 |
 | --- | --- | --- |
-| main/来源核对 | PASS | `git log`、`git ls-tree`、`git remote -v`；仅克隆指定项目 |
-| 本地文档检查 | PASS | macOS / Python 3.9.6；`python3 scripts/check_docs.py`，exit 0，5 份必需文档、10 个文本文件 |
-| 检查器正反例抽查 | PASS | 临时 Git 夹具：正常文档通过；断链、行末空格、冲突标记、缺少必需文档均被拒绝；exit 0 |
-| 空白与 diff 审查 | PASS | `git diff --cached --check`、`git diff main...HEAD --check`，exit 0；已人工审查范围、链接与敏感信息 |
-| 首轮 GitHub CI | PASS | `bad23bfe5ae62d79e7495592429a5f8e30e0b915`；[run 38700465193](https://github.com/Zwhao0/20261015/actions/runs/38700465193)，docs job success，输出 5 份必需文档、10 个文本文件 |
-| 前次交付的 CI | PASS | 审核基线 `bc560436388f7bb96864680ad64242552fb26a07`；[run 38700717006](https://github.com/Zwhao0/20261015/actions/runs/38700717006) success |
-| 本次修复的 CI | INCONCLUSIVE（写入时） | 本地文档与 diff 检查已通过；发布后核实对应新 HEAD 的 CI，精确 SHA、运行链接及结果记录于 [PR 描述与 Checks](https://github.com/Zwhao0/20261015/pull/2/checks)，旧结果不替代新提交验证 |
-| H800/训练/GPU/检测器验证 | NOT_RUN | 本次未授权、不执行；不能从文档检查推断通过 |
+| main / Issue / PR #2 核对 | PASS | git fetch、rev-parse；GitHub API 的 Issue #3、PR #2 merged/merge SHA、独立复审评论；只使用唯一仓库 |
+| A/B 平台只读采集 | PASS（仅字段获取） | 各自 E-A-01/E-B-01，真实 SSH exit 0；GPU 查询、OS/kernel、Python 与时间报告 exit 0；container 检测 exit 1/none 单列解释 |
+| A/B 软件/来源元数据 | INCONCLUSIVE（训练层） | 各自 02/03/04，SSH exit 0；包、进程类别与 API 时钟事实已获取；Docker/Chrony/dpkg 混合查询失败保留，不能按 SSH exit 0 记全通过 |
+| 本地文档 / diff | PASS，exit 0 | macOS / Python 3.9.6；`python3 scripts/check_docs.py`：5 份必需文档、11 个文本文件；`git diff --check`；对本次五份文档内容执行并人工审查范围/链接 |
+| 摘要哈希 / 敏感信息 | PASS，exit 0 | 标准库核对八条 ID、规范 JSON 摘要哈希与受控副本；五份公开文档的指定敏感值/常见身份与密钥模式扫描通过，人工检查通过。不是通用秘密检测器或服务器功能测试 |
+| 对应新 HEAD GitHub CI | INCONCLUSIVE（尚未发布） | 不继承 PR #2 的 PASS；新提交发布后核验 head 关联 run、job 与日志，精确链接/结果写 Draft PR |
+| GPU 计算 / 训练 / 映射集成 / RAS / Flight Recorder / 故障注入 | NOT_RUN | 本次不创建负载、不初始化 CUDA、不调用进程内 API、不跑 profiler，不读取任务私有数据，不能从文档检查推断通过 |
 
-## 阻塞与下一步
+## 失败、阻塞与下一步
 
-- B1（已绕过）：`GIT_TERMINAL_PROMPT=0 git push --dry-run origin HEAD`，exit 128，`could not read Username`；终端无推送凭据。已用连接的 GitHub Git data 接口发布同一分支，再 fetch/fast-forward；首轮本地/远端 tree 均为 `afce283f50ce392c03de8e1072582b177483467d`。后续发布可复用此路径，不需要服务器凭据。
-- F1（已恢复）：反例抽查首轮夹具在正常样例断言失败（exit 1）；macOS 临时路径 `/var` 与解析后的 `/private/var` 不一致。夹具根路径改用 `Path.resolve()` 后正常及四项反例全部通过，产品检查器无需修改。
-- F2（已恢复）：single-branch clone 初次设置 upstream 失败；为开发分支增加 fetch refspec 后恢复跟踪，无历史覆盖。首轮 CI 的 Node 20 弃用警告通过改用固定 SHA 的官方 checkout v7.0.1 处理，最终 CI 见 PR。
-- 环境与观测事实均为 `UNKNOWN`，不是调查结论。
-- 无待用户处理的实施阻塞。等待 ChatGPT 对唯一必修项复审；模型档位未独立核验、项目许可证未指定，均已明确记录。
-- M0-0 审核不等于 M0-Gate 通过；后续 M0 工作需另行授权。阻塞报告模板见 HANDOFF。
+- **B-Container（持续）**：A/B 当前账户 `docker ps` exit 1，permission denied（03）；未提权/改权限。容器 Python/Torch/CUDA/NCCL/框架版本 UNKNOWN。恢复需管理员提供批准容器的脱敏版本元数据或既有只读访问方式。
+- **B-Workload（持续）**：04 各有 8 行 PID/GPU 关联，但归属与任务类型未确认；没有读取获准本项目训练入口/日志，Job/Run/Rank/Local Rank UNKNOWN。后续需明确可读任务及字段，不碰旧项目/第三方数据；不启动训练补证。
+- **F-Time（保留）**：A/B chronyc tracking exit 1，`506 Cannot talk to daemon`；timedatectl 报告同步但详细偏差未知，未修改时钟/服务。
+- **F-Package（已界定）**：混合模式 dpkg 查询 exit 1，不等于全部包缺失；03 DCGM 单包查询 exit 0。02 仅保留 stderr 存在标记；03 是另一次诊断复采，未虚构原始 stderr。
+- **B-Publish（连接已恢复）**：初次 GitHub 工具不可调用；终端 dry-run exit 128（缺少 GitHub 凭据）。连接恢复后以 Git data 接口非强制发布同树，计划 fetch/一致性核对；终端无凭据不需用户提供秘密。
+- **F-Local（已恢复）**：本地临时文档辅助脚本直接执行两次报 source 非 UTF-8（exit 1）；文件 UTF-8 严格解码、tokenize/compile 均通过，显式 UTF-8 读取并 compile/exec 后生成成功（exit 0）。未查明解释器直接读文件差异原因；辅助脚本不进仓库，不改产品代码，后续文档检查通过。
+- 历史 M0-0 的临时夹具路径失败、single-branch upstream 恢复与 CI 变更证据保留在 [PR #2](https://github.com/Zwhao0/20261015/pull/2)，不作为本次调查验证。
+- 当前可安全交付证据与明确缺口；ChatGPT 独立审核前不推进后续阶段。项目自身许可证仍未指定。阻塞恢复模板及上下文检查点见 HANDOFF。
