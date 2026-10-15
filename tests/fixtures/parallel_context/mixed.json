@@ -8,6 +8,7 @@
       "evidence_ref": "SYN_REF_L",
       "kind": "LAUNCHER",
       "observed_tick": 0,
+      "process_instance": null,
       "scope": {
         "attempt_id": "SYN_ATTEMPT_0",
         "job_id": "SYN_JOB",
@@ -15,7 +16,9 @@
       },
       "source_epoch": "SYN_SOURCE_EPOCH_0",
       "source_id": "SYN_SOURCE_L",
-      "source_seq": 0
+      "source_seq": 0,
+      "source_version": "SYN_PROFILE_0_1",
+      "worker_id": null
     },
     {
       "clock_domain_id": "SYN_CLOCK",
@@ -24,6 +27,7 @@
       "evidence_ref": "SYN_REF_G",
       "kind": "GROUP_MANIFEST",
       "observed_tick": 0,
+      "process_instance": null,
       "scope": {
         "attempt_id": "SYN_ATTEMPT_0",
         "job_id": "SYN_JOB",
@@ -31,7 +35,9 @@
       },
       "source_epoch": "SYN_SOURCE_EPOCH_0",
       "source_id": "SYN_SOURCE_G",
-      "source_seq": 0
+      "source_seq": 0,
+      "source_version": "SYN_PROFILE_0_1",
+      "worker_id": null
     },
     {
       "clock_domain_id": "SYN_CLOCK",
@@ -40,6 +46,7 @@
       "evidence_ref": "SYN_REF_E",
       "kind": "EXPERT_MANIFEST",
       "observed_tick": 0,
+      "process_instance": null,
       "scope": {
         "attempt_id": "SYN_ATTEMPT_0",
         "job_id": "SYN_JOB",
@@ -47,7 +54,113 @@
       },
       "source_epoch": "SYN_SOURCE_EPOCH_0",
       "source_id": "SYN_SOURCE_E",
-      "source_seq": 0
+      "source_seq": 0,
+      "source_version": "SYN_PROFILE_0_1",
+      "worker_id": null
+    },
+    {
+      "clock_domain_id": "SYN_CLOCK",
+      "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "evidence_id": "SYN_EV_W0",
+      "evidence_ref": "SYN_REF_W0",
+      "kind": "LAUNCHER",
+      "observed_tick": 0,
+      "process_instance": {
+        "boot_id": "SYN_BOOT_0",
+        "host_id": "SYN_HOST_0",
+        "pid": 100,
+        "pid_namespace_id": "SYN_NS",
+        "process_start_ticks": 1000,
+        "start_ticks_hz": 100
+      },
+      "scope": {
+        "attempt_id": "SYN_ATTEMPT_0",
+        "job_id": "SYN_JOB",
+        "run_id": "SYN_RUN"
+      },
+      "source_epoch": "SYN_SOURCE_EPOCH_0",
+      "source_id": "SYN_SOURCE_L",
+      "source_seq": 1,
+      "source_version": "SYN_PROFILE_0_1",
+      "worker_id": "SYN_W0"
+    },
+    {
+      "clock_domain_id": "SYN_CLOCK",
+      "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "evidence_id": "SYN_EV_W1",
+      "evidence_ref": "SYN_REF_W1",
+      "kind": "LAUNCHER",
+      "observed_tick": 0,
+      "process_instance": {
+        "boot_id": "SYN_BOOT_0",
+        "host_id": "SYN_HOST_0",
+        "pid": 101,
+        "pid_namespace_id": "SYN_NS",
+        "process_start_ticks": 1000,
+        "start_ticks_hz": 100
+      },
+      "scope": {
+        "attempt_id": "SYN_ATTEMPT_0",
+        "job_id": "SYN_JOB",
+        "run_id": "SYN_RUN"
+      },
+      "source_epoch": "SYN_SOURCE_EPOCH_0",
+      "source_id": "SYN_SOURCE_L",
+      "source_seq": 2,
+      "source_version": "SYN_PROFILE_0_1",
+      "worker_id": "SYN_W1"
+    },
+    {
+      "clock_domain_id": "SYN_CLOCK",
+      "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "evidence_id": "SYN_EV_W2",
+      "evidence_ref": "SYN_REF_W2",
+      "kind": "LAUNCHER",
+      "observed_tick": 0,
+      "process_instance": {
+        "boot_id": "SYN_BOOT_1",
+        "host_id": "SYN_HOST_1",
+        "pid": 102,
+        "pid_namespace_id": "SYN_NS",
+        "process_start_ticks": 1000,
+        "start_ticks_hz": 100
+      },
+      "scope": {
+        "attempt_id": "SYN_ATTEMPT_0",
+        "job_id": "SYN_JOB",
+        "run_id": "SYN_RUN"
+      },
+      "source_epoch": "SYN_SOURCE_EPOCH_0",
+      "source_id": "SYN_SOURCE_L",
+      "source_seq": 3,
+      "source_version": "SYN_PROFILE_0_1",
+      "worker_id": "SYN_W2"
+    },
+    {
+      "clock_domain_id": "SYN_CLOCK",
+      "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "evidence_id": "SYN_EV_W3",
+      "evidence_ref": "SYN_REF_W3",
+      "kind": "LAUNCHER",
+      "observed_tick": 0,
+      "process_instance": {
+        "boot_id": "SYN_BOOT_1",
+        "host_id": "SYN_HOST_1",
+        "pid": 103,
+        "pid_namespace_id": "SYN_NS",
+        "process_start_ticks": 1000,
+        "start_ticks_hz": 100
+      },
+      "scope": {
+        "attempt_id": "SYN_ATTEMPT_0",
+        "job_id": "SYN_JOB",
+        "run_id": "SYN_RUN"
+      },
+      "source_epoch": "SYN_SOURCE_EPOCH_0",
+      "source_id": "SYN_SOURCE_L",
+      "source_seq": 4,
+      "source_version": "SYN_PROFILE_0_1",
+      "worker_id": "SYN_W3"
     }
   ],
   "experts": {
@@ -214,14 +327,14 @@
       {
         "global_rank": {
           "evidence": [
-            "SYN_EV_L"
+            "SYN_EV_W0"
           ],
           "unknown_reason": null,
           "value": 7
         },
         "gpu_ids": {
           "evidence": [
-            "SYN_EV_L"
+            "SYN_EV_W0"
           ],
           "unknown_reason": null,
           "value": [
@@ -230,14 +343,14 @@
         },
         "local_rank": {
           "evidence": [
-            "SYN_EV_L"
+            "SYN_EV_W0"
           ],
           "unknown_reason": null,
           "value": 0
         },
         "process": {
           "evidence": [
-            "SYN_EV_L"
+            "SYN_EV_W0"
           ],
           "unknown_reason": null,
           "value": {
@@ -254,14 +367,14 @@
       {
         "global_rank": {
           "evidence": [
-            "SYN_EV_L"
+            "SYN_EV_W1"
           ],
           "unknown_reason": null,
           "value": 2
         },
         "gpu_ids": {
           "evidence": [
-            "SYN_EV_L"
+            "SYN_EV_W1"
           ],
           "unknown_reason": null,
           "value": [
@@ -270,14 +383,14 @@
         },
         "local_rank": {
           "evidence": [
-            "SYN_EV_L"
+            "SYN_EV_W1"
           ],
           "unknown_reason": null,
           "value": 1
         },
         "process": {
           "evidence": [
-            "SYN_EV_L"
+            "SYN_EV_W1"
           ],
           "unknown_reason": null,
           "value": {
@@ -294,14 +407,14 @@
       {
         "global_rank": {
           "evidence": [
-            "SYN_EV_L"
+            "SYN_EV_W2"
           ],
           "unknown_reason": null,
           "value": 11
         },
         "gpu_ids": {
           "evidence": [
-            "SYN_EV_L"
+            "SYN_EV_W2"
           ],
           "unknown_reason": null,
           "value": [
@@ -310,14 +423,14 @@
         },
         "local_rank": {
           "evidence": [
-            "SYN_EV_L"
+            "SYN_EV_W2"
           ],
           "unknown_reason": null,
           "value": 0
         },
         "process": {
           "evidence": [
-            "SYN_EV_L"
+            "SYN_EV_W2"
           ],
           "unknown_reason": null,
           "value": {
@@ -334,14 +447,14 @@
       {
         "global_rank": {
           "evidence": [
-            "SYN_EV_L"
+            "SYN_EV_W3"
           ],
           "unknown_reason": null,
           "value": 0
         },
         "gpu_ids": {
           "evidence": [
-            "SYN_EV_L"
+            "SYN_EV_W3"
           ],
           "unknown_reason": null,
           "value": [
@@ -350,14 +463,14 @@
         },
         "local_rank": {
           "evidence": [
-            "SYN_EV_L"
+            "SYN_EV_W3"
           ],
           "unknown_reason": null,
           "value": 1
         },
         "process": {
           "evidence": [
-            "SYN_EV_L"
+            "SYN_EV_W3"
           ],
           "unknown_reason": null,
           "value": {

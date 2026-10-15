@@ -1,0 +1,83 @@
+test_attempt_partition_does_not_inherit_epochs_or_process_state (tests.test_parallel_context.ParallelContextTests) ... FAIL
+test_bounds_and_empty_batch (tests.test_parallel_context.ParallelContextTests) ... ok
+test_coverage_and_real_authenticity_are_explicit_unknown (tests.test_parallel_context.ParallelContextTests) ... ok
+test_dp_only_explicit_members (tests.test_parallel_context.ParallelContextTests) ... ok
+test_duplicate_evidence_and_wrong_reference_rejected (tests.test_parallel_context.ParallelContextTests) ... ok
+test_duplicate_global_and_local_rank_rejected (tests.test_parallel_context.ParallelContextTests) ... ok
+test_duplicate_group_or_member_is_rejected (tests.test_parallel_context.ParallelContextTests) ... ok
+test_duplicate_member_within_group_is_rejected (tests.test_parallel_context.ParallelContextTests) ... ok
+test_dynamic_routing_or_load_cannot_be_fabricated (tests.test_parallel_context.ParallelContextTests) ... ok
+test_elastic_resize_explicit_new_members_and_groups (tests.test_parallel_context.ParallelContextTests) ... ok
+test_empty_members_or_empty_group_rejected (tests.test_parallel_context.ParallelContextTests) ... ok
+test_exact_duplicate_only_counted_once (tests.test_parallel_context.ParallelContextTests) ... ok
+test_expert_cannot_use_dp_group (tests.test_parallel_context.ParallelContextTests) ... ok
+test_expert_owner_must_be_member_and_in_ep_group (tests.test_parallel_context.ParallelContextTests) ... ok
+test_fixture_hash_manifest (tests.test_parallel_context.ParallelContextTests) ... ok
+test_gpu_unknown_differs_from_evidenced_no_gpu (tests.test_parallel_context.ParallelContextTests) ... ok
+test_group_rank_order_is_not_global_rank_or_gpu (tests.test_parallel_context.ParallelContextTests) ... ok
+test_invalid_member_fixture_is_rejected (tests.test_parallel_context.ParallelContextTests) ... ok
+test_membership_epoch_conflict_isolates_all_versions (tests.test_parallel_context.ParallelContextTests) ... FAIL
+test_missing_evidence_rejects_concrete_values (tests.test_parallel_context.ParallelContextTests) ... ok
+test_missing_rank_gpu_and_expert_group_remain_unknown (tests.test_parallel_context.ParallelContextTests) ... ok
+test_mixed_intersecting_non_cartesian_groups (tests.test_parallel_context.ParallelContextTests) ... ok
+test_new_epoch_does_not_hide_old_conflict (tests.test_parallel_context.ParallelContextTests) ... ok
+test_no_sources_no_fake_precision (tests.test_parallel_context.ParallelContextTests) ... ok
+test_normalization_does_not_mutate_or_alias_input (tests.test_parallel_context.ParallelContextTests) ... ok
+test_optional_group_types_keep_explicit_members (tests.test_parallel_context.ParallelContextTests) ... ok
+test_partial_epoch_data_does_not_enrich_other_context (tests.test_parallel_context.ParallelContextTests) ... ok
+test_partial_process_instance_is_rejected (tests.test_parallel_context.ParallelContextTests) ... ok
+test_process_mapping_missing_remains_unknown (tests.test_parallel_context.ParallelContextTests) ... ERROR
+test_pure_deterministic_result_and_routing_unknown_paths (tests.test_parallel_context.ParallelContextTests) ... ok
+test_read_time_changes_do_not_corrupt_immutable_source_slots (tests.test_parallel_context.ParallelContextTests) ... ok
+test_real_unknown_fields_bool_bad_version_and_identifier_rejected (tests.test_parallel_context.ParallelContextTests) ... ok
+test_rejoin_new_epochs_keeps_both_process_instances (tests.test_parallel_context.ParallelContextTests) ... ok
+test_resize_cannot_reuse_topology_epoch (tests.test_parallel_context.ParallelContextTests) ... ok
+test_same_process_cannot_map_two_workers_even_different_tick_frequency (tests.test_parallel_context.ParallelContextTests) ... ok
+test_scope_mismatch_is_rejected (tests.test_parallel_context.ParallelContextTests) ... ok
+test_source_epoch_change_is_separate (tests.test_parallel_context.ParallelContextTests) ... ok
+test_source_slot_conflict_across_attempts_is_not_hidden (tests.test_parallel_context.ParallelContextTests) ... ok
+test_source_slot_conflict_isolates_both (tests.test_parallel_context.ParallelContextTests) ... ok
+test_static_expert_different_in_same_epoch_conflicts (tests.test_parallel_context.ParallelContextTests) ... ok
+test_static_expert_replica_is_separate_from_routing (tests.test_parallel_context.ParallelContextTests) ... ok
+test_topology_epoch_conflict_no_first_wins (tests.test_parallel_context.ParallelContextTests) ... ok
+test_unknown_claim_requires_explicit_reason_and_no_precision (tests.test_parallel_context.ParallelContextTests) ... ok
+test_unknown_epoch_cannot_support_precise_members_or_groups (tests.test_parallel_context.ParallelContextTests) ... ok
+test_unverified_log_cannot_support_identity (tests.test_parallel_context.ParallelContextTests) ... ok
+test_worker_gpu_evidence_cannot_be_reused_for_another_instance (tests.test_parallel_context.ParallelContextTests) ... ok
+test_worker_rank_evidence_cannot_be_reused_for_another_worker (tests.test_parallel_context.ParallelContextTests) ... ok
+test_wrong_group_epoch_is_rejected (tests.test_parallel_context.ParallelContextTests) ... ok
+
+======================================================================
+ERROR: test_process_mapping_missing_remains_unknown (tests.test_parallel_context.ParallelContextTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>/tests/test_parallel_context.py", line 228, in test_process_mapping_missing_remains_unknown
+    self.assertIsNone(result["contexts"][0]["context"]["members"]["value"][0]["process"]["value"])
+IndexError: list index out of range
+
+======================================================================
+FAIL: test_attempt_partition_does_not_inherit_epochs_or_process_state (tests.test_parallel_context.ParallelContextTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>/tests/test_parallel_context.py", line 167, in test_attempt_partition_does_not_inherit_epochs_or_process_state
+    self.assertEqual(len(result["contexts"]), 2)
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_membership_epoch_conflict_isolates_all_versions (tests.test_parallel_context.ParallelContextTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>/tests/test_parallel_context.py", line 138, in test_membership_epoch_conflict_isolates_all_versions
+    self.assertEqual(result["contexts"], [])
+AssertionError: Lists differ: [{'index': 0, 'digest': 'c4d912b118c849e15[8315 chars]g']}] != []
+
+First list contains 1 additional elements.
+First extra element 0:
+{'index': 0, 'digest': 'c4d912b118c849e151355e3bb34407592afc82b82bbf99a97f42933eb728cec6', 'context': {'context_version': '0.1', 'evidence': [{'clock_domain_id': 'SYN_CLOCK', 'content_sha256': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'evidence_id': 'SYN_EV_L', 'evidence_ref': 'SYN_REF_L', 'kind': 'LAUNCHER', 'observed_tick': 0, 'process_instance': None, 'scope': {'attempt_id': 'SYN_ATTEMPT_0', 'job_id': 'SYN_JOB', 'run_id': 'SYN_RUN'}, 'source_epoch': 'SYN_SOURCE_EPOCH_0', 'source_id': 'SYN_SOURCE_L', 'source_seq': 0, 'source_version': 'SYN_PROFILE_0_1', 'worker_id': None}, {'clock_domain_id': 'SYN_CLOCK', 'content_sha256': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'evidence_id': 'SYN_EV_G', 'evidence_ref': 'SYN_REF_G', 'kind': 'GROUP_MANIFEST', 'observed_tick': 0, 'process_instance': None, 'scope': {'attempt_id': 'SYN_ATTEMPT_0', 'job_id': 'SYN_JOB', 'run_id': 'SYN_RUN'}, 'source_epoch': 'SYN_SOURCE_EPOCH_0', 'source_id': 'SYN_SOURCE_G', 'source_seq': 0, 'source_version': 'SYN_PROFILE_0_1', 'worker_id': None}, {'clock_domain_id': 'SYN_CLOCK', 'content_sha256': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'evidence_id': 'SYN_EV_E', 'evidence_ref': 'SYN_REF_E', 'kind': 'EXPERT_MANIFEST', 'observed_tick': 0, 'process_instance': None, 'scope': {'attempt_id': 'SYN_ATTEMPT_0', 'job_id': 'SYN_JOB', 'run_id': 'SYN_RUN'}, 'source_epoch': 'SYN_SOURCE_EPOCH_0', 'source_id': 'SYN_SOURCE_E', 'source_seq': 0, 'source_version': 'SYN_PROFILE_0_1', 'worker_id': None}, {'clock_domain_id': 'SYN_CLOCK', 'content_sha256': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'evidence_id': 'SYN_EV_W0', 'evidence_ref': 'SYN_REF_W0', 'kind': 'LAUNCHER', 'observed_tick': 0, 'process_instance': {'boot_id': 'SYN_BOOT_0', 'host_id': 'SYN_HOST_0', 'pid': 100, 'pid_namespace_id': 'SYN_NS', 'process_start_ticks': 1000, 'start_ticks_hz': 100}, 'scope': {'attempt_id': 'SYN_ATTEMPT_0', 'job_id': 'SYN_JOB', 'run_id': 'SYN_RUN'}, 'source_epoch': 'SYN_SOURCE_EPOCH_0', 'source_id': 'SYN_SOURCE_L', 'source_seq': 1, 'source_version': 'SYN_PROFILE_0_1', 'worker_id': 'SYN_W0'}, {'clock_domain_id': 'SYN_CLOCK', 'content_sha256': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'evidence_id': 'SYN_EV_W1', 'evidence_ref': 'SYN_REF_W1', 'kind': 'LAUNCHER', 'observed_tick': 0, 'process_instance': {'boot_id': 'SYN_BOOT_0', 'host_id': 'SYN_HOST_0', 'pid': 101, 'pid_namespace_id': 'SYN_NS', 'process_start_ticks': 1000, 'start_ticks_hz': 100}, 'scope': {'attempt_id': 'SYN_ATTEMPT_0', 'job_id': 'SYN_JOB', 'run_id': 'SYN_RUN'}, 'source_epoch': 'SYN_SOURCE_EPOCH_0', 'source_id': 'SYN_SOURCE_L', 'source_seq': 2, 'source_version': 'SYN_PROFILE_0_1', 'worker_id': 'SYN_W1'}, {'clock_domain_id': 'SYN_CLOCK', 'content_sha256': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'evidence_id': 'SYN_EV_W2', 'evidence_ref': 'SYN_REF_W2', 'kind': 'LAUNCHER', 'observed_tick': 0, 'process_instance': {'boot_id': 'SYN_BOOT_1', 'host_id': 'SYN_HOST_1', 'pid': 102, 'pid_namespace_id': 'SYN_NS', 'process_start_ticks': 1000, 'start_ticks_hz': 100}, 'scope': {'attempt_id': 'SYN_ATTEMPT_0', 'job_id': 'SYN_JOB', 'run_id': 'SYN_RUN'}, 'source_epoch': 'SYN_SOURCE_EPOCH_0', 'source_id': 'SYN_SOURCE_L', 'source_seq': 3, 'source_version': 'SYN_PROFILE_0_1', 'worker_id': 'SYN_W2'}, {'clock_domain_id': 'SYN_CLOCK', 'content_sha256': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'evidence_id': 'SYN_EV_W3', 'evidence_ref': 'SYN_REF_W3', 'kind': 'LAUNCHER', 'observed_tick': 0, 'process_instance': {'boot_id': 'SYN_BOOT_1', 'host_id': 'SYN_HOST_1', 'pid': 103, 'pid_namespace_id': 'SYN_NS', 'process_start_ticks': 1000, 'start_ticks_hz': 100}, 'scope': {'attempt_id': 'SYN_ATTEMPT_0', 'job_id': 'SYN_JOB', 'run_id': 'SYN_RUN'}, 'source_epoch': 'SYN_SOURCE_EPOCH_0', 'source_id': 'SYN_SOURCE_L', 'source_seq': 4, 'source_version': 'SYN_PROFILE_0_1', 'worker_id': 'SYN_W3'}], 'experts': {'evidence': ['SYN_EV_E'], 'unknown_reason': None, 'value': [{'communication_group_ids': {'evidence': ['SYN_EV_E'], 'unknown_reason': None, 'value': ['SYN_EP0']}, 'evidence': ['SYN_EV_E'], 'expert_id': 'SYN_E0', 'layer_id': 'SYN_LAYER0', 'owner_worker_ids': ['SYN_W0'], 'replica_id': 'SYN_R0'}, {'communication_group_ids': {'evidence': ['SYN_EV_E'], 'unknown_reason': None, 'value': ['SYN_EP1']}, 'evidence': ['SYN_EV_E'], 'expert_id': 'SYN_E0', 'layer_id': 'SYN_LAYER0', 'owner_worker_ids': ['SYN_W3'], 'replica_id': 'SYN_R1'}, {'communication_group_ids': {'evidence': ['SYN_EV_E'], 'unknown_reason': None, 'value': ['SYN_EP1']}, 'evidence': ['SYN_EV_E'], 'expert_id': 'SYN_E1', 'layer_id': 'SYN_LAYER0', 'owner_worker_ids': ['SYN_W2'], 'replica_id': 'SYN_R0'}]}, 'groups': {'evidence': ['SYN_EV_G'], 'unknown_reason': None, 'value': [{'evidence': ['SYN_EV_G'], 'group_id': 'SYN_DP0', 'group_type': 'DP', 'member_ids': ['SYN_W0', 'SYN_W2'], 'membership_epoch': 0, 'topology_epoch': 0}, {'evidence': ['SYN_EV_G'], 'group_id': 'SYN_DP1', 'group_type': 'DP', 'member_ids': ['SYN_W1', 'SYN_W3'], 'membership_epoch': 0, 'topology_epoch': 0}, {'evidence': ['SYN_EV_G'], 'group_id': 'SYN_TP0', 'group_type': 'TP', 'member_ids': ['SYN_W1', 'SYN_W0'], 'membership_epoch': 0, 'topology_epoch': 0}, {'evidence': ['SYN_EV_G'], 'group_id': 'SYN_PP0', 'group_type': 'PP', 'member_ids': ['SYN_W0', 'SYN_W3'], 'membership_epoch': 0, 'topology_epoch': 0}, {'evidence': ['SYN_EV_G'], 'group_id': 'SYN_EP0', 'group_type': 'EP', 'member_ids': ['SYN_W0', 'SYN_W1', 'SYN_W3'], 'membership_epoch': 0, 'topology_epoch': 0}, {'evidence': ['SYN_EV_G'], 'group_id': 'SYN_EP1', 'group_type': 'EP', 'member_ids': ['SYN_W2', 'SYN_W3'], 'membership_epoch': 0, 'topology_epoch': 0}]}, 'members': {'evidence': ['SYN_EV_L'], 'unknown_reason': None, 'value': [{'global_rank': {'evidence': ['SYN_EV_W0'], 'unknown_reason': None, 'value': 7}, 'gpu_ids': {'evidence': ['SYN_EV_W0'], 'unknown_reason': None, 'value': ['SYN_GPU_9']}, 'local_rank': {'evidence': ['SYN_EV_W0'], 'unknown_reason': None, 'value': 0}, 'process': {'evidence': ['SYN_EV_W0'], 'unknown_reason': None, 'value': {'boot_id': 'SYN_BOOT_0', 'host_id': 'SYN_HOST_0', 'pid': 100, 'pid_namespace_id': 'SYN_NS', 'process_start_ticks': 1000, 'start_ticks_hz': 100}}, 'worker_id': 'SYN_W0'}, {'global_rank': {'evidence': ['SYN_EV_W1'], 'unknown_reason': None, 'value': 2}, 'gpu_ids': {'evidence': ['SYN_EV_W1'], 'unknown_reason': None, 'value': ['SYN_GPU_8']}, 'local_rank': {'evidence': ['SYN_EV_W1'], 'unknown_reason': None, 'value': 1}, 'process': {'evidence': ['SYN_EV_W1'], 'unknown_reason': None, 'value': {'boot_id': 'SYN_BOOT_0', 'host_id': 'SYN_HOST_0', 'pid': 101, 'pid_namespace_id': 'SYN_NS', 'process_start_ticks': 1000, 'start_ticks_hz': 100}}, 'worker_id': 'SYN_W1'}, {'global_rank': {'evidence': ['SYN_EV_W2'], 'unknown_reason': None, 'value': 11}, 'gpu_ids': {'evidence': ['SYN_EV_W2'], 'unknown_reason': None, 'value': ['SYN_GPU_7']}, 'local_rank': {'evidence': ['SYN_EV_W2'], 'unknown_reason': None, 'value': 0}, 'process': {'evidence': ['SYN_EV_W2'], 'unknown_reason': None, 'value': {'boot_id': 'SYN_BOOT_1', 'host_id': 'SYN_HOST_1', 'pid': 102, 'pid_namespace_id': 'SYN_NS', 'process_start_ticks': 1000, 'start_ticks_hz': 100}}, 'worker_id': 'SYN_W2'}, {'global_rank': {'evidence': ['SYN_EV_W3'], 'unknown_reason': None, 'value': 0}, 'gpu_ids': {'evidence': ['SYN_EV_W3'], 'unknown_reason': None, 'value': ['SYN_GPU_6']}, 'local_rank': {'evidence': ['SYN_EV_W3'], 'unknown_reason': None, 'value': 1}, 'process': {'evidence': ['SYN_EV_W3'], 'unknown_reason': None, 'value': {'boot_id': 'SYN_BOOT_1', 'host_id': 'SYN_HOST_1', 'pid': 103, 'pid_namespace_id': 'SYN_NS', 'process_start_ticks': 1000, 'start_ticks_hz': 100}}, 'worker_id': 'SYN_W3'}]}, 'membership_epoch': {'evidence': ['SYN_EV_L'], 'unknown_reason': None, 'value': 0}, 'origin': 'SYNTHETIC', 'routing': {'expert_load': {'evidence': [], 'unknown_reason': 'NOT_SUPPORTED', 'value': None}, 'token_routing': {'evidence': [], 'unknown_reason': 'NOT_SUPPORTED', 'value': None}}, 'scope': {'attempt_id': 'SYN_ATTEMPT_0', 'job_id': 'SYN_JOB', 'run_id': 'SYN_RUN'}, 'topology_epoch': {'evidence': ['SYN_EV_G'], 'unknown_reason': None, 'value': 0}}, 'status': 'SYNTHETIC_SUPPORTED', 'unknown_paths': ['routing.expert_load', 'routing.token_routing']}
+
+Diff is 19514 characters long. Set self.maxDiff to None to see it.
+
+----------------------------------------------------------------------
+Ran 48 tests in 0.053s
+
+FAILED (failures=2, errors=1)

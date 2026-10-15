@@ -8,7 +8,7 @@
 | --- | --- | --- |
 | 冻结 C1 如何兼容 | 选择独立 sidecar 和独立 Python API；不扩展 C1 解析器 | C2-A 不提供自动事件连接；原52测试、源码、golden逐字保留并回归 |
 | 如何表达并行 | 显式列出每个有序通信组，按 worker 实例引用；不使用维度乘积 | 不证明覆盖了所有组；合法子集不等于完整拓扑；混合/相交/非笛卡尔合成测试 |
-| 有字段但没有来源 | 非 null claim 必须引用允许语义的同 attempt 合成证据；无证据用 null+理由 | 标签和哈希不是鉴权；仅检验输入一致性，不声称现场真实性 |
+| 有字段但没有来源 | 非 null claim 必须引用允许语义的同 attempt 合成证据；无证据用 null+理由 | 标签和哈希不是鉴权；即便subject正确，任意合规合成GPU值也无法由本模块核验原始来源内容；仅检验输入一致性，不声称现场真实性 |
 | epoch 与重启 | attempt 分区内显式双 epoch；同 epoch 的不同成员/拓扑全部隔离 | 不按到达顺序挑赢家、不补 latest；重建/resize 需新 epoch；冲突与重入测试 |
 
 ## API 与输入
@@ -39,15 +39,21 @@
 | experts | 列表：`layer_id,expert_id,replica_id,owner_worker_ids,communication_group_ids,evidence`。三个ID组成静态专家副本键；owners是非空成员子集；communication_group_ids为可 UNKNOWN 的Claim，仅引用 EP/EXPERT_TENSOR 组，已知时 owners 必须落在所声明组成员并集内。不推断专家数量/副本/路由 |
 | routing | `token_routing,expert_load` 两个 Claim，本阶段都只接受 UNKNOWN；没有获准 token 来源，不允许静态归属推算动态流量/负载或故障 |
 
-每个 evidence 严格包含 `evidence_id,source_id,source_epoch,source_seq,kind,scope,evidence_ref,content_sha256,clock_domain_id,observed_tick`。所有标识为合成逻辑ID；SHA为64位小写十六进制，仅记录引用内容摘要，不自动读取/验证被引用内容。clock/tick 是同一合成时钟域中的观测点，不作跨机排序；无现场时钟精度结论。scope必须与顶层完全相同。相同 source_id/epoch/seq 在批次中出现不同证据内容时，相关 context 全部隔离。
+每个 evidence 严格包含 `evidence_id,source_id,source_epoch,source_seq,kind,scope,evidence_ref,content_sha256,clock_domain_id,observed_tick,source_version,worker_id,process_instance`。所有标识为合成逻辑ID；SHA为64位小写十六进制，仅记录引用内容摘要，不自动读取/验证被引用内容。clock/tick 是本次读取的合成观测点，不作跨机排序；无现场时钟精度结论。重读可以改变 clock/tick，比较源槽位不可变内容时排除这两项和本地 evidence_id，其余证据字段均参与冲突比较。scope必须与顶层完全相同。
+
+`source_version` 仅接受离线能力 profile `SYN_PROFILE_0_1` 或 `UNKNOWN`，不是厂商/真实API版本声明；UNKNOWN不能支持具体Claim，未知profile拒绝。真实producer/schema/API版本仍待OWNER_INPUT确认，未实现真实版本兼容适配。
+
+`worker_id/process_instance` 明确证据对象：成员清单/双epoch/组/专家的 attempt 证据两项都为null；rank证据必须绑定对应 worker；若rank证据显式携带process实例，则必须与当前worker的process完全匹配，不能复用旧实例；process/GPU证据必须绑定对应 worker 及与该 worker process Claim 完全匹配的完整实例。LOCAL_PROCESS/DEVICE_MONITOR必须有完整绑定，设备级指标快照不能作为 PID→GPU 映射。process Claim 未知时 GPU Claim也必须UNKNOWN；不会用设备或rank反向填进程。局部rank的证据可绑定worker而暂缺进程，整体状态仍UNKNOWN。
+
+全局 source_id/epoch/seq 表示一个批准来源流的不可变槽位，**不按attempt重新命名其序号空间**；跨attempt复用同槽且scope/内容不同也冲突并全隔离。若来源真实采用attempt-local seq，须为其分配明确不同的source_id或有来源证明的新source_epoch，不能仅改attempt规避冲突。当前不验证epoch转换真实性，epoch连续性固定UNKNOWN。
 
 | evidence kind | 允许支撑的 Claim 语义（仅模拟） |
 | --- | --- |
 | OWNER_MANIFEST | membership epoch / members / rank / process |
-| LAUNCHER | membership epoch / members / rank / process / GPU映射 |
+| LAUNCHER | membership epoch / members / rank / process / GPU映射（绑定具体worker/process的映射记录） |
 | SCHEDULER | membership epoch / members |
 | LOCAL_PROCESS | process |
-| DEVICE_MONITOR | GPU映射 |
+| DEVICE_MONITOR | GPU映射（绑定具体worker/process的映射记录） |
 | GROUP_MANIFEST | topology epoch / groups |
 | EXPERT_MANIFEST | experts / 专家通信组引用 |
 | LOG_UNVERIFIED / UNKNOWN | 不允许支撑任何精确 Claim |
@@ -60,7 +66,7 @@ UNKNOWN claim 逐项保留，规范化不填默认rank/GPU/epoch，不用数组�
 
 批次不推断时间先后，也不挑“最大epoch”为当前状态。相同规范内容只计 duplicate；证据不同的相同事实各自保留，不合并权限。相同 scope+membership epoch 的 members 结构不同，或相同 scope+topology epoch 的 membership epoch/groups/experts 不同，所有关联版本隔离。未知与具体的同 epoch 表述不同也保守隔离，不以部分来源拼成精确事实。不同 epoch 或不同 attempt 分开保存；process/worker/rank 可在新 membership epoch 中重新加入，不继承旧退出状态。group_id 重用只在明确新 topology epoch 下成立。epoch为UNKNOWN的记录无精确成员/拓扑，不连接其它记录。
 
-隔离记录不出现在可用 `contexts` 中；diagnostics仅有固定code、输入索引及规范内容SHA，不回显非法输入。批次存在非法/冲突/任何非routing缺项时 status=UNKNOWN；否则 SYNTHETIC_SUPPORTED。下游必须检查 diagnostics，不能把空 contexts 当空任务、退出或无故障。
+隔离记录不出现在可用 `contexts` 中；diagnostics仅有固定code、输入索引及规范内容SHA，不回显非法输入。批次存在非法/冲突/任何非routing缺项时 status=UNKNOWN；否则 SYNTHETIC_SUPPORTED。每次输出另有 `coverage=UNKNOWN,source_authenticity=UNKNOWN,epoch_continuity=UNKNOWN`：不证明成员/组覆盖完整，不验证现场鉴权，不证明epoch转换或当前生效顺序。缺完整清单并不阻塞局部结构验证，但任何完整性结论均UNKNOWN。下游必须检查 diagnostics，不能把空 contexts 当空任务、退出或无故障。
 
 ## 合成验证与恢复
 

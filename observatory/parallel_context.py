@@ -70,6 +70,14 @@ def _tokens(value, path, nonempty=False):
     return values
 
 
+def _process_fields(item, path):
+    _obj(item, "host_id boot_id pid_namespace_id pid process_start_ticks start_ticks_hz", path)
+    for key in ("host_id", "boot_id", "pid_namespace_id"):
+        _token(item[key], path + "." + key)
+    for key in ("pid", "process_start_ticks", "start_ticks_hz"):
+        _int(item[key], path + "." + key, positive=key != "process_start_ticks")
+
+
 def _scope(value, path):
     _obj(value, "job_id run_id attempt_id", path)
     for key in value:
@@ -128,7 +136,7 @@ def validate_context(value):
     source_slots = set()
     for item in _array(value["evidence"], "evidence", limit=64):
         _obj(item, "evidence_id source_id source_epoch source_seq kind scope evidence_ref "
-             "content_sha256 clock_domain_id observed_tick", "evidence[]")
+             "content_sha256 clock_domain_id observed_tick source_version worker_id process_instance", "evidence[]")
         for key in ("evidence_id", "source_id", "source_epoch", "evidence_ref", "clock_domain_id"):
             _token(item[key], "evidence[]." + key)
         for key in ("source_seq", "observed_tick"):
@@ -139,18 +147,39 @@ def validate_context(value):
             _fail("evidence[].content_sha256", "invalid digest")
         if _scope(item["scope"], "evidence[].scope") != scope:
             _fail("evidence[].scope", "scope mismatch")
+        if type(item["source_version"]) is not str or item["source_version"] not in {"SYN_PROFILE_0_1", "UNKNOWN"}:
+            _fail("evidence[].source_version", "unsupported synthetic source profile")
+        if item["worker_id"] is not None:
+            _token(item["worker_id"], "evidence[].worker_id")
+        if item["process_instance"] is not None:
+            if item["worker_id"] is None:
+                _fail("evidence[]", "process evidence requires worker subject")
+            _process_fields(item["process_instance"], "evidence[].process_instance")
+        if item["kind"] in {"LOCAL_PROCESS", "DEVICE_MONITOR"} and (item["worker_id"] is None or item["process_instance"] is None):
+            _fail("evidence[]", "local evidence requires complete worker process binding")
         slot = (item["source_id"], item["source_epoch"], item["source_seq"])
         if item["evidence_id"] in evidence or slot in source_slots:
             _fail("evidence", "duplicate evidence identity or source slot")
         source_slots.add(slot)
         evidence[item["evidence_id"]] = item
 
-    def refs(items, capability, path):
+    def refs(items, capability, path, worker_id=None, instance=None):
         for ref in _tokens(items, path, nonempty=True):
             if ref not in evidence or capability not in _CAPABILITIES[evidence[ref]["kind"]]:
                 _fail(path, "missing or unsuitable evidence")
+            proof = evidence[ref]
+            if proof["source_version"] != "SYN_PROFILE_0_1":
+                _fail(path, "unknown source profile cannot support precise claim")
+            if proof["worker_id"] != worker_id:
+                _fail(path, "evidence worker subject mismatch")
+            if capability in {"process", "gpu"} and (instance is None or proof["process_instance"] != instance):
+                _fail(path, "evidence process instance mismatch")
+            if capability == "rank" and proof["process_instance"] is not None and proof["process_instance"] != instance:
+                _fail(path, "rank evidence belongs to different process instance")
+            if worker_id is None and proof["process_instance"] is not None:
+                _fail(path, "attempt evidence must not claim process scope")
 
-    def claim(item, capability, path, validator):
+    def claim(item, capability, path, validator, worker_id=None, instance=None):
         _obj(item, "value evidence unknown_reason", path)
         if item["value"] is None:
             if item["evidence"] != [] or type(item["evidence"]) is not list:
@@ -160,7 +189,7 @@ def validate_context(value):
         else:
             if item["unknown_reason"] is not None:
                 _fail(path, "known claim cannot have unknown reason")
-            refs(item["evidence"], capability, path + ".evidence")
+            refs(item["evidence"], capability, path + ".evidence", worker_id, instance)
             validator(item["value"], path + ".value")
         return item["value"]
 
@@ -169,11 +198,7 @@ def validate_context(value):
     worker_ids, ranks, processes, local_ranks = set(), set(), set(), set()
 
     def process(item, path):
-        _obj(item, "host_id boot_id pid_namespace_id pid process_start_ticks start_ticks_hz", path)
-        for key in ("host_id", "boot_id", "pid_namespace_id"):
-            _token(item[key], path + "." + key)
-        for key in ("pid", "process_start_ticks", "start_ticks_hz"):
-            _int(item[key], path + "." + key, positive=key != "process_start_ticks")
+        _process_fields(item, path)
         # Tick frequency is a representation property, not a different instance.
         instance = tuple(item[k] for k in ("host_id", "boot_id", "pid_namespace_id", "pid", "process_start_ticks"))
         if instance in processes:
@@ -189,10 +214,12 @@ def validate_context(value):
             if wid in worker_ids:
                 _fail("members", "duplicate worker")
             worker_ids.add(wid)
-            p = claim(item["process"], "process", "members[].process", process)
-            rank = claim(item["global_rank"], "rank", "members[].global_rank", _int)
-            local = claim(item["local_rank"], "rank", "members[].local_rank", _int)
-            claim(item["gpu_ids"], "gpu", "members[].gpu_ids", _tokens)
+            process_claim = _obj(item["process"], "value evidence unknown_reason", "members[].process")
+            p = claim(process_claim, "process", "members[].process", process,
+                      wid, process_claim["value"])
+            rank = claim(item["global_rank"], "rank", "members[].global_rank", _int, wid, p)
+            local = claim(item["local_rank"], "rank", "members[].local_rank", _int, wid, p)
+            claim(item["gpu_ids"], "gpu", "members[].gpu_ids", _tokens, wid, p)
             if rank is not None:
                 if rank in ranks:
                     _fail("members", "duplicate global rank")
@@ -295,9 +322,11 @@ def normalize_contexts(values):
         if te is not None:
             checks.append((("TOPOLOGY_CONFLICT", scope, te), [me, _facts(context["groups"]), _facts(context["experts"])]))
         for item in context["evidence"]:
-            # Source namespace includes scope; never join unrelated attempts.
-            key = ("SOURCE_CONFLICT", scope, item["source_id"], item["source_epoch"], item["source_seq"])
-            fact = {k: v for k, v in item.items() if k != "evidence_id"}
+            # A source stream's cursor namespace is independent of entity scope.
+            # Read-time metadata can vary on a reread of an immutable record.
+            key = ("SOURCE_CONFLICT", item["source_id"], item["source_epoch"], item["source_seq"])
+            fact = {k: v for k, v in item.items()
+                    if k not in {"evidence_id", "observed_tick", "clock_domain_id"}}
             checks.append((key, fact))
         for key, fact in checks:
             slots.setdefault(key, []).append((index, _digest(fact), digest))
@@ -318,4 +347,6 @@ def normalize_contexts(values):
         accepted.append({"index": index, "digest": digest, "context": context,
                          "status": status, "unknown_paths": unknown_paths})
     status = "UNKNOWN" if not accepted or diagnostics or any(x["status"] == "UNKNOWN" for x in accepted) else "SYNTHETIC_SUPPORTED"
-    return {"contexts": accepted, "diagnostics": diagnostics, "duplicates": duplicates, "status": status}
+    return {"contexts": accepted, "diagnostics": diagnostics, "duplicates": duplicates,
+            "status": status, "coverage": "UNKNOWN", "source_authenticity": "UNKNOWN",
+            "epoch_continuity": "UNKNOWN"}

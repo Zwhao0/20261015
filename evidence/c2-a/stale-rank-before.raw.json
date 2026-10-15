@@ -1,0 +1,5 @@
+{
+  "command": "python3 -m unittest tests.test_parallel_context.ParallelContextTests.test_rank_evidence_bound_to_stale_process_is_rejected -v",
+  "exit_code": 1,
+  "output": "test_rank_evidence_bound_to_stale_process_is_rejected (tests.test_parallel_context.ParallelContextTests) ... FAIL\n\n======================================================================\nFAIL: test_rank_evidence_bound_to_stale_process_is_rejected (tests.test_parallel_context.ParallelContextTests)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"<REPO>/tests/test_parallel_context.py\", line 419, in test_rank_evidence_bound_to_stale_process_is_rejected\n    self.assertInvalid(context)\n  File \"<REPO>/tests/test_parallel_context.py\", line 26, in assertInvalid\n    validate_context(value)\nAssertionError: InvalidContext not raised\n\n----------------------------------------------------------------------\nRan 1 test in 0.002s\n\nFAILED (failures=1)\n"
+}

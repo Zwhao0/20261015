@@ -134,6 +134,7 @@ class ParallelContextTests(unittest.TestCase):
     def test_membership_epoch_conflict_isolates_all_versions(self):
         original, changed = fixture(), fixture()
         changed["members"]["value"][0]["process"]["value"]["process_start_ticks"] = 2000
+        changed["evidence"][3]["process_instance"]["process_start_ticks"] = 2000
         result = normalize_contexts([original, changed])
         self.assertEqual(result["contexts"], [])
         self.assertEqual(result["status"], "UNKNOWN")
@@ -162,6 +163,7 @@ class ParallelContextTests(unittest.TestCase):
         context["scope"]["attempt_id"] = "SYN_ATTEMPT_1"
         for ev in context["evidence"]:
             ev["scope"]["attempt_id"] = "SYN_ATTEMPT_1"
+            ev["source_id"] += "_ATTEMPT_1"
         context["members"]["value"][0]["global_rank"]["value"] = 3
         result = normalize_contexts([fixture(), context])
         self.assertEqual(len(result["contexts"]), 2)
@@ -223,6 +225,9 @@ class ParallelContextTests(unittest.TestCase):
     def test_process_mapping_missing_remains_unknown(self):
         context = fixture()
         context["members"]["value"][0]["process"] = unknown("MISSING_MAPPING")
+        context["members"]["value"][0]["gpu_ids"] = unknown("MISSING_MAPPING")
+        # Worker-scoped manifest rank proof does not claim a process instance.
+        context["evidence"][3]["process_instance"] = None
         result = normalize_contexts([context])
         self.assertEqual(result["status"], "UNKNOWN")
         self.assertIsNone(result["contexts"][0]["context"]["members"]["value"][0]["process"]["value"])
@@ -232,6 +237,7 @@ class ParallelContextTests(unittest.TestCase):
         other = copy.deepcopy(context["members"]["value"][0]["process"])
         other["value"]["start_ticks_hz"] = 200
         context["members"]["value"][1]["process"] = other
+        context["evidence"][4]["process_instance"] = copy.deepcopy(other["value"])
         self.assertInvalid(context)
 
     def test_duplicate_global_and_local_rank_rejected(self):
@@ -339,6 +345,88 @@ class ParallelContextTests(unittest.TestCase):
         self.assertEqual([x["index"] for x in result["contexts"]], [2])
         self.assertEqual(result["status"], "UNKNOWN")
         self.assertEqual(result["diagnostics"][0]["indices"], [0, 1])
+
+    def test_worker_gpu_evidence_cannot_be_reused_for_another_instance(self):
+        context = fixture()
+        context["members"]["value"][0]["gpu_ids"]["evidence"] = context["members"]["value"][1]["gpu_ids"]["evidence"][:]
+        self.assertInvalid(context)
+
+    def test_worker_rank_evidence_cannot_be_reused_for_another_worker(self):
+        context = fixture()
+        context["members"]["value"][0]["global_rank"]["evidence"] = context["members"]["value"][1]["global_rank"]["evidence"][:]
+        self.assertInvalid(context)
+
+    def test_source_slot_conflict_across_attempts_is_not_hidden(self):
+        changed = fixture()
+        changed["scope"]["attempt_id"] = "SYN_ATTEMPT_1"
+        for ev in changed["evidence"]:
+            ev["scope"]["attempt_id"] = "SYN_ATTEMPT_1"
+            ev["content_sha256"] = "b" * 64
+        result = normalize_contexts([fixture(), changed])
+        self.assertEqual(result["contexts"], [])
+        self.assertEqual(result["status"], "UNKNOWN")
+        self.assertIn("SOURCE_CONFLICT", [d["code"] for d in result["diagnostics"]])
+
+    def test_read_time_changes_do_not_corrupt_immutable_source_slots(self):
+        changed = fixture()
+        changed["evidence"][0]["observed_tick"] += 123
+        changed["evidence"][0]["clock_domain_id"] = "SYN_OTHER_OBSERVER_CLOCK"
+        result = normalize_contexts([fixture(), changed])
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(len(result["contexts"]), 2)
+
+    def test_coverage_and_real_authenticity_are_explicit_unknown(self):
+        result = normalize_contexts([fixture("dp_only")])
+        self.assertEqual(result["coverage"], "UNKNOWN")
+        self.assertEqual(result["source_authenticity"], "UNKNOWN")
+        self.assertEqual(result["epoch_continuity"], "UNKNOWN")
+
+    def test_unknown_source_version_cannot_support_concrete_claims(self):
+        context = fixture()
+        context["evidence"][0]["source_version"] = "UNKNOWN"
+        self.assertInvalid(context)
+        context["evidence"][0]["source_version"] = "SYN_PROFILE_0_2"
+        self.assertInvalid(context)
+
+    def test_gpu_mapping_requires_complete_matching_process(self):
+        context = fixture()
+        context["members"]["value"][0]["process"] = unknown("MISSING_MAPPING")
+        self.assertInvalid(context)
+        context = fixture()
+        context["evidence"][3]["process_instance"]["process_start_ticks"] += 1
+        self.assertInvalid(context)
+
+    def test_device_snapshot_without_instance_binding_is_not_gpu_mapping(self):
+        context = fixture()
+        context["evidence"][3]["kind"] = "DEVICE_MONITOR"
+        context["evidence"][3]["worker_id"] = None
+        context["evidence"][3]["process_instance"] = None
+        self.assertInvalid(context)
+
+    def test_bound_device_mapping_can_support_gpu_only(self):
+        context = fixture()
+        proof = copy.deepcopy(context["evidence"][3])
+        proof.update(evidence_id="SYN_DEVICE_MAP", source_id="SYN_DEVICE_SOURCE", kind="DEVICE_MONITOR")
+        context["evidence"].append(proof)
+        context["members"]["value"][0]["gpu_ids"]["evidence"] = ["SYN_DEVICE_MAP"]
+        self.assertEqual(validate_context(context)["members"]["value"][0]["gpu_ids"]["value"], ["SYN_GPU_9"])
+
+    def test_rank_evidence_bound_to_stale_process_is_rejected(self):
+        context = fixture()
+        proof = copy.deepcopy(context["evidence"][3])
+        proof.update(evidence_id="SYN_STALE_RANK", source_id="SYN_OLD_RANK_SOURCE")
+        proof["process_instance"]["process_start_ticks"] -= 1
+        context["evidence"].append(proof)
+        context["members"]["value"][0]["global_rank"]["evidence"] = ["SYN_STALE_RANK"]
+        self.assertInvalid(context)
+
+    def test_worker_scoped_rank_proof_without_process_binding_is_explicit(self):
+        context = fixture()
+        proof = copy.deepcopy(context["evidence"][3])
+        proof.update(evidence_id="SYN_WORKER_RANK", source_id="SYN_WORKER_RANK_SOURCE", process_instance=None)
+        context["evidence"].append(proof)
+        context["members"]["value"][0]["global_rank"]["evidence"] = ["SYN_WORKER_RANK"]
+        self.assertEqual(validate_context(context)["members"]["value"][0]["global_rank"]["value"], 7)
 
     def test_fixture_hash_manifest(self):
         manifest = json.loads((ROOT / "manifest.json").read_text())

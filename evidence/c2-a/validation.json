@@ -1,0 +1,124 @@
+{
+  "base_head": "504d43b2c66ff1d79959a94fe75b053729cc72f2",
+  "base_tree": "dec625b9a2daf745a71515f32daab75f35ab2e0c",
+  "checkpoint_head": "090b87fd51bf9131c06dfef436755f545b08d55e",
+  "checkpoint_tree": "829cd986191f1a1dd2b873bdeb7b84d95f6a8138",
+  "environment": {
+    "python": "3.9.6",
+    "os": "Darwin",
+    "release": "25.6.0"
+  },
+  "object": "Final candidate content identified by per-file SHA256 below; exact containing commit/tree and matching CI in Draft PR (no self-reference).",
+  "tests": {
+    "baseline": {
+      "command": "python3 -m unittest discover -s tests -v",
+      "count": 52,
+      "result": "PASS",
+      "exit_code": 0,
+      "log": "baseline-tests.txt"
+    },
+    "targeted": {
+      "command": "python3 -m unittest tests.test_parallel_context -v",
+      "count": 54,
+      "result": "PASS",
+      "exit_code": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "log": "final-targeted-tests.txt"
+    },
+    "full": {
+      "command": "python3 -m unittest discover -s tests -v",
+      "count": 106,
+      "result": "PASS",
+      "exit_code": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "log": "final-tests.txt"
+    }
+  },
+  "docs": {
+    "command": "python3 scripts/check_docs.py",
+    "result": "PASS",
+    "exit_code": 0,
+    "output": "PASS: 5 required documents; 32 text files checked\n"
+  },
+  "diff": {
+    "command": "git diff --check",
+    "result": "PASS",
+    "exit_code": 0,
+    "output": ""
+  },
+  "scope_result": "PASS",
+  "protected_files": 67,
+  "failures": [
+    {
+      "log": "initial-tests.raw.json",
+      "exit_code": 1,
+      "tests": 35,
+      "errors": 1,
+      "cause": "fixture SHA manifest not yet written"
+    },
+    {
+      "log": "binding-before.raw.json",
+      "exit_code": 1,
+      "tests": 5,
+      "failures": 4,
+      "errors": 1,
+      "cause": "worker subject and global source stream gaps plus volatile read metadata and missing coverage field"
+    },
+    {
+      "log": "binding-first-recovery.txt",
+      "exit_code": 1,
+      "tests": 48,
+      "failures": 2,
+      "errors": 1,
+      "cause": "synthetic variants missing new explicit source namespace / process proof / GPU UNKNOWN prerequisites"
+    },
+    {
+      "log": "stale-rank-before.raw.json",
+      "exit_code": 1,
+      "tests": 1,
+      "failures": 1,
+      "cause": "rank evidence carrying an old process instance was accepted"
+    }
+  ],
+  "content_sha256": {
+    "README.md": "507909e98facf02b62b36ef25e81168140ac454ed9d3363da0ecbe1eb8d55592",
+    "docs/HANDOFF.md": "4740d198fbc32d55604be010a4aa1b9af2de63487d41c050e42f53f0ec002650",
+    "docs/M1_C2_OWNER_INPUT.md": "9714ce07a118cb95250a6307171e6f095765e0f8ec6dcef57d2b93c05a491bfc",
+    "docs/M1_C2_PARALLEL_CONTEXT.md": "9cbe7536ca676dce7548722c2dc1b57c044483fc5f8d264ef7b0607c1c2cafbf",
+    "docs/M1_C2_SOURCE_PLAN.md": "7cb8b52ba95cc65ebb8b4faefdbba777da3e1b42502dc2a9c5632b7c54fc24c9",
+    "docs/STATUS.md": "ecd395c9f363534d95d327a004b369c738fa8ac5c79c9327f2b9251c24fc048d",
+    "evidence/c2-a/README.md": "720645d1d941b8054006c14c1cd7d437116574dee9f8aa6de1aa06a7b2c0bc3c",
+    "evidence/c2-a/baseline-tests.txt": "4768020cf0525c83b32534ec4a49ea5969c569ea4cd2f519f68cc2df22f075a1",
+    "evidence/c2-a/binding-after.txt": "89e40125b39405f35b16a29469f81960d03d7817884e0d1e5fad1b82fce11fef",
+    "evidence/c2-a/binding-before.raw.json": "2943cd6a1e4a8a05194cca19e960fc4a140722d8dc147606935296de0a9a4402",
+    "evidence/c2-a/binding-before.txt": "6d763425420b20dbb4d6549885460e79420a9284df994b1d73761913242aae00",
+    "evidence/c2-a/binding-first-recovery.txt": "e2025d5d463c682b3e0f79fdc73d5fb802574490dae09dba08c9085d532618b5",
+    "evidence/c2-a/docs-check.txt": "99f2a9a5d94cc30eb272e2fb7e1fe740e6f11a09c1123828ee1102d8e1d2b25c",
+    "evidence/c2-a/final-targeted-tests.txt": "105d023a7cfcf75e956171c5a2b5ef168e71c9ef325bac375864d031e029426a",
+    "evidence/c2-a/final-tests.txt": "d7e4d85b27a4b9f2c21ea0a5522f38ba60c0a31669cec12e62587b8b9b7fe3b4",
+    "evidence/c2-a/initial-tests.raw.json": "81c46762cab44c3ff7e9d8a642dc28fdff69fecd86ff517e0385479db5a3baa0",
+    "evidence/c2-a/initial-tests.txt": "33f98f469de114f904acbdc175092641f1dc1225417b9aab17f572371d414681",
+    "evidence/c2-a/integrated-tests.txt": "2291b631c567ce3ddef58c4575c88325d0515b290680410f7e0c90db23863ca3",
+    "evidence/c2-a/recovered-tests.txt": "2c253c42efeb2e72b237d023fbbbd1cb52eb16b95fda3e306988a4b8e059faf0",
+    "evidence/c2-a/scope-check.json": "f993dfd0cba4890c49ad0403b4870ec81cdf6a06eacc1f61bb0fcb94628801d8",
+    "evidence/c2-a/stale-rank-before.raw.json": "c47e04af6f29ae2d92281ed560d471cc54ca9922c803fd341d144d70f9ffa411",
+    "evidence/c2-a/stale-rank-before.txt": "479cbbacdd36d2fd81e2c5286b9a170edeb4187474c4922b4745f92fe80736ff",
+    "observatory/parallel_context.py": "31ecced3a7201665b98257d9681c9c8425157628479962e73b33ca5b9c7d31cb",
+    "tests/fixtures/parallel_context/dp_only.json": "9eaac78095be009ffce176bd788c4ea9c204dc7c2d4780cf33525c6cf08cc25d",
+    "tests/fixtures/parallel_context/invalid_member.json": "ccdec818591d4203a8bbbb7d048e837e949eb8a73c2f7e27425d6ddb3a77ccf1",
+    "tests/fixtures/parallel_context/manifest.json": "c4712f8bf63f545f31c3c34ac2accd5b9a1c674d85d0717f4a960227f904cb0c",
+    "tests/fixtures/parallel_context/missing_mapping.json": "0033f563875442d3ebe67a7410c9584ee6befff19f970128bc2d41c226193104",
+    "tests/fixtures/parallel_context/mixed.json": "3921321b7e91b9935ea475fa528e36de0e6fdca41f34120106dc0f846f568892",
+    "tests/fixtures/parallel_context/rejoined.json": "fa4960a004b9092f1abaf87e1928a8bdd015bf2ecea409443e8df0d04f8f9c06",
+    "tests/fixtures/parallel_context/unknown.json": "ad794f95d7febdef31c53f25a6159edb96300b44e1393551cacc8a712ac2360e",
+    "tests/test_parallel_context.py": "63fe6bacdc562198586c7b3c788f6da7b32cbc02242c8ce44428e1bd74785320"
+  },
+  "ci": "INCONCLUSIVE at content freeze; final HEAD run/job/raw log verification recorded in Draft PR",
+  "real_sources": "UNKNOWN",
+  "c2_b": "BLOCKED / not authorized",
+  "field_validation": "NOT_RUN"
+}
