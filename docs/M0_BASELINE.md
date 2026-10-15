@@ -1,11 +1,11 @@
 # M0 技术基线
 
-依据：[README](../README.md)、母 [Issue #1](https://github.com/Zwhao0/20261015/issues/1)、当前 [Issue #8](https://github.com/Zwhao0/20261015/issues/8)。2026-10-15（Asia/Shanghai）用户明确授权启动M0-3。M0-2 PR #7 已获[离线矩阵审核PASS](https://github.com/Zwhao0/20261015/pull/7#issuecomment-6189223408)并合并，当前main `d36cdacb77b6b1b08392bf27b9b288952918aa98`。本轮只做V0.1切片设计与验收方案；18条证据和原能力矩阵不变，功能未实现，M1未授权。
+依据：[README](../README.md)、母 [Issue #1](https://github.com/Zwhao0/20261015/issues/1)及[M0-Gate 正式审核记录](M0_GATE.md)。2026-10-15（Asia/Shanghai）用户授权启动 M0-Gate 正式审核记录，随后明确“批准执行M0-GATE”；首版仅登记执行授权，整体Gate当时INCONCLUSIVE。2026-10-15后续[用户最终批准记录](https://github.com/Zwhao0/20261015/issues/1#issuecomment-6190108253)已登记最终验收批准，现按[PR #10修正要求](https://github.com/Zwhao0/20261015/pull/10#issuecomment-6190117664)同步限定范围PASS。M0-3 PR #9/head `1ef24fe27a63791857c8bf8fb2b59b715b61e542` 已获[独立设计复审 PASS](https://github.com/Zwhao0/20261015/pull/9#issuecomment-6189756035)，合并基线 main `42bce13c5bd925c74856f96de64f431526d142bf`，tree `b83c0ed32dfac917701b81be53ea5de37c75b2af` 与审核 head 相同。以下 M0-0～M0-2 的时间、版本、授权及失败为历史事实，保留原适用范围；最新门禁以正式记录为准，M1 未授权。
 
 ## 路线与门禁
 
 M0 技术基线 → M1 Observability → M2 Fail-Stop → M3 Hang → M4 Fail-Slow → M5 Evidence-based Diagnosis & Delivery。
-M0-1～M0-3 填充以下材料后，由 ChatGPT 独立审核、用户最终批准 M0-Gate；当前 `INCONCLUSIVE`，不自动进入 M1。
+M0-0～M0-3 材料已获各自限范围独立审核 PASS；[整体技术审查](https://github.com/Zwhao0/20261015/issues/1#issuecomment-6189883744)认为离线设计就绪。用户最终批准现已取得，整体 M0-Gate 为 PASS（限工程基线/离线调查、矩阵、V0.1设计及M1-C1离线编码技术准备）；真实接入/兼容/开销仍INCONCLUSIVE，M1执行未授权。
 
 ## M0-0 决策记录
 
@@ -67,7 +67,7 @@ M0-1～M0-3 填充以下材料后，由 ChatGPT 独立审核、用户最终批�
 
 M0-2轮现场测试 NOT_RUN，完整运行兼容性 INCONCLUSIVE；没有证据支持把未知项判“不可得”或健康。原矩阵按历史快照保留，其中“待审核/M0-3未授权”是当轮状态；最新审核与授权以上文、STATUS和当前Issue为准。
 
-## M0-3 最小端到端切片及验收（方案完成，待独立审核）
+## M0-3 最小端到端切片及验收（设计复审 PASS，PR #9 已合并）
 
 选定V0.1：一个明确获准真实任务的基础观测及进程异常退出。完整[切片方案](M0_3_SLICE.md)包含：
 
@@ -77,10 +77,14 @@ M0-2轮现场测试 NOT_RUN，完整运行兼容性 INCONCLUSIVE；没有证据�
 - I0～I5双机接入/验收步骤、量化资源/延迟预算和回退；现场命令须待真实对象批准后在M1 PR落实。
 - M1候选C1～C4及DoD，仅列表不创建/启动任务。M0只做设计；功能回放/双机/开销测试均NOT_RUN。
 
-## M0-Gate 材料与审核（INCONCLUSIVE）
+## M0-Gate 材料与审核（限定范围PASS）
 
-已有M0-1调查证据/限定审核、M0-2离线矩阵/审核PASS、M0-3方案/待审核与M1候选列表。现场来源、身份/退出样本、C1运行时来源和具体命令仍有缺口；不能据此声明训练功能已验收。
-M0-3独立审核与M0-Gate/用户最终批准尚缺。审核填写范围、被审核SHA/PR、证据、PASS/FAIL/INCONCLUSIVE、ChatGPT意见、用户批准及日期；本轮不自行给Gate PASS或进入M1。
+[正式审核记录](M0_GATE.md)汇总 M0-0～M0-3 的审核 SHA、合并事实、证据和批准栏。独立审查来源为[Issue #1 评论](https://github.com/Zwhao0/20261015/issues/1#issuecomment-6189883744)，Codex 本轮只登记及核对，不替代独立审核者。
+
+- 离线设计交付及 M1-C1 离线编码技术准备：PASS（独立技术审查结论）。
+- 真实训练接入、信号有效性、兼容与低开销：INCONCLUSIVE；真实来源/身份/权威退出/运行时来源/受控存储/时钟及现场命令仍缺。
+- T01～T14 功能回放、CPU子进程、I0～I5、GPU/collective及开销：NOT_RUN。
+- 整体 M0-Gate：PASS（限工程基线/离线调查、矩阵、V0.1设计及M1-C1离线编码技术准备）。2026-10-15用户在ChatGPT中明确回答“批准”，[用户最终批准记录](https://github.com/Zwhao0/20261015/issues/1#issuecomment-6190108253)记录原提问与范围；先前仅授权记录时的INCONCLUSIVE过程保留于正式记录和历史STATUS。M1执行仍未授权，C2～C4真实接入/服务器授权另行取得；不以文档PASS代替功能验收。
 
 ## 外部来源
 
