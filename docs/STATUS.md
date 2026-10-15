@@ -1,45 +1,44 @@
 # 项目状态
 
-更新：2026-10-15（Asia/Shanghai）。当前 [Issue #6：M0-2](https://github.com/Zwhao0/20261015/issues/6)，母 [Issue #1](https://github.com/Zwhao0/20261015/issues/1)。用户明确指令“启动 M0-2”；历史文档的未授权状态已被本轮指令取代。
+更新：2026-10-15（Asia/Shanghai）。当前 [Issue #8：M0-3](https://github.com/Zwhao0/20261015/issues/8)，母 [Issue #1](https://github.com/Zwhao0/20261015/issues/1)。用户明确指令“启动 M0-3”，取代历史文档的未授权状态。
 
 ## 阶段与当前交付
 
 | 项目 | 状态 | 事实与边界 |
 | --- | --- | --- |
-| M0-0 | PASS，已合并 | PR #2，历史 main 41a30e0… |
-| M0-1 首轮 | 文档审核 PASS，已合并 PR #4 | 历史 main `4ae0555c6fca24a6082e8e6af4ac40f107cb6716` |
-| M0-1 容器补证 | 限环境调查交付审核 PASS；训练/信号 INCONCLUSIVE | [PR #5 审核](https://github.com/Zwhao0/20261015/pull/5#issuecomment-6188441126)，精确 head f15050dc1c4b8bf5cd5e49d75576f19ecf7b269d；启动时 Open/Ready/Unmerged；发布前GitHub已合并为main `4d93a08d76a10ff9a52fba68b84cba2d5fc6475a`，本轮未操作合并 |
-| M0-2 | 离线矩阵材料完成，待独立审核 | [9行矩阵](M0_2_CAPABILITIES.md)、A/B证据、官方版本来源、V1～V7条件与失败降级；不声明真实信号可用 |
-| M0-2 现场验证 | NOT_RUN | 未再次 SSH/读凭据/读metrics或私有日志/查询RAS/触发FR/GPU/训练/collective；完整兼容性 INCONCLUSIVE |
-| M0-3 / M1～M5 | NOT_RUN | 未授权，本轮不选切片/不实现监控或检测、不故障注入 |
-| M0-Gate | INCONCLUSIVE | M0-2 独立审核、后续材料与最终批准尚缺 |
+| M0-0 / M0-1 | 限各次交付审核 PASS，已合并 | PR #2/#4/#5；18条调查证据，训练/真实信号 INCONCLUSIVE |
+| M0-2 | 离线矩阵审核 PASS，已合并 PR #7 | [审核](https://github.com/Zwhao0/20261015/pull/7#issuecomment-6189223408)覆盖head `7c9326b61bb539f1c2cf9435d41fb48a403772f4`；merge/main `d36cdacb77b6b1b08392bf27b9b288952918aa98`；本轮Codex未合并 |
+| M0-3 | 方案材料完成，待独立审核 | [V0.1方案](M0_3_SLICE.md)：基础观测/权威异常退出、契约、14类回放、双机验收/预算/回退、M1候选；无功能实现 |
+| M0-3 功能/现场 | NOT_RUN | T01～T14回放、CPU子进程、I0～I5双机、开销未执行；真实任务来源/完整身份/退出样本UNKNOWN |
+| M0-Gate | INCONCLUSIVE | 本PR独立审核与用户最终批准尚缺，不能进入M1 |
+| M1～M5 | NOT_RUN | 未授权；只列M1候选，不创建/启动执行Issue、不实现Detector/故障注入 |
 
-- 分支 `codex/m0-2-capability-matrix` 先从4ae0555…建立，发布前fetch发现PR #5已合并，保存草稿后快进到main `4d93a08d76a10ff9a52fba68b84cba2d5fc6475a`；不改旧分支、不操作GitHub合并。当前 Draft PR 由该分支关联，最终 head/tree/CI 在 PR 描述保存；仅五份文档改动，工程检查器/CI/AGENTS/原调查证据不变。
-- 最新main已包含完整18条证据，原始分析输入仍固定为 [PR #5 固定快照](https://github.com/Zwhao0/20261015/blob/f15050dc1c4b8bf5cd5e49d75576f19ecf7b269d/docs/M0_1_INVENTORY.md) 的18条；本分支同名本地文件随main快进同步，原8条及新增10条未改。GitHub可恢复公开输入，不提供主机登录或私密原始证据。
-- A/B 各自版本调查：Torch 2.13.0+cu130、Toolkit 13.0.88；NCCL 包/header 2.30.7、Torch编译API 2.29.7、探查进程库2.30.7。上游编译宏解释支持两种查询可不同，不证明本地ABI/collective兼容。
-- 直接可得仅限历史主机设备/瞬时PID-GPU字段、时钟API语义；完整Job/Run/Rank身份、跨机精度、真实进度、metrics/日志来源、RAS/FR现场配置/输出仍UNKNOWN。RAS/FR有对应版本支持路径，需配置/本地构建核实；没有证据判完整能力“不可得”。
+- 分支 `codex/m0-3-slice-acceptance` 从最新main d36cdac…新建；PR由该分支关联的Draft PR确认，最终head/tree/CI写PR描述，避免自引提交。只改README/STATUS/HANDOFF/M0_BASELINE并新增M0_3_SLICE；原调查/矩阵、AGENTS、检查器与CI保持原文。
+- 真实来源选择“所有者任务清单+获准局部观测+启动器权威终止记录”，当前尚未落实。裸PID消失不能判退出，单节点launcher退出不外推所有worker或run终态；未明确编码的137不判OOM/SIGKILL。
+- A/B历史版本：Torch2.13.0+cu130、Toolkit13.0.88；NCCL包/header2.30.7、Torch编译API2.29.7、探查库2.30.7。差异保留，不换库，不证明collective兼容。C1通用运行时来源待所有者确认，确认前不用于开发/测试。
+- 本轮未SSH、读凭据/私密索引/metrics/任务日志、查询RAS/触发FR、运行GPU/训练/collective或更改环境。用户取消清理继续有效；容器删除/停止/重启/新建及镜像/卷删除均0。
 
 ## 验证记录
 
-本地 macOS / Python 3.9.6，验证对象为本分支待提交的五份文档；最终提交用相同 tree 绑定，精确SHA和CI由PR记录。
+本地macOS / Python3.9.6，验证对象为本分支五份待提交文档；最终提交绑定相同tree，精确SHA/发布/CI以PR为准。检查结果只限文档与合成payload一致性，不表示监控功能通过。
 
 | 检查 | 结果 | 命令 / 退出码 / 证据 |
 | --- | --- | --- |
-| 仓库、main、Issue、前序审核 | PASS | `git status --short --branch`、`git fetch origin`、`git rev-parse origin/main` exit 0；GitHub Issue #1/#3、PR #5 metadata/审核 API；新任务 Issue #6 |
-| 官方版本资料 | PASS（离线来源核对） | 矩阵 S1～S9；NCCL 2.30.7归档、PyTorch v2.13.0源码、exporter 4.8.4 release；工具查询无 shell 退出码，部分候选URL失败另列，不算功能测试 |
-| 本地文档/diff | PASS，exit 0 | `python3 scripts/check_docs.py` → 5份必需文档/12文本文件；`git diff --check`；最终staged diff同样检查 |
-| 18条公开摘要/原8条不变 | PASS，exit 0 | `python3` 标准库复核（矩阵内可复跑代码）：18个唯一ID/规范JSON SHA-256匹配，与历史4ae0555…原8条的JSON文本/哈希逐字一致，最新main18条与f15050d输入逐字一致；不读取私密原始材料 |
-| 敏感信息/范围 | PASS，exit 0 + 人工审查 | 标准库扫描五份全文的IPv4/真实GPU UUID/私钥头/常见token和password赋值/本机用户路径/SSH身份模式无匹配；仅五份文档，AGENTS/CI/检查器/旧证据未改；扫描覆盖有限，不读取凭据 |
-| 当前HEAD CI | INCONCLUSIVE（写入时） | 发布后核对本次 PR Checks 的 run/job/log；旧PR的PASS不能替代，精确链接保存PR描述 |
-| 真实信号/GPU/双机验证 | NOT_RUN | 没有本轮主机命令/现场退出码/新原始日志；不将文档检查冒充功能验收 |
+| 基线与前序审核 | PASS | `git fetch origin`、`git rev-parse HEAD origin/main` exit0；Issue #1/#6/#8、PR #7实际metadata/评论；PR已合并，旧文档待审核为历史状态 |
+| 官方接口来源 | PASS（文档核对） | Python3.12 os/time、PyTorch v2.13.0 torchrun；方案内链接，仅API语义引用，不复制实现、不证明本地构建/任务来源；工具查询无shell退出码 |
+| 文档与diff | PASS，exit0 | `python3 scripts/check_docs.py` → 5份必需文档/13文本文件；`git diff --check`；staged/最终diff结果保存PR |
+| 合成示例/历史材料一致性 | PASS，exit0 | `python3`标准库解析4个SYNTHETIC payload，用`os.waitstatus_to_exitcode`核对0/7/15的静态编码，14类用例编号齐备；执行矩阵内公开脚本重算18摘要/原8条不变；原调查/矩阵/AGENTS/检查器/CI与main字节一致；非功能回放 |
+| 范围与敏感信息 | PASS，exit0 + 人工审查 | 仅五份文档；IPv4/真实GPU UUID/私钥/常见token与password赋值/本机用户路径/SSH身份模式无匹配；不读凭据或受控材料，扫描覆盖有限 |
+| 当前HEAD CI | INCONCLUSIVE（写入时） | 发布后核对本PR run/job/log与精确head/base；旧PR CI不能替代 |
+| T01～T14 / CPU进程 / I0～I5 | NOT_RUN | 仅设计及样例值检查；无回放器/产品测试实现，无双机命令/现场退出码/新原始日志 |
 
-## 阻塞、失败与恢复
+## 阻塞与恢复
 
-- B-Workload / B-Signals / B-Time：无已确认可读本项目任务、launcher/Rank/进度来源、metrics/RAS/FR信号与时钟误差界，继续 UNKNOWN。补证条件 V1～V6 见矩阵，不自行读取未知归属任务。
-- B-Runtime：C1只完成版本/CPU导入，通用运行时来源待环境所有者确认，确认前不作为开发/测试环境。GPU/双机验证为V7后续独立授权项，不为消除NCCL差异换库。
-- B-Predecessor（已解除）：发布前发现PR #5已合并；草稿以命名stash和本机公开文档备份保留后快进最新main，整合M0-2入口。固定SHA仍保留用于可复现；无远端强推/合并。
-- F-Docs：初次NCCL RAS路径错误/PyTorch 2.13文档页与部分候选路径工具访问失败；改查NCCL2.30.7正确归档路径和PyTorch v2.13.0官方源码成功。失败仅表示本次工具未取得资料，不证明HTTP404或功能缺失，详见矩阵。
-- F-Local-M0-2（已恢复）：一次文档辅助命令的嵌套heredoc结束符相同，zsh解析报unmatched backtick/exit 1，整段未执行；改用apply_patch和不同结束符后成功，不涉及服务器。
-- 历史失败不抹去：Docker权限、Chrony506、dpkg混合非零、B05认证、A05截断/本地IndexError、08 mount模板、终端推送凭据/upstream refspec/本地编码诊断，均保留在[首轮记录](M0_1_INVENTORY.md)、PR #4/#5与固定18条证据快照。容器版本访问后来已获准成功，时间/训练信号缺口仍在。
-- 用户取消清理继续有效：删除/停止/重启/新建容器、镜像/卷删除为0；本轮没有服务器配置变更需回滚。文档可经审查revert/后续修复，不覆盖失败历史。
-- 主智能体要求6.1 Sol/High，无可靠模型/档位回读，不声称已核验/切换；本轮未委派子智能体。上下文检查点、发布恢复与独立审核入口见[HANDOFF](HANDOFF.md)。
+- B-Workload / B-Identity / B-Exit：无本项目获准真实任务/完整成员与进程实例/权威退出来源，接入门禁I0未满足。M0-3方案可独立审核，M1现场执行INCONCLUSIVE；须由任务所有者提供V1/V3白名单来源，不扫描全量env/args或访问旧项目。
+- B-Runtime / B-Time / B-Signals：C1来源待确认，跨机误差/真实step/metrics/RAS/FR仍UNKNOWN；它们不是本切片全部前置项，但不能据此宣称真实功能或训练影响PASS。现场存储位置/访问者/保留期限/预算也待确认。
+- B-Review：M0-3本PR独立审核、M0-Gate和用户批准尚缺。M1候选C1～C4仅设计清单，未启动。
+- 本轮无服务器失败或变更。一次本地批量定位命令在已完成fetch/HEAD输出后，对不存在的可选技能路径执行rg导致exit2；改为读取已列出的准确技能路径，exit0，未读取其它项目文件；不将该批量命令整体冒称exit0。
+- F-Patch（已恢复）：首个多文件补丁对STATUS/HANDOFF同时使用Delete/Add，工具报multiple operations target并拒绝整批，未应用；改为独立Update及标准库完整写入，保留原历史失败链接，随后复核diff。
+- F-Heredoc（已恢复）：本轮末尾状态辅助命令的结束符误用PY，Python将后续shell行视作源码并在执行前SyntaxError/exit1；文档未写入、暂存未执行。更正为匹配结束符后运行成功，随后重做检查。
+- 历史失败保留于[调查记录](M0_1_INVENTORY.md)、[矩阵](M0_2_CAPABILITIES.md)及PR #4/#5/#7：Docker权限、Chrony506、dpkg混合非零、B05认证、A05截断/IndexError、08 mount模板、Git凭据/refspec/编码、候选资料URL失败、嵌套heredoc解析等。来源差异按当轮时间/作用域解释，不删除失败或升级UNKNOWN。
+- 文档回退用审查revert/后续修正，不强推/覆盖；未合并、不关闭旧Issue。主智能体要求6.1Sol/High，无可靠模型/档位回读，不声称核验/切换；未委派子智能体。发布/上下文恢复见[HANDOFF](HANDOFF.md)。
