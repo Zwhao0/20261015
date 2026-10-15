@@ -16,39 +16,41 @@ M0-1～M0-3 填充以下材料后，由 ChatGPT 独立审核、用户最终批�
 | CI 如何接入 | 普通 push/PR 工作流，contents 只读、checkout v7.0.1 固定 commit、关闭凭据持久化 | 首轮 v4 检查通过但有 Node 20 弃用警告；改用官方 Node 24 版本，已观察 runner 2.337.0 满足最低要求 2.327.1 | runner/托管 Action 是外部依赖；变更后重跑 CI，保留本地相同检查命令 |
 | 技术栈何时确定 | 先留 UNKNOWN，后续授权调查后决策；不预装 PyTorch/CUDA 等 | 避免猜测 H800 环境或提前开展 M1 | 目前不能证明兼容性；须由 M0-1/2 的事实与证据验证 |
 
-## M0-1 环境事实（待独立审核；训练层 INCONCLUSIVE）
+## M0-1 环境事实（容器补证待审核；训练验收 INCONCLUSIVE）
 
-起点 main `41a30e011b3fb0074aaef7cb8c42070aef4562b1`。用户当前明确授权两台指定服务器与连接信息文件的访问，实际只使用只读权限；没有沿用旧项目事实。采集于 2026-10-15 16:08:10～16:12:18 Asia/Shanghai（UTC+08:00）。下表 OBSERVED 限定于本次快照/命名空间，UNKNOWN 不能解释为未安装。
+起点 main `41a30e011b3fb0074aaef7cb8c42070aef4562b1`。首轮宿主机快照 2026-10-15 16:08:10～16:12:18 Asia/Shanghai（UTC+08:00），容器补证 16:36:01～16:42:26 同时区；A/B 均独立执行，不继承旧项目环境结论。用户新增容器与既有 sudo 访问授权，优先复用环境；清理容器的请求在执行前被用户取消，删除/停止/重启/新建均为 0。
 
 | 事实与状态 | A（独立采集） | B（独立采集） | 证据与限制 |
 | --- | --- | --- | --- |
-| GPU / 显存 OBSERVED | 8×NVIDIA H800；每卡 81559 MiB | 8×NVIDIA H800；每卡 81559 MiB | E-A-01 / E-B-01，nvidia-smi query，exit 0；无 GPU 计算验收 |
-| Driver / 驱动声明 CUDA OBSERVED | 580.178.04 / 13.0 | 580.178.04 / 13.0 | 各自 01；驱动 CUDA 声明不等于实际 Runtime/Toolkit |
-| OS / Kernel OBSERVED | Ubuntu 24.04 / Linux 6.8.0-146-generic x86_64 | Ubuntu 24.04 / Linux 6.8.0-139-generic x86_64 | 各自 01，exit 0；内核不能跨节点外推 |
-| CPU / 内存总量 OBSERVED | 192 在线逻辑 CPU / 1056430708 kB | 192 在线逻辑 CPU / 1056419436 kB | 各自 01，getconf / MemTotal，exit 0；非容器资源配额 |
-| 登录环境/容器线索 OBSERVED | container 检测 none，exit 1；两个标准标记未见 | container 检测 none，exit 1；两个标准标记未见 | 各自 01/02；支持宿主机视图线索，不证明全部隔离状态 |
-| 默认 Python OBSERVED | 3.12.3 | 3.12.3 | 各自 01/02，exit 0；不替代实际训练解释器 |
-| PyTorch / 训练 Python / 框架 UNKNOWN | 当前默认解释器未发现指定包元数据；实际训练版本 UNKNOWN | 同左，独立采集 | 各自 02；torch/deepspeed/transformers/accelerate/lightning/pytorch-lightning/megatron-core 清单见调查，不扫描其他环境 |
-| CUDA Runtime / Toolkit UNKNOWN | Runtime UNKNOWN；nvcc 不在 PATH、默认位置未见 | 同左，独立采集 | 各自 01/02；不是全机未安装断言 |
-| Torch 构建 CUDA/NCCL / 已加载 NCCL UNKNOWN | 均 UNKNOWN | 均 UNKNOWN | 各自 02；包元数据未发现，未 import/attach；其它可执行/系统 NCCL 版本亦 UNKNOWN |
-| 训练启动/分布式 launcher UNKNOWN | 未读获准任务入口，实际启动器/版本 UNKNOWN | 同左 | 各自 01/02；torchrun/srun/mpirun 不在 PATH 不证明任务未使用它们 |
-| Docker/容器 Toolkit OBSERVED | client 29.1.3；包 29.1.3-0ubuntu3~24.04.2 / 1.20.1-1 | 同版本，独立采集 | 各自 02/04；docker ps exit 1 permission denied，容器内部版本 NOT_RUN/BLOCKED |
-| DCGM / Exporter 安装 OBSERVED | core/proprietary 包 1:4.6.1-1；exporter 包 4.8.4.3955-1 | 同版本，独立采集 | 各自 02/03；03 core/exporter 单项 exit 0，不等于正在产出信号 |
-| 现有观测来源 OBSERVED / UNKNOWN | exporter/node_exporter comm 存在；配置/信号 UNKNOWN | 同左，独立采集 | 各自 02/04；指定 service 名 inactive/not-found 与进程线索并存，实际来源未查，未访问 metrics |
-| NCCL RAS / Flight Recorder UNKNOWN | 安装/配置/信号均 UNKNOWN；API NOT_RUN | 同左 | 未读配置/任务日志、未调用 RAS/profiler，不以最新文档推断当前版本支持 |
-| GPU compute-app 瞬时字段 OBSERVED | 02 时 0 行，04 时 8 行/8 PID/8 GPU | 02 时 8 行，04 时 8 行/8 PID/8 GPU | 各自 02/04；只发布聚合计数，不公开 PID/UUID，不推断为本项目训练 |
-| Job/Run/Rank/Local Rank/Host-PID-GPU 关联 UNKNOWN | 除单机 PID-GPU 字段可读外，任务映射 UNKNOWN | 同左 | 无本项目可读任务标识；不读未知归属进程环境/args/日志，不形成 M0-2 能力判断 |
-| 时区/同步线索 OBSERVED / INCONCLUSIVE | Etc/UTC；NTP=yes；NTPSynchronized=yes；chrony 4.5-1ubuntu4.2；tracking exit 1 | 同左，独立采集 | 各自 01/03/04；506 Cannot talk to daemon；跨机精度 UNKNOWN |
-| 时钟 API OBSERVED | time=CLOCK_REALTIME；monotonic/perf_counter=CLOCK_MONOTONIC | 同左，独立采集 | 各自 02；仅 API 语义，不代表训练事件时间来源 |
+| GPU / 显存 OBSERVED | 8×NVIDIA H800；每卡 81559 MiB | 同规格，独立采集 | E-A-01 / E-B-01，exit 0；没有 GPU 计算验收 |
+| Driver / 驱动声明 CUDA OBSERVED | 580.178.04 / 13.0 | 同版本，独立采集 | 各自 01；驱动声明不等于 Runtime/Toolkit |
+| OS / Kernel OBSERVED | Ubuntu 24.04 / Linux 6.8.0-146-generic x86_64 | Ubuntu 24.04 / Linux 6.8.0-139-generic x86_64 | 各自 01；内核不同 |
+| CPU / MemTotal OBSERVED | 192 逻辑 CPU / 1056430708 kB | 192 逻辑 CPU / 1056419436 kB | 各自 01；不是容器 cgroup 配额 |
+| 默认宿主机 Python OBSERVED | 3.12.3，指定 Torch 元数据未发现 | 同版本，独立采集 | 各自 01/02；不能外推到容器，原拒绝访问已解除 |
+| 当前复用候选 C1 OBSERVED | running、未暂停；容器 Ubuntu 24.04 / Python 3.12.3 | 同状态/版本，独立采集 | 各自 06/07；只查系统与第三方包，不读取/复制旧项目 |
+| 容器 PyTorch OBSERVED | 2.13.0+cu130，CPU 导入 exit 0 | 同版本/结果，独立采集 | 各自 07/08/09；is_initialized 查询前后均 false；GPU/训练 NOT_RUN |
+| Torch 构建 CUDA / Toolkit OBSERVED | 13.0 / nvcc 13.0.88 | 同版本，独立采集 | 各自 07/09；构建声明与编译器版本分列 |
+| 当前探查进程 CUDA Runtime OBSERVED / UNKNOWN | 已映射 libcudart.so.13；补丁版本 UNKNOWN | 同左，独立采集 | 各自 08/09；未调用 CUDA 初始化/内核；真实训练进程 Runtime UNKNOWN |
+| NCCL 包 / 头文件 OBSERVED | nvidia-nccl-cu13 2.30.7 / header 2.30.7 | 同版本，独立采集 | 各自 07；安装事实不等于 Torch 版本 API |
+| Torch NCCL 版本 API OBSERVED | (2,29,7)，raw 8591835143 | 同值，独立采集 | 各自 09；不冒称为实际训练进程加载版本 |
+| 本次探查进程实际 NCCL 库 OBSERVED | libnccl.so.2，RTLD_NOLOAD 后 ncclGetVersion code 23007 / exit 0（2.30.7） | 同值，独立采集 | 各自 09；版本 API 与运行库不同，兼容性 INCONCLUSIVE；真实训练进程已加载库 UNKNOWN |
+| 容器框架包 OBSERVED | Transformers 5.17.0 / Accelerate 1.15.0 | 同版本，独立采集 | 各自 07；元数据，不代表真实训练框架/启动器版本 |
+| 真实训练/launcher/任务来源 UNKNOWN | 未识别获准本项目任务；Job/Run/Rank/Local Rank UNKNOWN | 同左 | PID/GPU 字段在 04 可读，但未读取未知归属进程 args/env/日志；真实分布式启动方式未验证 |
+| Docker/容器 Toolkit OBSERVED | client 29.1.3；docker.io 29.1.3-0ubuntu3~24.04.2 / Toolkit 包 1.20.1-1 | 同版本，独立采集 | 各自 02/04；06 后以授权现有 sudo 成功查询，未改权限 |
+| DCGM / Exporter 安装 OBSERVED | core/proprietary 1:4.6.1-1；exporter 4.8.4.3955-1 | 同版本，独立采集 | 各自 02/03；不等于正在产出指标 |
+| 现有观测 / RAS / Flight Recorder | exporter/node_exporter 进程线索；配置/实际信号 UNKNOWN；RAS/FR UNKNOWN | 同左 | 各自 02/04；版本查询不是观测能力测试，不访问日志或 metrics 端点 |
+| 时间线索 OBSERVED / INCONCLUSIVE | Etc/UTC，NTP=yes/同步报告yes；chrony 4.5-1ubuntu4.2；tracking exit 1/506 | 同左，独立采集 | 各自 01/03/04；偏差/跨机精度 UNKNOWN；未改时钟 |
+| 时钟 API OBSERVED | time=CLOCK_REALTIME；monotonic/perf_counter=CLOCK_MONOTONIC | 同左，独立采集 | 各自 02；不是训练事件时间来源证据 |
 
-## M0-1 原始/脱敏证据索引与未验证项
+## M0-1 证据、已解决阻塞与剩余缺口
 
-[只读调查记录](M0_1_INVENTORY.md) 保存采集前方案、精确命令、八条实际证据（E-A-01～04、E-B-01～04）、UTC 起止时间、各层退出码、公开摘要 SHA-256、失败记录及恢复条件。原始敏感材料仅留授权本机 Git 忽略目录、私下受控索引；公开逻辑引用 `LOCAL/<证据ID>` 不暴露实际路径。摘要哈希可验证公开摘要完整性，不能替代独立复核。精确 commit/PR/对应 CI 由本分支 Draft PR 描述保存。
+[只读调查记录](M0_1_INVENTORY.md) 保存两轮授权、方案、实际命令、18 条证据（A/B 各 01～09）、精确 UTC 起止、分层退出码、规范 JSON 摘要/哈希和失败恢复。首轮 8 条摘要/哈希保持原文；新增 10 条单列，不能混用时间/作用域。敏感原始材料仅留本机授权受控索引，公开逻辑 `LOCAL/<ID>` 不泄露真实身份/路径，摘要哈希不替代原始证据独立审核。
 
-- 容器读取 BLOCKED：现有登录账户对 Docker 清单无权限；没有提权或修改权限。
-- 真实训练入口、训练 Python/Torch/Runtime/Toolkit/NCCL/框架版本、Rank 映射、已加载库均 UNKNOWN；获准任务内容读取 NOT_RUN。后续需任务所有者/管理员提供受控元数据与明确可读边界，不接触旧项目。
-- metrics 端点/实际信号、训练日志/进度、RAS/Flight Recorder 配置/API、跨机同步精度均 UNKNOWN / NOT_RUN。未配置新观测或执行兼容性实验；M0-2/M0-3/M1 仍未执行。
-- 关键决定、非零查询的解释、时间变化与失败保留见调查记录；不能给双机训练环境全量 PASS。等待 ChatGPT 独立审核，用户批准前不推进阶段。
+- **B-Container 已对版本补证解除**：使用本轮明确授权的现有 sudo 权限，未修改用户组/socket/sudoers。B 首次认证 exit 1，随后使用已提供的登录凭据成功；原失败保留。
+- 已找到可复用的现有环境，未触发下载/上传/构建条件。仅证明 C1 的版本读取与 CPU 导入；不把候选升级为 GPU/双机训练通过，不复用旧项目代码/构建内容。
+- Torch NCCL API 2.29.7 与本进程 ncclGetVersion 2.30.7 差异已观察；不推断兼容与否，不更换库。实际训练入口/launcher、Runtime 完整版本、训练进程已加载库、Rank、日志/指标配置、RAS/FR 与时钟精度仍 UNKNOWN / NOT_RUN。
+- 清理 CANCELLED / NOT_RUN，无容器/镜像/卷删除；原始数据和既有运行容器保留。
+- [PR #4 独立审核](https://github.com/Zwhao0/20261015/pull/4#issuecomment-6187891676) 仅覆盖旧宿主机快照 `1dced3b…`。原 PR #4 已合并，最新 main 为 `4ae0555c6fca24a6082e8e6af4ac40f107cb6716`。本轮以 `codex/m0-1-container-inventory` 提交 [Draft PR #5](https://github.com/Zwhao0/20261015/pull/5)，base=最新 main，新的 head/CI/审核单独记录。M0-Gate 与训练层仍 INCONCLUSIVE，用户未授权 M0-2/M0-3/M1。
 
 ## M0-2 观测能力与兼容性矩阵（NOT_RUN）
 
