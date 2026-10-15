@@ -13,7 +13,7 @@ M0-1～M0-3 填充以下材料后，由 ChatGPT 独立审核、用户最终批�
 | --- | --- | --- | --- |
 | 初始化放多少工程工具 | 选择 Markdown + Python 标准库检查 + 单个 CI；暂不引入应用脚架/训练依赖 | Issue 要求最小初始化，环境尚未调查 | 检查覆盖有限；运行检查并人工审核语义、权限与敏感信息 |
 | 状态如何跨会话恢复 | GitHub Issue/PR + STATUS/HANDOFF；不依赖聊天记忆 | Issue 明确规定事实基线与上下文检查点 | 状态可能过时；每小任务更新并核对 PR head/Checks |
-| CI 如何接入 | 普通 push/PR 工作流，contents 只读、checkout 固定 commit、关闭凭据持久化 | 只需仓库文档验证；无需 GPU、服务器或部署密钥 | runner/托管 Action 是外部依赖；保留本地相同检查命令，故障时记录而非绕过 |
+| CI 如何接入 | 普通 push/PR 工作流，contents 只读、checkout v7.0.1 固定 commit、关闭凭据持久化 | 首轮 v4 检查通过但有 Node 20 弃用警告；改用官方 Node 24 版本，已观察 runner 2.337.0 满足最低要求 2.327.1 | runner/托管 Action 是外部依赖；变更后重跑 CI，保留本地相同检查命令 |
 | 技术栈何时确定 | 先留 UNKNOWN，后续授权调查后决策；不预装 PyTorch/CUDA 等 | 避免猜测 H800 环境或提前开展 M1 | 目前不能证明兼容性；须由 M0-1/2 的事实与证据验证 |
 
 ## M0-1 环境事实表（NOT_RUN）
@@ -62,5 +62,5 @@ M0-1～M0-3 填充以下材料后，由 ChatGPT 独立审核、用户最终批�
 ## 外部来源
 
 - [GitHub Actions 事件文档](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows)：参考 push/普通 pull_request 触发方式。
-- [actions/checkout v4.2.2](https://github.com/actions/checkout/releases/tag/v4.2.2)：CI 引用官方 Action `11bd71901bbe5b1630ceea73d27597364c9af683`，MIT 许可证；仅检出本仓库，不将其代码复制入项目。
+- [actions/checkout v7.0.1](https://github.com/actions/checkout/releases/tag/v7.0.1)：CI 引用官方 Action `3d3c42e5aac5ba805825da76410c181273ba90b1`；[运行时声明](https://github.com/actions/checkout/blob/v7.0.1/action.yml)、[兼容性说明](https://github.com/actions/checkout/blob/v7.0.1/README.md)、[MIT 许可证](https://github.com/actions/checkout/blob/v7.0.1/LICENSE)。仅检出本仓库，不将其代码复制入项目。
 - 未引入旧项目、外部训练实现或算法代码；项目自身许可证尚未指定，后续需由所有者决定，不擅自添加。
