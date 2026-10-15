@@ -1,0 +1,8 @@
+{
+  "dp_only.json": "9eaac78095be009ffce176bd788c4ea9c204dc7c2d4780cf33525c6cf08cc25d",
+  "invalid_member.json": "ccdec818591d4203a8bbbb7d048e837e949eb8a73c2f7e27425d6ddb3a77ccf1",
+  "missing_mapping.json": "0033f563875442d3ebe67a7410c9584ee6befff19f970128bc2d41c226193104",
+  "mixed.json": "3921321b7e91b9935ea475fa528e36de0e6fdca41f34120106dc0f846f568892",
+  "rejoined.json": "fa4960a004b9092f1abaf87e1928a8bdd015bf2ecea409443e8df0d04f8f9c06",
+  "unknown.json": "ad794f95d7febdef31c53f25a6159edb96300b44e1393551cacc8a712ac2360e"
+}

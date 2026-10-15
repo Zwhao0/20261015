@@ -1,0 +1,511 @@
+{
+  "context_version": "0.1",
+  "evidence": [
+    {
+      "clock_domain_id": "SYN_CLOCK",
+      "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "evidence_id": "SYN_EV_L",
+      "evidence_ref": "SYN_REF_L",
+      "kind": "LAUNCHER",
+      "observed_tick": 0,
+      "process_instance": null,
+      "scope": {
+        "attempt_id": "SYN_ATTEMPT_0",
+        "job_id": "SYN_JOB",
+        "run_id": "SYN_RUN"
+      },
+      "source_epoch": "SYN_SOURCE_EPOCH_0",
+      "source_id": "SYN_SOURCE_L",
+      "source_seq": 0,
+      "source_version": "SYN_PROFILE_0_1",
+      "worker_id": null
+    },
+    {
+      "clock_domain_id": "SYN_CLOCK",
+      "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "evidence_id": "SYN_EV_G",
+      "evidence_ref": "SYN_REF_G",
+      "kind": "GROUP_MANIFEST",
+      "observed_tick": 0,
+      "process_instance": null,
+      "scope": {
+        "attempt_id": "SYN_ATTEMPT_0",
+        "job_id": "SYN_JOB",
+        "run_id": "SYN_RUN"
+      },
+      "source_epoch": "SYN_SOURCE_EPOCH_0",
+      "source_id": "SYN_SOURCE_G",
+      "source_seq": 0,
+      "source_version": "SYN_PROFILE_0_1",
+      "worker_id": null
+    },
+    {
+      "clock_domain_id": "SYN_CLOCK",
+      "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "evidence_id": "SYN_EV_E",
+      "evidence_ref": "SYN_REF_E",
+      "kind": "EXPERT_MANIFEST",
+      "observed_tick": 0,
+      "process_instance": null,
+      "scope": {
+        "attempt_id": "SYN_ATTEMPT_0",
+        "job_id": "SYN_JOB",
+        "run_id": "SYN_RUN"
+      },
+      "source_epoch": "SYN_SOURCE_EPOCH_0",
+      "source_id": "SYN_SOURCE_E",
+      "source_seq": 0,
+      "source_version": "SYN_PROFILE_0_1",
+      "worker_id": null
+    },
+    {
+      "clock_domain_id": "SYN_CLOCK",
+      "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "evidence_id": "SYN_EV_W0",
+      "evidence_ref": "SYN_REF_W0",
+      "kind": "LAUNCHER",
+      "observed_tick": 0,
+      "process_instance": {
+        "boot_id": "SYN_BOOT_0",
+        "host_id": "SYN_HOST_0",
+        "pid": 100,
+        "pid_namespace_id": "SYN_NS",
+        "process_start_ticks": 1000,
+        "start_ticks_hz": 100
+      },
+      "scope": {
+        "attempt_id": "SYN_ATTEMPT_0",
+        "job_id": "SYN_JOB",
+        "run_id": "SYN_RUN"
+      },
+      "source_epoch": "SYN_SOURCE_EPOCH_0",
+      "source_id": "SYN_SOURCE_L",
+      "source_seq": 1,
+      "source_version": "SYN_PROFILE_0_1",
+      "worker_id": "SYN_W0"
+    },
+    {
+      "clock_domain_id": "SYN_CLOCK",
+      "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "evidence_id": "SYN_EV_W1",
+      "evidence_ref": "SYN_REF_W1",
+      "kind": "LAUNCHER",
+      "observed_tick": 0,
+      "process_instance": {
+        "boot_id": "SYN_BOOT_0",
+        "host_id": "SYN_HOST_0",
+        "pid": 101,
+        "pid_namespace_id": "SYN_NS",
+        "process_start_ticks": 1000,
+        "start_ticks_hz": 100
+      },
+      "scope": {
+        "attempt_id": "SYN_ATTEMPT_0",
+        "job_id": "SYN_JOB",
+        "run_id": "SYN_RUN"
+      },
+      "source_epoch": "SYN_SOURCE_EPOCH_0",
+      "source_id": "SYN_SOURCE_L",
+      "source_seq": 2,
+      "source_version": "SYN_PROFILE_0_1",
+      "worker_id": "SYN_W1"
+    },
+    {
+      "clock_domain_id": "SYN_CLOCK",
+      "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "evidence_id": "SYN_EV_W2",
+      "evidence_ref": "SYN_REF_W2",
+      "kind": "LAUNCHER",
+      "observed_tick": 0,
+      "process_instance": {
+        "boot_id": "SYN_BOOT_1",
+        "host_id": "SYN_HOST_1",
+        "pid": 102,
+        "pid_namespace_id": "SYN_NS",
+        "process_start_ticks": 1000,
+        "start_ticks_hz": 100
+      },
+      "scope": {
+        "attempt_id": "SYN_ATTEMPT_0",
+        "job_id": "SYN_JOB",
+        "run_id": "SYN_RUN"
+      },
+      "source_epoch": "SYN_SOURCE_EPOCH_0",
+      "source_id": "SYN_SOURCE_L",
+      "source_seq": 3,
+      "source_version": "SYN_PROFILE_0_1",
+      "worker_id": "SYN_W2"
+    },
+    {
+      "clock_domain_id": "SYN_CLOCK",
+      "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "evidence_id": "SYN_EV_W3",
+      "evidence_ref": "SYN_REF_W3",
+      "kind": "LAUNCHER",
+      "observed_tick": 0,
+      "process_instance": {
+        "boot_id": "SYN_BOOT_1",
+        "host_id": "SYN_HOST_1",
+        "pid": 103,
+        "pid_namespace_id": "SYN_NS",
+        "process_start_ticks": 1000,
+        "start_ticks_hz": 100
+      },
+      "scope": {
+        "attempt_id": "SYN_ATTEMPT_0",
+        "job_id": "SYN_JOB",
+        "run_id": "SYN_RUN"
+      },
+      "source_epoch": "SYN_SOURCE_EPOCH_0",
+      "source_id": "SYN_SOURCE_L",
+      "source_seq": 4,
+      "source_version": "SYN_PROFILE_0_1",
+      "worker_id": "SYN_W3"
+    }
+  ],
+  "experts": {
+    "evidence": [
+      "SYN_EV_E"
+    ],
+    "unknown_reason": null,
+    "value": [
+      {
+        "communication_group_ids": {
+          "evidence": [],
+          "unknown_reason": "NO_SOURCE",
+          "value": null
+        },
+        "evidence": [
+          "SYN_EV_E"
+        ],
+        "expert_id": "SYN_E0",
+        "layer_id": "SYN_LAYER0",
+        "owner_worker_ids": [
+          "SYN_W0"
+        ],
+        "replica_id": "SYN_R0"
+      },
+      {
+        "communication_group_ids": {
+          "evidence": [
+            "SYN_EV_E"
+          ],
+          "unknown_reason": null,
+          "value": [
+            "SYN_EP1"
+          ]
+        },
+        "evidence": [
+          "SYN_EV_E"
+        ],
+        "expert_id": "SYN_E0",
+        "layer_id": "SYN_LAYER0",
+        "owner_worker_ids": [
+          "SYN_W3"
+        ],
+        "replica_id": "SYN_R1"
+      },
+      {
+        "communication_group_ids": {
+          "evidence": [
+            "SYN_EV_E"
+          ],
+          "unknown_reason": null,
+          "value": [
+            "SYN_EP1"
+          ]
+        },
+        "evidence": [
+          "SYN_EV_E"
+        ],
+        "expert_id": "SYN_E1",
+        "layer_id": "SYN_LAYER0",
+        "owner_worker_ids": [
+          "SYN_W2"
+        ],
+        "replica_id": "SYN_R0"
+      }
+    ]
+  },
+  "groups": {
+    "evidence": [
+      "SYN_EV_G"
+    ],
+    "unknown_reason": null,
+    "value": [
+      {
+        "evidence": [
+          "SYN_EV_G"
+        ],
+        "group_id": "SYN_DP0",
+        "group_type": "DP",
+        "member_ids": [
+          "SYN_W0",
+          "SYN_W2"
+        ],
+        "membership_epoch": 0,
+        "topology_epoch": 0
+      },
+      {
+        "evidence": [
+          "SYN_EV_G"
+        ],
+        "group_id": "SYN_DP1",
+        "group_type": "DP",
+        "member_ids": [
+          "SYN_W1",
+          "SYN_W3"
+        ],
+        "membership_epoch": 0,
+        "topology_epoch": 0
+      },
+      {
+        "evidence": [
+          "SYN_EV_G"
+        ],
+        "group_id": "SYN_TP0",
+        "group_type": "TP",
+        "member_ids": [
+          "SYN_W1",
+          "SYN_W0"
+        ],
+        "membership_epoch": 0,
+        "topology_epoch": 0
+      },
+      {
+        "evidence": [
+          "SYN_EV_G"
+        ],
+        "group_id": "SYN_PP0",
+        "group_type": "PP",
+        "member_ids": [
+          "SYN_W0",
+          "SYN_W3"
+        ],
+        "membership_epoch": 0,
+        "topology_epoch": 0
+      },
+      {
+        "evidence": [
+          "SYN_EV_G"
+        ],
+        "group_id": "SYN_EP0",
+        "group_type": "EP",
+        "member_ids": [
+          "SYN_W0",
+          "SYN_W1",
+          "SYN_W3"
+        ],
+        "membership_epoch": 0,
+        "topology_epoch": 0
+      },
+      {
+        "evidence": [
+          "SYN_EV_G"
+        ],
+        "group_id": "SYN_EP1",
+        "group_type": "EP",
+        "member_ids": [
+          "SYN_W2",
+          "SYN_W3"
+        ],
+        "membership_epoch": 0,
+        "topology_epoch": 0
+      }
+    ]
+  },
+  "members": {
+    "evidence": [
+      "SYN_EV_L"
+    ],
+    "unknown_reason": null,
+    "value": [
+      {
+        "global_rank": {
+          "evidence": [],
+          "unknown_reason": "MISSING_MAPPING",
+          "value": null
+        },
+        "gpu_ids": {
+          "evidence": [],
+          "unknown_reason": "MISSING_MAPPING",
+          "value": null
+        },
+        "local_rank": {
+          "evidence": [
+            "SYN_EV_W0"
+          ],
+          "unknown_reason": null,
+          "value": 0
+        },
+        "process": {
+          "evidence": [
+            "SYN_EV_W0"
+          ],
+          "unknown_reason": null,
+          "value": {
+            "boot_id": "SYN_BOOT_0",
+            "host_id": "SYN_HOST_0",
+            "pid": 100,
+            "pid_namespace_id": "SYN_NS",
+            "process_start_ticks": 1000,
+            "start_ticks_hz": 100
+          }
+        },
+        "worker_id": "SYN_W0"
+      },
+      {
+        "global_rank": {
+          "evidence": [
+            "SYN_EV_W1"
+          ],
+          "unknown_reason": null,
+          "value": 2
+        },
+        "gpu_ids": {
+          "evidence": [
+            "SYN_EV_W1"
+          ],
+          "unknown_reason": null,
+          "value": [
+            "SYN_GPU_8"
+          ]
+        },
+        "local_rank": {
+          "evidence": [
+            "SYN_EV_W1"
+          ],
+          "unknown_reason": null,
+          "value": 1
+        },
+        "process": {
+          "evidence": [
+            "SYN_EV_W1"
+          ],
+          "unknown_reason": null,
+          "value": {
+            "boot_id": "SYN_BOOT_0",
+            "host_id": "SYN_HOST_0",
+            "pid": 101,
+            "pid_namespace_id": "SYN_NS",
+            "process_start_ticks": 1000,
+            "start_ticks_hz": 100
+          }
+        },
+        "worker_id": "SYN_W1"
+      },
+      {
+        "global_rank": {
+          "evidence": [
+            "SYN_EV_W2"
+          ],
+          "unknown_reason": null,
+          "value": 11
+        },
+        "gpu_ids": {
+          "evidence": [
+            "SYN_EV_W2"
+          ],
+          "unknown_reason": null,
+          "value": [
+            "SYN_GPU_7"
+          ]
+        },
+        "local_rank": {
+          "evidence": [
+            "SYN_EV_W2"
+          ],
+          "unknown_reason": null,
+          "value": 0
+        },
+        "process": {
+          "evidence": [
+            "SYN_EV_W2"
+          ],
+          "unknown_reason": null,
+          "value": {
+            "boot_id": "SYN_BOOT_1",
+            "host_id": "SYN_HOST_1",
+            "pid": 102,
+            "pid_namespace_id": "SYN_NS",
+            "process_start_ticks": 1000,
+            "start_ticks_hz": 100
+          }
+        },
+        "worker_id": "SYN_W2"
+      },
+      {
+        "global_rank": {
+          "evidence": [
+            "SYN_EV_W3"
+          ],
+          "unknown_reason": null,
+          "value": 0
+        },
+        "gpu_ids": {
+          "evidence": [
+            "SYN_EV_W3"
+          ],
+          "unknown_reason": null,
+          "value": [
+            "SYN_GPU_6"
+          ]
+        },
+        "local_rank": {
+          "evidence": [
+            "SYN_EV_W3"
+          ],
+          "unknown_reason": null,
+          "value": 1
+        },
+        "process": {
+          "evidence": [
+            "SYN_EV_W3"
+          ],
+          "unknown_reason": null,
+          "value": {
+            "boot_id": "SYN_BOOT_1",
+            "host_id": "SYN_HOST_1",
+            "pid": 103,
+            "pid_namespace_id": "SYN_NS",
+            "process_start_ticks": 1000,
+            "start_ticks_hz": 100
+          }
+        },
+        "worker_id": "SYN_W3"
+      }
+    ]
+  },
+  "membership_epoch": {
+    "evidence": [
+      "SYN_EV_L"
+    ],
+    "unknown_reason": null,
+    "value": 0
+  },
+  "origin": "SYNTHETIC",
+  "routing": {
+    "expert_load": {
+      "evidence": [],
+      "unknown_reason": "NOT_SUPPORTED",
+      "value": null
+    },
+    "token_routing": {
+      "evidence": [],
+      "unknown_reason": "NOT_SUPPORTED",
+      "value": null
+    }
+  },
+  "scope": {
+    "attempt_id": "SYN_ATTEMPT_0",
+    "job_id": "SYN_JOB",
+    "run_id": "SYN_RUN"
+  },
+  "topology_epoch": {
+    "evidence": [
+      "SYN_EV_G"
+    ],
+    "unknown_reason": null,
+    "value": 0
+  }
+}

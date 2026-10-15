@@ -1,0 +1,16 @@
+test_rank_evidence_bound_to_stale_process_is_rejected (tests.test_parallel_context.ParallelContextTests) ... FAIL
+
+======================================================================
+FAIL: test_rank_evidence_bound_to_stale_process_is_rejected (tests.test_parallel_context.ParallelContextTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>/tests/test_parallel_context.py", line 419, in test_rank_evidence_bound_to_stale_process_is_rejected
+    self.assertInvalid(context)
+  File "<REPO>/tests/test_parallel_context.py", line 26, in assertInvalid
+    validate_context(value)
+AssertionError: InvalidContext not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.002s
+
+FAILED (failures=1)
