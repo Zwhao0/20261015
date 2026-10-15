@@ -7,6 +7,15 @@
 - M0-2 [PR #7](https://github.com/Zwhao0/20261015/pull/7) 已获[独立审核PASS](https://github.com/Zwhao0/20261015/pull/7#issuecomment-6189223408)并合并，审核head `7c9326b61bb539f1c2cf9435d41fb48a403772f4`，仅离线矩阵；本轮未操作合并。Issue #6/原矩阵中的待审核/M0-3未授权为历史状态，最新以本轮明确授权及GitHub实时事实为准，不覆盖原证据。
 - 本轮完成[V0.1方案](M0_3_SLICE.md)，只五份文档；原M0_1_INVENTORY/M0_2_CAPABILITIES、AGENTS、检查器、CI不变。M0-Gate INCONCLUSIVE；未进入M1，无Detector/采集器实现。
 
+## PR 9 两项修正与复审入口
+
+用户已明确授权根据[审核评论](https://github.com/Zwhao0/20261015/pull/9#issuecomment-6189558036)完成两项修正。被审旧head `16a8bee3a1de5f40674d0dc3983862d8a9dc18ad` 保留；在原分支追加提交，增量仅M0_3_SLICE/STATUS/HANDOFF三份文档，新head/tree/CI核对PR #9描述与Checks。
+
+- R1：PERIODIC有约定周期/心跳时才以15秒判STALE；EVENT_DRIVEN健康读取但数小时无新事件为IDLE，producer活性仍UNKNOWN，不能因空闲判GAP。权限/读取错误、来源消失、确认轮转缺口继续UNAVAILABLE/GAP。对应契约/SOURCE_STATUS、T07/T10、I0/I2和验收。
+- R2：process/attempt/run三层终态与键分开；完整成员全0仅ATTEMPT_EXITED_OK，run保持UNKNOWN直至权威run终态或受控最终attempt且不会重启/续跑证明。最终attempt完成路径还需完整成员全0，无权威证明或仍可重试不宣告COMPLETED。对应契约/摘要、T01/T14、I0/I3和验收。
+- 仅文档与静态样例检查；14类功能回放/CPU进程/双机/开销仍NOT_RUN。新head待ChatGPT独立复审，不自行宣告审核通过/合并/Gate PASS/M1授权。
+- 外部ChatGPT在上述评论中已记录其第5问交接；新窗口从自己的首问计数，不沿用Codex轮数。恢复先读评论与修复增量，而不是重审旧head后直接放行。
+
 ## 设计结论与现场缺口
 
 - 选定一个获准真实任务的基础观测及进程异常退出；入口是所有者清单/获准局部快照/启动器权威终止记录。实际任务、成员、namespace/start、Job/Rank/GPU链和退出样本尚UNKNOWN，不能用历史PID/GPU字段补成完整链。需要I0/V1/V3输入，不能读取旧项目核实。
@@ -19,7 +28,7 @@
 
 ## 新会话恢复顺序
 
-1. 读README/AGENTS、Issue #8/#1、本分支关联Draft PR的diff/讨论/Checks、STATUS/HANDOFF/M0_BASELINE/M0_3_SLICE；核对PR #7审核和已合并状态，再读原矩阵/18条证据。
+1. 读README/AGENTS、Issue #8/#1、PR #9上述审核评论及本分支最新diff/讨论/Checks、STATUS/HANDOFF/M0_BASELINE/M0_3_SLICE；先核对旧head到新head的两项修复，核对PR #7已合并事实，再读原矩阵/18条证据。
 2. `git status --short --branch`、`git remote -v`，有修改先保留，不reset/覆盖。fetch main与本开发分支，核对实际head/base和祖先；新main若改变则先审差异，不自动覆盖。
 3. 干净工作区可跟踪开发分支并`git pull --ff-only`，核对HEAD/tree与PR。按README执行文档检查与diff，再按方案JSON和矩阵公开脚本校验示例/18摘要，原矩阵与调查blob应保持不变。
 4. 仅继续本M0-3已授权范围的设计修正与审核交接；不得把预算当实测、JSON值检查当功能回放或把历史/合成记录当实时双机验证。M0-Gate独立审核及用户批准前不推进M1。
@@ -46,6 +55,8 @@ M0-3选定V0.1真实任务基础观测+权威进程异常退出；实际任务/�
 T01～T14/CPU进程/I0～I5均NOT_RUN；合成payload值校验不是回放PASS，预算不是实测。M0-Gate及用户最终批准未完成，不进入M1。
 C1通用运行时来源待确认；NCCL编译API2.29.7/探查库2.30.7差异保留，不换库。用户取消清理：不删除/停止/重启/新建容器，不删除镜像/卷。
 请独立审查本PR精确head的设计与验收可执行性，按PASS/FAIL/INCONCLUSIVE结论；不要凭聊天摘要给功能或Gate PASS。外部ChatGPT五问计数由本窗口首问起维护。
+PR #9旧head 16a8bee3a1de5f40674d0dc3983862d8a9dc18ad已收到评论#issuecomment-6189558036：要求两项修正，暂不批准合并。用户已授权修复，原分支追加提交，仅三份文档增量；精确新head/tree/CI从PR描述获取。
+请优先复审来源合约PERIODIC/EVENT_DRIVEN（稀疏源健康读取无事件为IDLE，仅约定周期/心跳用15秒STALE）及process/attempt/run终态（全员0只代表attempt退出成功，run完成需权威终态/不会重启续跑的最终attempt证明）；T07/T10及T01/T14、I0/I2/I3/验收已同步。仍14类用例，功能测试NOT_RUN；不要把修正提交当独立审核PASS。
 ```
 
 ## 阻塞记录模板

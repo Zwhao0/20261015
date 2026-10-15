@@ -6,6 +6,8 @@
 
 开发分支 `codex/m0-3-slice-acceptance` 从 main `d36cdacb77b6b1b08392bf27b9b288952918aa98` 建立。[M0-2 PR #7 审核](https://github.com/Zwhao0/20261015/pull/7#issuecomment-6189223408) 对 head `7c9326b61bb539f1c2cf9435d41fb48a403772f4` 的离线矩阵给出 PASS，PR 已合并；本轮未操作合并。[18条历史证据](M0_1_INVENTORY.md)与[能力矩阵](M0_2_CAPABILITIES.md)原文保留。
 
+[PR #9 审核评论](https://github.com/Zwhao0/20261015/pull/9#issuecomment-6189558036)对旧head `16a8bee3a1de5f40674d0dc3983862d8a9dc18ad` 要求修正来源空闲/失活与attempt/run终态两项。本次只修正文档，保留旧提交供增量复审；不表示审核已通过。
+
 | 问题 | 选择与依据 | 风险与验证 |
 | --- | --- | --- |
 | 首个切片依赖哪些信号 | 任务清单、获准的进程/设备局部快照、启动器结构化终止记录；对应矩阵 C01～C03/C07、V1/V3 | 真实任务及来源 UNKNOWN；落实下表后才接入，不能从历史查询重建真实身份链 |
@@ -43,7 +45,8 @@ M1 优先读取任务所有者提供的白名单文件/事件源。仅在另行�
 | 对象 | 字段与约束 |
 | --- | --- |
 | 公共封装 | `event_id`、`event_type`、`source_id`、`source_epoch`、`source_seq`（非负整数）、`origin`（`REAL`/`SYNTHETIC`）、`identity`、`time`、`payload`、`evidence_ref`、`unknown_reasons`；source epoch 在轮转/重建或不能延续序号时更换 |
-| 任务身份 | `job_id`、`run_id`、`attempt_id`、`world_size`、`rank`、`local_rank`；rank 是 attempt 内的逻辑成员，重启不沿用旧实例；Job 与 Run 分开。成员清单列出每个预期成员及记录对象 `scope`（`worker`/`launcher`/`run`） |
+| 任务身份 | `job_id`、`run_id`、`attempt_id`、`world_size`、`rank`、`local_rank`；rank 是 attempt 内的逻辑成员，重启不沿用旧实例；Job 与 Run 分开。成员清单列出每个预期成员及记录对象 `scope`（`worker`/`launcher`/`attempt`/`run`）；run级记录的attempt_id可为null |
+| 来源合约 | `source_mode=PERIODIC/EVENT_DRIVEN/UNKNOWN`、`expected_interval_ms`、`freshness_timeout_ms`；仅已约定周期/心跳的PERIODIC源使用15秒freshness阈值，EVENT_DRIVEN及UNKNOWN源两项为null，不凭无新事件启动计时。另存`last_successful_read_monotonic_ns`和`last_record_age_ms`，读取成功与记录年龄分开 |
 | 节点与进程身份 | `host_id`、`boot_id`、`pid_namespace_id`、`pid`、`process_start_ticks`（Linux 时钟 tick，附 `start_ticks_hz`）；完整实例键为 host/boot/namespace/pid/start，不以 PID 独立关联；跨 namespace 的 PID 映射须另有证据 |
 | 设备身份 | `gpu_uuids`（允许多GPU或有依据的空列表）；GPU index 与 local rank 只作来源字段，不能当 UUID。`null` 表示没有映射证据；实际 UUID 仅受控保存，公开样例使用合成 token |
 | 时间 | `event_time_utc`（带 Z 的 UTC 或 null）、`observed_time_utc`、`event_monotonic_ns`（整数或 null）、`observed_monotonic_ns`、`event_clock_domain_id`、`observed_clock_domain_id`（均为host/boot/clock/time namespace组合或null）、`uncertainty_ms`（非负或 null）；source 事件与接收采集时间分列，两个非空域相等才能相减 |
@@ -55,29 +58,35 @@ M1 优先读取任务所有者提供的白名单文件/事件源。仅在另行�
 | --- | --- |
 | `IDENTITY` | 成员清单/作用域与映射证据；缺环节只提供部分关联，`identity_status=UNKNOWN`；身份补证不能把历史未知事件无证据地重新归属 |
 | `SNAPSHOT` | `process_presence=OBSERVED/NOT_OBSERVED/UNKNOWN`、`device_samples`（每个字段附单位/采集状态）、`progress`（step/语义/来源或 null）；NOT_OBSERVED 只表示此窗口未见 |
-| `PROCESS_EXIT` | `scope`、`authority`、`status_kind=EXITED/SIGNALED/UNKNOWN`、`raw_status`、`raw_status_format`、`exit_code`、`signal`、`expected_stop`（true/false/null）；权威终止事实与是否预期停止分开 |
-| `SOURCE_STATUS` | `status=OK/GAP/STALE/UNAVAILABLE/INVALID_RECORD/CONFLICT`、`reason`、受影响 source/成员/窗口；进程实例与 rank 可为 null，不能伪造任务实例来挂载源失败 |
+| `PROCESS_EXIT` | `scope=worker/launcher`、`authority`、`status_kind=EXITED/SIGNALED/UNKNOWN`、`raw_status`、`raw_status_format`、`exit_code`、`signal`、`expected_stop`（true/false/null）；只声明具体进程终止，不声明attempt或run最终结局 |
+| `RUN_TERMINAL` | `scope=run`、`authority`、`proof_kind=RUN_TERMINAL/FINAL_ATTEMPT`、`outcome=COMPLETED/FAILED/CANCELLED`及证据引用；RUN_TERMINAL须来自可验证的权威run级终态。FINAL_ATTEMPT须绑定`final_attempt_id`、`no_restart_or_resume=true`的受控终态证明；字段缺失或冲突时run保持UNKNOWN |
+| `SOURCE_STATUS` | `source_mode`、`status=OK/IDLE/UNKNOWN/GAP/STALE/UNAVAILABLE/INVALID_RECORD/CONFLICT`、`read_status=OK/UNAVAILABLE/UNKNOWN`、`reason`、受影响source/成员/窗口；IDLE仅表示EVENT_DRIVEN源读取成功且无预期新事件，producer是否仍在写为UNKNOWN，不证明训练健康；STALE仅用于已约定周期/心跳的源。进程实例与rank可为null，不能伪造任务实例来挂载源失败 |
 
 退出值必须说明编码：POSIX wait status 要先确认 `WIFEXITED` 或 `WIFSIGNALED`；Python `subprocess` return code、shell status、调度器 code 不可混解。[Python 3.12 os](https://docs.python.org/3.12/library/os.html#os.waitstatus_to_exitcode)说明 Unix wait status 转换结果为退出码或负信号号。选择记录 `EXITED` 时 `exit_code` 为 0～255、`signal=null`；`SIGNALED` 时 `exit_code=null`、`signal` 为正整数；未证明编码/终止语义时均 null/UNKNOWN。shell 137 不能自行解成 SIGKILL 或 OOM。
 
 `event_id` 对同一 `(source_id,source_epoch,source_seq)` 稳定；重读同一内容只产一个事件，相同键不同内容为 CONFLICT。跨来源重复的同实例/同终止事实合并为一个派生退出通知并附多条证据；终止事实冲突则CONFLICT/UNKNOWN，不自行选择。权威终止同时有完整进程键且可绑定本 attempt，才更新该对象状态；绑定不全可保留来源终止记录，任务归属和聚合仍 UNKNOWN。
 
-派生摘要以 `(job_id,run_id,attempt_id,scope,process_instance)` 为键，分别存 `identity_status`、`coverage_status`、`lifecycle`、`last_observed_age_ms` 和 `evidence_refs`；run摘要不带process_instance，另存预期/已知成员数、失败证据和终态来源。缺必需键的记录停留在来源层，不能用所有null组成共享实例。源状态事件不生成进程终态。
+派生摘要分三层：process以`(job_id,run_id,attempt_id,scope,process_instance)`为键，记录`EXITED_OK/EXITED_NONZERO/EXITED_SIGNAL/UNKNOWN`；attempt以`(job_id,run_id,attempt_id)`为键，仅在完整预期成员均有可信终止且无冲突时记录`ATTEMPT_EXITED_OK`（全员0）或`ATTEMPT_EXITED_WITH_FAILURE`（存在非0/信号），否则终态UNKNOWN，另保留已知失败事实；run以`(job_id,run_id)`为键，终态`COMPLETED/FAILED/CANCELLED`仅由权威run终态或受控最终attempt证明支持，否则UNKNOWN。attempt摘要没有“不会重启/续跑”的隐含含义，run键不包含attempt_id。
+
+各层分别存`identity_status`、`coverage_status`、`lifecycle`与`evidence_refs`；process另存`last_observed_age_ms`，attempt/run另存预期/已知/已终止成员数、失败事实、`terminal_evidence_ref`及run的`final_attempt_id`。FINAL_ATTEMPT证明用于run COMPLETED时，还须该attempt完整成员全EXITED/0且无冲突；只有全员0、重试策略缺失或仍可续跑均不够。缺必需键的记录停留在来源层，不能用所有null组成共享实例。源状态事件不生成任何层的终态。
 
 ## 状态与 UNKNOWN 传播
 
-身份状态、观测覆盖、对象生命周期是三个独立维度。`OBSERVED` 表示有一次观测，不宣称训练健康；终止后的历史事实不因采集器断开消失。以下规则按成员实例应用：
+身份状态、观测覆盖、对象生命周期是三个独立维度。`OBSERVED` 表示有一次观测，不宣称训练健康；终止后的历史事实不因采集器断开消失。以下规则按声明的process/attempt/run或来源作用域应用：
 
 | 输入/条件 | 输出 |
 | --- | --- |
 | 清单/映射/时间字段缺失 | 对应字段 UNKNOWN，并列出原因；仍可展示有证据的局部字段，不猜 Rank=GPU index |
 | 查询空行、PID 消失、GPU 空闲 | `process_presence=NOT_OBSERVED`，生命周期 UNKNOWN；没有退出事件 |
-| 可信终止 EXITED/0 | 该进程 `EXITED_OK`；仅当 run 终止记录或完整已知成员清单中的全体终止成功且无冲突，才可将 run 标 `COMPLETED` |
+| 可信终止 EXITED/0 | 该进程`EXITED_OK`；完整预期成员全员0且无冲突只得出`ATTEMPT_EXITED_OK`。没有权威run级终态或受控最终attempt且不会重启/续跑的证明，run保持UNKNOWN |
+| 权威run终态或受控最终attempt证明 | 核对run绑定/来源/结局/证据；直接run终态可确定其最终结局，不能补造成员终止事实。最终attempt证明须明确final_attempt_id及不会重启/续跑，宣告COMPLETED另需完整成员全员0且无冲突；证明缺失或相互冲突时run UNKNOWN |
 | 可信终止 EXITED/非0 或 SIGNALED | 生成 `PROCESS_EXIT`，该对象 `EXITED_NONZERO` 或 `EXITED_SIGNAL`；`expected_stop` 从所有者终止意图证据取得，缺失为 null；根因 UNKNOWN，不判 OOM/NCCL 故障 |
 | worker 的失败记录 | 可以报告该 attempt 下已有失败证据；run 最终结局仍需终态来源/重试策略，不能把一次 attempt 失败当最终任务失败；不推断其他节点退出 |
 | 单节点 launcher 退出 | 仅更新该 launcher；worker 或另一节点未知，不能广播成全部 rank 退出 |
 | 丢序号、截断、轮转无连续证据、权限/网络失败 | `GAP` 或 `UNAVAILABLE`；保留最后观测及 age，当前值 UNKNOWN；源恢复不自动填补历史空洞 |
-| 超过本地15秒未见源记录 | `STALE`，不能判 hang/退出；以本地单调时间计 age；源恢复为 OK 只恢复新窗口，历史 GAP 保留 |
+| PERIODIC源超过约定15秒未见周期/心跳记录 | `STALE`，以本地单调时间计freshness；须已确认周期和15秒阈值，不能判hang/退出；源恢复只恢复新窗口，历史GAP保留 |
+| EVENT_DRIVEN源长时间无新记录，读取/连续性检查正常 | `read_status=OK`、`status=IDLE`，记录年龄可为数小时；无新事件不产生STALE/GAP或退出。producer活性与训练状态仍UNKNOWN；若来源模式/读取状态未核实则status=UNKNOWN |
+| 任意源读取失败/来源消失或轮转缺口 | 权限/超时/来源消失为UNAVAILABLE，确认截断/序号断层为GAP；不能以EVENT_DRIVEN的IDLE掩盖故障或覆盖历史缺口 |
 | 迟到/乱序/重复 | 按 source epoch/seq 去重、记录到达顺序，迟到数据追加更正而不覆盖证据；终态后迟到旧 SNAPSHOT 不复活进程；冲突状态 UNKNOWN |
 | PID复用/重启/节点重启/弹性成员变化 | 新进程实例、新 attempt 或 boot/namespace；旧终止不传播。无新清单时成员聚合 UNKNOWN |
 | 跨节点墙钟差/倒退或不同单调域 | 按节点/源序号展示，禁止计算跨域持续时间或首因；标 `uncertainty_ms=null`；source seq 本身也不能证明跨源因果 |
@@ -96,20 +105,20 @@ M1 优先读取任务所有者提供的白名单文件/事件源。仅在另行�
 
 | 用例 | 输入与预期 |
 | --- | --- |
-| T01 正常结束 | 全部已知成员按各自实例 EXITED/0：每实例一终止事件，完整终态才 COMPLETED；无异常退出 |
+| T01 正常结束 | 完整预期成员按各自实例EXITED/0：每实例一终止事件、attempt=ATTEMPT_EXITED_OK；调度器尚可能重试/阶段切换/续跑时run=UNKNOWN。仅加入权威run成功终态，或绑定最终attempt且不会重启/续跑的受控证明后，run才COMPLETED；无异常退出 |
 | T02 非零退出 | 一个成员权威 EXITED/7：一条该实例异常退出，其他成员未知不补终态，根因 UNKNOWN |
 | T03 信号退出 | 权威 SIGNALED/15 且意图未知：信号事实可报告，expected_stop=null，不报告 OOM |
 | T04 编码不明 | shell_unverified/137：状态 UNKNOWN，不臆断 SIGKILL/OOM |
 | T05 身份不完整 | 缺namespace/start/Job/Rank/GPU映射分别置null：保留局部字段，不能形成完整链或错配退出 |
 | T06 PID重用与attempt重启 | 同PID不同start或attempt：旧退出不影响新实例，缺清单则新成员 UNKNOWN |
-| T07 源失败与恢复 | permission denied/空行/超时/15秒陈旧：各有源状态，零条推测退出；恢复后新窗口OK，历史空洞保留 |
+| T07 源失败与恢复 | PERIODIC已约定周期/心跳，15秒未更新才STALE；EVENT_DRIVEN连续数小时无新记录但每次读取/连续性检查成功，始终IDLE/read_status=OK，producer活性UNKNOWN，零条STALE/GAP/推测退出。模式未知为UNKNOWN；permission denied/超时/来源消失为UNAVAILABLE；恢复后的新窗口OK或IDLE，历史缺口保留 |
 | T08 重复乱序冲突 | 一致记录重复/旧快照迟到/同seq异内容：分别去重/不复活/CONFLICT，绝不双发退出 |
 | T09 墙钟回拨与跨域 | 本机墙钟回拨/跨机单调域不同：不算负age或跨域延迟，不宣称跨机先后；同域 age 仍准确 |
-| T10 截断轮转与坏记录 | 半行JSON/未知schema/序号断层/轮转无连续证据：隔离坏行与GAP；后续合法行继续，不能悄悄丢弃 |
+| T10 截断轮转与坏记录 | 半行JSON/未知schema/序号断层/轮转无连续证据：按帧合约待补齐、隔离坏行或GAP；EVENT_DRIVEN同样保留确认的轮转/截断缺口，不能因空闲清除；没有新字节不等于半行/截断，不能仅15秒无事件判GAP；后续合法行继续 |
 | T11 无进度与指标错误 | progress=null 与step未变分开；metrics错误/哨兵值保留错误，不能填0或判健康/hang |
 | T12 局部终止与意图 | 单节点launcher失败只更新该launcher；预期取消可报告退出但expected_stop=true，不判自动故障/全体退出 |
 | T13 隐私与超限 | 含未知字段、原始路径/token/真实身份的候选导出拒绝；单行>16KiB/队列满给源错误，内存有界、不阻塞训练 |
-| T14 成员未齐与重启 | 少一个成员或新boot/namespace时即使其他成员全EXITED/0，run保持UNKNOWN；补齐终态后才可完成 |
+| T14 成员未齐与重启 | 少一个成员、退出未证实或新boot/namespace清单未齐时attempt终态UNKNOWN；补齐全员0只得ATTEMPT_EXITED_OK。即使全员0，只要调度器仍可能重试或无最终证明，run仍UNKNOWN；新attempt不继承旧终态。独立权威run终态可确定run结局，但不能补填未知成员；最终attempt证明路径仍须完整成员终止及不会重启/续跑 |
 
 M1 应提供标准库 `unittest` 可发现的 T01～T14 用例和离线回放入口。在 M1 对应 PR 确认实现/路径/fixture 后，从仓库根运行 `python3 -m unittest discover -s tests -v`，应 exit 0、逐例断言匹配且无跳过。当前仓库无此测试目录/回放器，命令本轮不执行，不以示例校验代替回放 PASS。
 
@@ -117,16 +126,18 @@ M1 应提供标准库 `unittest` 可发现的 T01～T14 用例和离线回放入
 
 以下为待 M1 实施/单独授权的执行清单。真实任务入口与读取路径尚 UNKNOWN，因此现在不存在可诚实填写的双机启动命令。M1 集成 PR 必须用已批准对象补齐逐条命令、env白名单、scope、timeout、预计影响、退出码和受控证据索引，独立审核后执行；不得执行占位符或笼统扫描现有作业。
 
-1. **I0 输入检查**：所有者确认任务来源/运行时、两个节点、成员规模、读取位置、退出记录权限/语义、受控保留周期与资源预算。A/B各自提供一个同窗口清单，完整身份逐成员可追溯；任一未落实则该项 INCONCLUSIVE，不上机补猜。以现有真实任务来源为先，没有真实异常退出样本时异常路径只做回放。
+1. **I0 输入检查**：所有者确认任务来源/运行时、两个节点、成员规模、读取位置、退出记录权限/语义、受控保留周期与资源预算；逐源声明PERIODIC/EVENT_DRIVEN及周期/心跳合约，并明确run终态权威来源或最终attempt且不会重启/续跑的证明入口。A/B各自提供一个同窗口清单，完整身份逐成员可追溯；缺项对应验收INCONCLUSIVE，不上机补猜。以现有真实任务来源为先，没有真实异常退出样本时异常路径只做回放。
 2. **I1 离线先行**：T01～T14 全通过；在本机仅对自己启动的CPU短进程验证 exit 0/7 的真实 wait 编码与退出码透传，不发送信号。信号/网络断开/坏文件等失败路径使用合成回放，不在共享训练上制造。记录待验证 commit、命令/OS/Python、exit、fixture和输出哈希。
-3. **I2 受控旁路读取**：每节点1个采集进程，仅白名单来源，轮询5秒、单次读取超时1秒、并发1、每周期最多1MiB、单行16KiB、内存待处理队列最多1000行。单记录本地输入就绪至输出目标5秒；超时/超限写SOURCE_STATUS并退避到30秒，仍可读取其他已获准来源。失败不重启训练或调用GPU API。末尾未完成半行可等下周期，轮转截断或超过15秒须显式标GAP。
-4. **I3 正常路径**：在所有者批准的至少10分钟真实任务窗口，比对A/B独立原始索引、规范事件与摘要。若任务自然结束，对齐权威终止记录；窗口未结束不强行等待/停止任务，正常结束路径保持INCONCLUSIVE，可另用获准历史记录回放但标来源和时间。
+3. **I2 受控旁路读取**：每节点1个采集进程，仅白名单来源，轮询5秒、单次读取超时1秒、并发1、每周期最多1MiB、单行16KiB、内存待处理队列最多1000行。单记录本地输入就绪至输出目标5秒；超时/超限写SOURCE_STATUS并退避到30秒，仍可读取其他已获准来源。失败不重启训练或调用GPU API。仅已约定周期/心跳的PERIODIC源以15秒判断STALE；EVENT_DRIVEN正常读取到末尾且无新事件为IDLE，不设无事件15秒GAP/STALE。末尾半行可待下周期，须按明确帧完成期限或确认截断/轮转缺口标GAP，不能因空闲推定截断；读取/权限错误、来源消失仍UNAVAILABLE，历史缺口不清除。
+4. **I3 正常路径**：在所有者批准的至少10分钟真实任务窗口，比对A/B独立原始索引、规范事件与process/attempt/run摘要。自然退出时对齐进程权威终止；完整成员全员0只报告attempt退出成功。run COMPLETED须另有权威run成功终态或最终attempt且不会重启/续跑的受控证明，缺少则run完成验收INCONCLUSIVE；窗口未结束不强行等待/停止任务，可另用获准历史记录回放但标来源和时间。
 5. **I4 异常路径**：优先使用同一任务自然产生的已授权历史异常终止记录，逐条回放至相同契约，并注明历史回放、不能宣称在线检测。如果没有真实异常证据，合成T02/T03只验证逻辑，真实异常路径 INCONCLUSIVE；不kill/断网/OOM/扰动NCCL制造事件。
 6. **I5 资源/回退**：在同一获准任务及相近阶段先后记录关闭/开启采集各10分钟、重复3对；无可比窗口则开销 INCONCLUSIVE。结束后只停止本项目自己的采集进程，核对训练/容器仍保持原状态；保存范围内事件、失败、回退结果与 commit，交回独立审核。
 
 | 验收项 | 提议的 V0.1 阈值与判断 |
 | --- | --- |
 | 身份与退出准确性 | 所有获准预期成员100%有完整链；权威终止记录100%匹配正确实例，重复退出0、推测退出0；缺链允许系统降级，但本项INCONCLUSIVE，已知错配为FAIL |
+| 来源空闲与失活 | T07/T10逐源合约匹配；EVENT_DRIVEN读取健康且数小时无新事件必须IDLE，零条由空闲推测的STALE/GAP/退出；PERIODIC仅在约定周期/心跳下超15秒才STALE；模式不明为UNKNOWN，错误/来源丢失/确认轮转缺口仍UNAVAILABLE/GAP；任一混淆为FAIL |
+| 分层终态准确性 | T01/T14覆盖全员0但仍可能重试/续跑：attempt可ATTEMPT_EXITED_OK，run必须UNKNOWN；无权威run终态或受控最终attempt证明却宣告COMPLETED为FAIL。缺成员/未证实退出不补attempt终态；权威run终态不补造成员事实；无真实最终证明时该项现场完成验收INCONCLUSIVE |
 | 降级正确性 | T05～T14全部符合预期，任一缺失被判健康/退出/根因即FAIL；源恢复必须保留缺口 |
 | 延迟 | 至少20条同源同单调域可配对记录，本地输入就绪到输出 p95≤5秒、最大≤10秒；源提供事件/采集同域时间时另报事件到输出，不能混为一项；跨机精度未知不计算跨机延迟，样本不足为INCONCLUSIVE |
 | 采集资源 | 每节点采集CPU均值≤单个逻辑核1%，RSS峰值≤128MiB；不初始化CUDA/创建communicator，不开启metrics/RAS/FR。CPU按进程CPU秒/墙钟秒计算；上述是设计预算，未测量 |
