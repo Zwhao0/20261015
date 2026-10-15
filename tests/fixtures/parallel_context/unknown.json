@@ -1,0 +1,47 @@
+{
+  "context_version": "0.1",
+  "evidence": [],
+  "experts": {
+    "evidence": [],
+    "unknown_reason": "NO_SOURCE",
+    "value": null
+  },
+  "groups": {
+    "evidence": [],
+    "unknown_reason": "NO_SOURCE",
+    "value": null
+  },
+  "members": {
+    "evidence": [],
+    "unknown_reason": "NO_SOURCE",
+    "value": null
+  },
+  "membership_epoch": {
+    "evidence": [],
+    "unknown_reason": "NO_SOURCE",
+    "value": null
+  },
+  "origin": "SYNTHETIC",
+  "routing": {
+    "expert_load": {
+      "evidence": [],
+      "unknown_reason": "NOT_SUPPORTED",
+      "value": null
+    },
+    "token_routing": {
+      "evidence": [],
+      "unknown_reason": "NOT_SUPPORTED",
+      "value": null
+    }
+  },
+  "scope": {
+    "attempt_id": "SYN_ATTEMPT_0",
+    "job_id": "SYN_JOB",
+    "run_id": "SYN_RUN"
+  },
+  "topology_epoch": {
+    "evidence": [],
+    "unknown_reason": "NO_SOURCE",
+    "value": null
+  }
+}

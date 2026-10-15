@@ -1,0 +1,40 @@
+test_attempt_partition_does_not_inherit_epochs_or_process_state (tests.test_parallel_context.ParallelContextTests) ... ok
+test_bounds_and_empty_batch (tests.test_parallel_context.ParallelContextTests) ... ok
+test_dp_only_explicit_members (tests.test_parallel_context.ParallelContextTests) ... ok
+test_duplicate_global_and_local_rank_rejected (tests.test_parallel_context.ParallelContextTests) ... ok
+test_duplicate_group_or_member_is_rejected (tests.test_parallel_context.ParallelContextTests) ... ok
+test_duplicate_member_within_group_is_rejected (tests.test_parallel_context.ParallelContextTests) ... ok
+test_dynamic_routing_or_load_cannot_be_fabricated (tests.test_parallel_context.ParallelContextTests) ... ok
+test_exact_duplicate_only_counted_once (tests.test_parallel_context.ParallelContextTests) ... ok
+test_expert_cannot_use_dp_group (tests.test_parallel_context.ParallelContextTests) ... ok
+test_expert_owner_must_be_member_and_in_ep_group (tests.test_parallel_context.ParallelContextTests) ... ok
+test_fixture_hash_manifest (tests.test_parallel_context.ParallelContextTests) ... ok
+test_group_rank_order_is_not_global_rank_or_gpu (tests.test_parallel_context.ParallelContextTests) ... ok
+test_invalid_member_fixture_is_rejected (tests.test_parallel_context.ParallelContextTests) ... ok
+test_membership_epoch_conflict_isolates_all_versions (tests.test_parallel_context.ParallelContextTests) ... ok
+test_missing_evidence_rejects_concrete_values (tests.test_parallel_context.ParallelContextTests) ... ok
+test_missing_rank_gpu_and_expert_group_remain_unknown (tests.test_parallel_context.ParallelContextTests) ... ok
+test_mixed_intersecting_non_cartesian_groups (tests.test_parallel_context.ParallelContextTests) ... ok
+test_no_sources_no_fake_precision (tests.test_parallel_context.ParallelContextTests) ... ok
+test_normalization_does_not_mutate_or_alias_input (tests.test_parallel_context.ParallelContextTests) ... ok
+test_partial_process_instance_is_rejected (tests.test_parallel_context.ParallelContextTests) ... ok
+test_process_mapping_missing_remains_unknown (tests.test_parallel_context.ParallelContextTests) ... ok
+test_real_unknown_fields_bool_bad_version_and_identifier_rejected (tests.test_parallel_context.ParallelContextTests) ... ok
+test_rejoin_new_epochs_keeps_both_process_instances (tests.test_parallel_context.ParallelContextTests) ... ok
+test_resize_cannot_reuse_topology_epoch (tests.test_parallel_context.ParallelContextTests) ... ok
+test_same_process_cannot_map_two_workers_even_different_tick_frequency (tests.test_parallel_context.ParallelContextTests) ... ok
+test_scope_mismatch_is_rejected (tests.test_parallel_context.ParallelContextTests) ... ok
+test_source_epoch_change_is_separate (tests.test_parallel_context.ParallelContextTests) ... ok
+test_source_slot_conflict_isolates_both (tests.test_parallel_context.ParallelContextTests) ... ok
+test_static_expert_different_in_same_epoch_conflicts (tests.test_parallel_context.ParallelContextTests) ... ok
+test_static_expert_replica_is_separate_from_routing (tests.test_parallel_context.ParallelContextTests) ... ok
+test_topology_epoch_conflict_no_first_wins (tests.test_parallel_context.ParallelContextTests) ... ok
+test_unknown_claim_requires_explicit_reason_and_no_precision (tests.test_parallel_context.ParallelContextTests) ... ok
+test_unknown_epoch_cannot_support_precise_members_or_groups (tests.test_parallel_context.ParallelContextTests) ... ok
+test_unverified_log_cannot_support_identity (tests.test_parallel_context.ParallelContextTests) ... ok
+test_wrong_group_epoch_is_rejected (tests.test_parallel_context.ParallelContextTests) ... ok
+
+----------------------------------------------------------------------
+Ran 35 tests in 0.029s
+
+OK

@@ -1,3 +1,15 @@
+# M1-C2-A 当前执行状态（2026-10-15，Asia/Shanghai）
+
+- 用户明确授权 [Issue #13](https://github.com/Zwhao0/20261015/issues/13) 的 C2-A 离线设计、实现和合成测试；C2-B 未授权。已核对远端 main=`504d43b2c66ff1d79959a94fe75b053729cc72f2`，tree=`dec625b9a2daf745a71515f32daab75f35ab2e0c`，PR #12 已合并、Issue #11 已关闭及独立复审6191123236。仓库旧“C1待审核/C2未授权”是历史，不覆盖本次授权。
+- 新分支 `codex/m1-c2-a-parallel-context` 从该 main 建立。已读 AGENTS/README/STATUS/HANDOFF/M0_BASELINE/M0_2/M0_3/M1_C1 和 Issue #13，只访问本仓库。基线52测试实际 PASS/exit0，日志见 [C2-A证据](../evidence/c2-a/README.md)。
+- 已写入 [来源计划](M1_C2_SOURCE_PLAN.md)、[Owner模板](M1_C2_OWNER_INPUT.md)、[独立ParallelContext协议](M1_C2_PARALLEL_CONTEXT.md)、纯 Python validator/normalizer 及合成fixture；当前集成审核中。C1 schema/源码/原52测试及golden、冻结M0/工作流/检查器不修改。
+- 本地新增测试首轮35项/1错误/exit1：manifest尚未落盘；其余34项通过。补齐六份fixture SHA清单后相同35项 PASS/exit0，未改断言。原输出脱敏保存；子任务早期文档检查发现4行尾空格和主窗口未写完的3个链接，待集成后按原检查器全仓复核。完整最终测试/CI仍待执行，不能声称验收通过。
+- 来源文档及只读反例审查委派 6 Luna/Max 子智能体；无可靠运行时配置回读，不声称主/子配置已切换或核验。子任务不修改最终状态，不直接提交/合并；由主窗口集成复核。
+- 真实 launcher/scheduler/owner manifest/进程实例/GPU链、组/专家元数据、token routing、权限/存储/时钟/预算均 UNKNOWN；现场门禁 BLOCKED/INCONCLUSIVE。无H800/SSH/真实日志/私有数据/凭据/旧项目、GPU/训练/collective、安装升级或容器操作；不进入C2-B/C3、不合并、不强推。
+- 恢复：先读 Issue #13、分支关联 Draft PR 的最新 head/tree/diff/Checks，再读上列三份C2文档与证据；核对 main/工作区，保持现有安全改动，运行 README 中功能与文档命令。精确交付HEAD/tree及新双job CI以本轮PR为准，禁止套用C1历史CI。失败用后续修复/revert保留，不覆盖历史。
+
+下方历史全文保留，仅按其写入时点解释。
+
 # PR #12 R1 最小修正（2026-10-15，Asia/Shanghai）
 
 - 用户明确要求直接执行 [审核评论6190850559](https://github.com/Zwhao0/20261015/pull/12#issuecomment-6190850559)；被审HEAD `4624b7dc1f45e0ed1cfafd313966289840cd4bed`，tree `62f22a5442949e57380a6d4cbe895af2d3418eba`；main仍 `801fd156c2d39f696efa38811b0c0b433209b2d3`。在原分支/原Draft PR追加，不合并、不强推、不进入M1-C2。

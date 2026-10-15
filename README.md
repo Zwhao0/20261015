@@ -3,9 +3,9 @@
 An engineering project for **Training Observability** and **Detection, Localization & Diagnosis** in distributed AI training.
 
 ## Project status
-- **Phase:** M1-C1 — authorized synthetic offline contract and replay implementation; independent acceptance pending.
+- **Phase:** M1-C2-A — authorized offline source/identity design and ParallelContext preparation; independent review pending.
 - **Canonical repository:** https://github.com/Zwhao0/20261015
-- **Current task and acceptance criteria:** https://github.com/Zwhao0/20261015/issues/11 (M1-C1 offline contract and replay)
+- **Current task and acceptance criteria:** https://github.com/Zwhao0/20261015/issues/13 (C2-A offline only; C2-B not authorized)
 - **Implementation:** Codex, through small reviewed pull requests.
 - **Planning and independent review:** ChatGPT and project owner.
 
@@ -19,7 +19,20 @@ GitHub issues, pull requests and checked-in state/handoff docs are the source of
 
 See [M0 Issue #1](https://github.com/Zwhao0/20261015/issues/1) for the session handoff protocol (including ChatGPT's five-question window limit and Codex main/subagent context checkpoints), initial Codex task and M0 exit criteria.
 
-## M1-C1 离线入口
+## M1-C2-A 当前离线入口
+
+2026-10-15 用户已明确授权 Issue #13 的 C2-A 离线设计、实现与合成测试。远端 main `504d43b2c66ff1d79959a94fe75b053729cc72f2`（tree `dec625b9a2daf745a71515f32daab75f35ab2e0c`）；[PR #12](https://github.com/Zwhao0/20261015/pull/12) 已合并、Issue #11 已关闭，C1 52测试基线 PASS。分支 `codex/m1-c2-a-parallel-context` 从此 main 建立，交付一个 Draft PR，待 ChatGPT 独立审核和用户最终批准。
+
+- [来源与身份计划](docs/M1_C2_SOURCE_PLAN.md)：候选来源、权限、权威退出、身份链和失败降级。
+- [ParallelContext 0.1 协议与API](docs/M1_C2_PARALLEL_CONTEXT.md)：独立 sidecar、多组 DP/PP/TP/EP、成员/拓扑 epoch、静态专家映射与动态路由 UNKNOWN。
+- [Owner 输入模板](docs/M1_C2_OWNER_INPUT.md)：C2-B 前所需来源、字段、权限、预算、存储和回退；未确认项 BLOCKED/INCONCLUSIVE。
+- [C2-A 验证与失败恢复](evidence/c2-a/README.md)：实际合成测试、fixture SHA、原文保真和独立文档检查；交付 HEAD/tree 与对应 unit/docs CI 查询关联 Draft PR。
+
+仅 Python 3.9+ 标准库、合成数据和有限离线批次，不安装依赖。`python3 -m unittest discover -s tests -v` 运行原52项及新增测试；`python3 -m unittest tests.test_parallel_context -v` 单独验证新协议。文档与空白检查仍执行下方原命令。
+
+C1 schema 0.1、回放源码、原 tests/fixtures/golden 和冻结 M0 原文保持不变。真实任务/来源/训练信号、CPU launcher、I0～I5、GPU/collective、现场低开销均 NOT_RUN/INCONCLUSIVE；本轮禁止 H800/SSH/真实数据/旧项目/环境及容器变更/训练代码修改，不进入 C2-B/C3，不合并、不强推。下方旧阶段状态按历史写入时间理解。
+
+## M1-C1 离线入口（历史）
 
 用户已于2026-10-15另行明确授权“启动 M1-C1 离线开发”。开发范围、命令、输入和限制见 [M1-C1 使用及证据](docs/M1_C1_OFFLINE.md)。下面M0段落按历史记录理解，原调查及冻结方案不改。
 
