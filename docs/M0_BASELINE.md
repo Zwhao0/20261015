@@ -1,6 +1,6 @@
 # M0 技术基线
 
-依据：[README](../README.md)、母 [Issue #1](https://github.com/Zwhao0/20261015/issues/1)、当前 [Issue #3](https://github.com/Zwhao0/20261015/issues/3)。2026-10-15（Asia/Shanghai）更新 M0-1 真实只读调查；M0-0 已审核并合并，未实现监控/检测功能。
+依据：[README](../README.md)、母 [Issue #1](https://github.com/Zwhao0/20261015/issues/1)、当前 [Issue #6](https://github.com/Zwhao0/20261015/issues/6)。2026-10-15（Asia/Shanghai）用户授权启动M0-2，完成离线矩阵待审核。M0-1容器补证已获限调查目的审核PASS，发布前PR #5已合并到main `4d93a08d76a10ff9a52fba68b84cba2d5fc6475a`，18条证据原文不变；未实现监控/检测功能。
 
 ## 路线与门禁
 
@@ -16,7 +16,7 @@ M0-1～M0-3 填充以下材料后，由 ChatGPT 独立审核、用户最终批�
 | CI 如何接入 | 普通 push/PR 工作流，contents 只读、checkout v7.0.1 固定 commit、关闭凭据持久化 | 首轮 v4 检查通过但有 Node 20 弃用警告；改用官方 Node 24 版本，已观察 runner 2.337.0 满足最低要求 2.327.1 | runner/托管 Action 是外部依赖；变更后重跑 CI，保留本地相同检查命令 |
 | 技术栈何时确定 | 先留 UNKNOWN，后续授权调查后决策；不预装 PyTorch/CUDA 等 | 避免猜测 H800 环境或提前开展 M1 | 目前不能证明兼容性；须由 M0-1/2 的事实与证据验证 |
 
-## M0-1 环境事实（容器补证待审核；训练验收 INCONCLUSIVE）
+## M0-1 环境事实（限调查目的审核 PASS；训练验收 INCONCLUSIVE）
 
 起点 main `41a30e011b3fb0074aaef7cb8c42070aef4562b1`。首轮宿主机快照 2026-10-15 16:08:10～16:12:18 Asia/Shanghai（UTC+08:00），容器补证 16:36:01～16:42:26 同时区；A/B 均独立执行，不继承旧项目环境结论。用户新增容器与既有 sudo 访问授权，优先复用环境；清理容器的请求在执行前被用户取消，删除/停止/重启/新建均为 0。
 
@@ -50,20 +50,22 @@ M0-1～M0-3 填充以下材料后，由 ChatGPT 独立审核、用户最终批�
 - 已找到可复用的现有环境，未触发下载/上传/构建条件。仅证明 C1 的版本读取与 CPU 导入；不把候选升级为 GPU/双机训练通过，不复用旧项目代码/构建内容。
 - Torch NCCL API 2.29.7 与本进程 ncclGetVersion 2.30.7 差异已观察；不推断兼容与否，不更换库。实际训练入口/launcher、Runtime 完整版本、训练进程已加载库、Rank、日志/指标配置、RAS/FR 与时钟精度仍 UNKNOWN / NOT_RUN。
 - 清理 CANCELLED / NOT_RUN，无容器/镜像/卷删除；原始数据和既有运行容器保留。
-- [PR #4 独立审核](https://github.com/Zwhao0/20261015/pull/4#issuecomment-6187891676) 仅覆盖旧宿主机快照 `1dced3b…`。原 PR #4 已合并，最新 main 为 `4ae0555c6fca24a6082e8e6af4ac40f107cb6716`。本轮以 `codex/m0-1-container-inventory` 提交 [Draft PR #5](https://github.com/Zwhao0/20261015/pull/5)，base=最新 main，新的 head/CI/审核单独记录。M0-Gate 与训练层仍 INCONCLUSIVE，用户未授权 M0-2/M0-3/M1。
+- [PR #4 独立审核](https://github.com/Zwhao0/20261015/pull/4#issuecomment-6187891676) 仅覆盖旧宿主机快照 `1dced3b…`。原 PR #4 已合并，当时 main 为 `4ae0555c6fca24a6082e8e6af4ac40f107cb6716`。容器补证 [PR #5](https://github.com/Zwhao0/20261015/pull/5)/head `f15050dc1c4b8bf5cd5e49d75576f19ecf7b269d` 已获[独立审核](https://github.com/Zwhao0/20261015/pull/5#issuecomment-6188441126)限调查目的PASS；启动M0-2时尚未合并，发布前已合并为main `4d93a08d76a10ff9a52fba68b84cba2d5fc6475a`。用户明确授权M0-2；M0-Gate与训练层仍INCONCLUSIVE，M0-3/M1未授权。C1通用运行时来源仍需所有者确认，确认前不作为开发/测试环境。
 
-## M0-2 观测能力与兼容性矩阵（NOT_RUN）
+## M0-2 观测能力与兼容性矩阵（离线材料完成，待独立审核）
 
-调查后仅使用“直接可得 / 需配置或版本支持 / 不可得 / UNKNOWN”，每个结论附证据和失败降级；下列均为待核查项。
+完整 [M0-2 矩阵](M0_2_CAPABILITIES.md) 给出9行能力、A/B独立证据、版本适用条件、失败降级、V1～V7补证条件与官方来源。
 
-| 能力 | 可用性 | 版本/配置约束、证据、降级 |
-| --- | --- | --- |
-| Job / Run / Host / PID / Rank / GPU UUID 映射 | UNKNOWN | 待调查 |
-| 时间戳语义与跨机时钟 | UNKNOWN | 待调查 |
-| 训练进度 | UNKNOWN | 待调查 |
-| DCGM 与现有日志/指标 | UNKNOWN | 待调查 |
-| NCCL RAS | UNKNOWN | 待调查 |
-| Flight Recorder | UNKNOWN | 待调查 |
+| 能力 | 结论（只限历史快照与文档条件） |
+| --- | --- |
+| Host/PID/GPU UUID 局部字段 | 历史采样直接可得；Job/Run/Rank/Local Rank 完整关联 UNKNOWN |
+| 时间语义 | 本机 API 语义直接可得；真实事件时间源/跨机精度 UNKNOWN |
+| 训练进度 | UNKNOWN，不能用GPU利用率/存活替代 |
+| DCGM/主机 metrics/日志 | 安装/进程线索存在，实际来源与信号 UNKNOWN |
+| NCCL RAS | 需配置或版本支持；2.30.7归档有路径，实际任务配置与信号 UNKNOWN |
+| PyTorch Flight Recorder | 需配置或版本支持；上游v2.13.0有实现，本地构建/启用/导出 UNKNOWN |
+
+本轮现场测试 NOT_RUN，完整运行兼容性 INCONCLUSIVE；没有证据支持把未知项判“不可得”或健康。仅交付矩阵与补证门禁，不实现采集、不选择M0-3切片、不进入M1。
 
 ## M0-3 最小端到端切片及验收（NOT_RUN）
 
@@ -77,7 +79,7 @@ M0-1～M0-3 填充以下材料后，由 ChatGPT 独立审核、用户最终批�
 
 ## M0-Gate 材料与审核（INCONCLUSIVE）
 
-待补：环境事实及原始/脱敏证据索引、能力矩阵、待验证假设、V0.1 切片与可执行验收/回退方案、明确的 M1 候选 Issue 列表。
+已有M0-1调查证据与限范围审核、M0-2离线矩阵/待验证假设；M0-2独立审核待完成。待补V0.1切片与可执行验收/回退方案、明确的M1候选Issue列表，均不在本轮实施范围。
 审核时填写：范围、被审核 SHA/PR、证据、`PASS/FAIL/INCONCLUSIVE`、ChatGPT 审核意见、用户最终批准及日期；目前均未完成。
 
 ## 外部来源

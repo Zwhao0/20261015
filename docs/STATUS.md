@@ -1,42 +1,45 @@
 # 项目状态
 
-更新：2026-10-15（Asia/Shanghai）。当前 [Issue #3](https://github.com/Zwhao0/20261015/issues/3)，母 Issue #1。
+更新：2026-10-15（Asia/Shanghai）。当前 [Issue #6：M0-2](https://github.com/Zwhao0/20261015/issues/6)，母 [Issue #1](https://github.com/Zwhao0/20261015/issues/1)。用户明确指令“启动 M0-2”；历史文档的未授权状态已被本轮指令取代。
 
-仅 M0-1。用户已新增授权现有容器访问与已提供凭据的 sudo 认证，优先复用已有 PyTorch；本轮完成两台当前运行 C1 的只读版本/CPU 导入补证，没有修改权限或训练环境。用户最新明确取消清理：**容器删除/停止/重启/新建均为 0**。已有可复用候选，未下载/上传/构建环境。M0-2/M0-3/M1 未授权。
+## 阶段与当前交付
 
-## 阶段与恢复锚点
-
-| 项目 | 状态 | 证据与边界 |
+| 项目 | 状态 | 事实与边界 |
 | --- | --- | --- |
-| M0-0 | PASS，已合并 | PR #2，main 41a30e011b3fb0074aaef7cb8c42070aef4562b1 |
-| M0-1 首轮快照 | 文档交付审核 PASS；训练环境 INCONCLUSIVE | [PR #4 审核](https://github.com/Zwhao0/20261015/pull/4#issuecomment-6187891676)，仅覆盖 1dced3b… 的原 8 条摘要 |
-| M0-1 容器补证 | 版本/CPU 导入 PASS；训练/信号仍 INCONCLUSIVE，待审核 | A/B 各 07/08/09：Torch 2.13.0+cu130、Toolkit 13.0.88；NCCL API 2.29.7 与已加载库 2.30.7 分开；真实 GPU/训练 NOT_RUN |
-| M0-2 / M0-3 / M1～M5 | NOT_RUN | 未执行、未授权 |
-| M0-Gate | INCONCLUSIVE | 缺少后续材料与最终审核/批准 |
+| M0-0 | PASS，已合并 | PR #2，历史 main 41a30e0… |
+| M0-1 首轮 | 文档审核 PASS，已合并 PR #4 | 历史 main `4ae0555c6fca24a6082e8e6af4ac40f107cb6716` |
+| M0-1 容器补证 | 限环境调查交付审核 PASS；训练/信号 INCONCLUSIVE | [PR #5 审核](https://github.com/Zwhao0/20261015/pull/5#issuecomment-6188441126)，精确 head f15050dc1c4b8bf5cd5e49d75576f19ecf7b269d；启动时 Open/Ready/Unmerged；发布前GitHub已合并为main `4d93a08d76a10ff9a52fba68b84cba2d5fc6475a`，本轮未操作合并 |
+| M0-2 | 离线矩阵材料完成，待独立审核 | [9行矩阵](M0_2_CAPABILITIES.md)、A/B证据、官方版本来源、V1～V7条件与失败降级；不声明真实信号可用 |
+| M0-2 现场验证 | NOT_RUN | 未再次 SSH/读凭据/读metrics或私有日志/查询RAS/触发FR/GPU/训练/collective；完整兼容性 INCONCLUSIVE |
+| M0-3 / M1～M5 | NOT_RUN | 未授权，本轮不选切片/不实现监控或检测、不故障注入 |
+| M0-Gate | INCONCLUSIVE | M0-2 独立审核、后续材料与最终批准尚缺 |
 
-- 唯一仓库：[Zwhao0/20261015](https://github.com/Zwhao0/20261015)。最新 main = `4ae0555c6fca24a6082e8e6af4ac40f107cb6716`（合并 PR #4）；M0-1 初始起点仍是历史 `41a30e0…`。最新 main 的 tree 与原 `1dced3b…` 快照相同，已核验。
-- 原 PR #4/head `1dced3bdbbdf8a091c9bfde74fede838c56406c8` 保留，初读为 Ready/Open，后续 fetch/API 核实已合并为上述 main。尝试恢复 Draft 返回 GraphQL FORBIDDEN；不能据此推断对开放 PR 的通用权限。未改旧分支、未自行合并。
-- 当前分支 `codex/m0-1-container-inventory` → 最新 main，[Draft PR #5](https://github.com/Zwhao0/20261015/pull/5) 已发布，保持 Draft/Open/Unmerged。首个补证提交 `7ee7cc57c99e1af97e7d01eea7dc427975e72ea2`；交接提交整合最新 main 的父关系并更新入口，精确最新 head/tree/CI 写 PR 描述；不混用旧审核。
-- [完整事实表](M0_BASELINE.md)、[调查/18条证据/命令/哈希](M0_1_INVENTORY.md)、[恢复交接](HANDOFF.md)。首轮 16:08:10～16:12:18；容器补证 16:36:01～16:42:26，均 2026-10-15 UTC+08:00。
-- 主智能体要求 6.1 Sol/High、子智能体 6 Luna/Max；无可靠模型/档位回读接口，未声称核验或切换。本轮未启动子智能体，保留条件委派/回报协议。
+- 分支 `codex/m0-2-capability-matrix` 先从4ae0555…建立，发布前fetch发现PR #5已合并，保存草稿后快进到main `4d93a08d76a10ff9a52fba68b84cba2d5fc6475a`；不改旧分支、不操作GitHub合并。当前 Draft PR 由该分支关联，最终 head/tree/CI 在 PR 描述保存；仅五份文档改动，工程检查器/CI/AGENTS/原调查证据不变。
+- 最新main已包含完整18条证据，原始分析输入仍固定为 [PR #5 固定快照](https://github.com/Zwhao0/20261015/blob/f15050dc1c4b8bf5cd5e49d75576f19ecf7b269d/docs/M0_1_INVENTORY.md) 的18条；本分支同名本地文件随main快进同步，原8条及新增10条未改。GitHub可恢复公开输入，不提供主机登录或私密原始证据。
+- A/B 各自版本调查：Torch 2.13.0+cu130、Toolkit 13.0.88；NCCL 包/header 2.30.7、Torch编译API 2.29.7、探查进程库2.30.7。上游编译宏解释支持两种查询可不同，不证明本地ABI/collective兼容。
+- 直接可得仅限历史主机设备/瞬时PID-GPU字段、时钟API语义；完整Job/Run/Rank身份、跨机精度、真实进度、metrics/日志来源、RAS/FR现场配置/输出仍UNKNOWN。RAS/FR有对应版本支持路径，需配置/本地构建核实；没有证据判完整能力“不可得”。
 
-## 验证与失败
+## 验证记录
 
-| 检查 | 结果 | 命令/环境/退出码/证据 |
+本地 macOS / Python 3.9.6，验证对象为本分支待提交的五份文档；最终提交用相同 tree 绑定，精确SHA和CI由PR记录。
+
+| 检查 | 结果 | 命令 / 退出码 / 证据 |
 | --- | --- | --- |
-| main/旧 PR/审核核对 | PASS | git fetch、rev-parse、GitHub PR #4/评论/Issue #3；旧 HEAD 未变 |
-| A/B 既有 sudo/Docker 版本访问 | PASS（各自后续成功） | 06/07，exit 0；B05 sudo exit 1 保留，非全程无失败；不改权限 |
-| 容器版本与 CPU 导入 | PASS（限定作用域） | 各 07/08/09；python -I -S -B，隐藏 GPU、限制线程、禁字节码；导入/版本查询 exit 0、CUDA 初始化标记 false |
-| 完整 GPU/训练/分布式/观测能力 | NOT_RUN | 不创建训练、进程组、collective、profiler/RAS；不能把导入通过当训练或兼容通过 |
-| 本地文档/18条摘要/敏感信息 | PASS，exit 0 | macOS/Python 3.9.6；python3 scripts/check_docs.py（5份必需文档、11文本文件）、git diff --check、公开摘要校验代码及受控副本比较、敏感值/身份模式/人工审查通过；原8条摘要字节与哈希不变 |
-| 当前补证 HEAD CI | INCONCLUSIVE（写入时） | 新 HEAD 发布后单独核验 run/job/日志，最终精确 SHA/链接/结果见 [PR #5 描述及 Checks](https://github.com/Zwhao0/20261015/pull/5/checks)；旧 PR #4 的 PASS 不替代本轮 |
-| 清理操作 | NOT_RUN / 用户取消 | 只有预备元数据读取，无 rm/prune/stop/restart/镜像或卷删除；没有清理后状态或磁盘回收量可声称 |
+| 仓库、main、Issue、前序审核 | PASS | `git status --short --branch`、`git fetch origin`、`git rev-parse origin/main` exit 0；GitHub Issue #1/#3、PR #5 metadata/审核 API；新任务 Issue #6 |
+| 官方版本资料 | PASS（离线来源核对） | 矩阵 S1～S9；NCCL 2.30.7归档、PyTorch v2.13.0源码、exporter 4.8.4 release；工具查询无 shell 退出码，部分候选URL失败另列，不算功能测试 |
+| 本地文档/diff | PASS，exit 0 | `python3 scripts/check_docs.py` → 5份必需文档/12文本文件；`git diff --check`；最终staged diff同样检查 |
+| 18条公开摘要/原8条不变 | PASS，exit 0 | `python3` 标准库复核（矩阵内可复跑代码）：18个唯一ID/规范JSON SHA-256匹配，与历史4ae0555…原8条的JSON文本/哈希逐字一致，最新main18条与f15050d输入逐字一致；不读取私密原始材料 |
+| 敏感信息/范围 | PASS，exit 0 + 人工审查 | 标准库扫描五份全文的IPv4/真实GPU UUID/私钥头/常见token和password赋值/本机用户路径/SSH身份模式无匹配；仅五份文档，AGENTS/CI/检查器/旧证据未改；扫描覆盖有限，不读取凭据 |
+| 当前HEAD CI | INCONCLUSIVE（写入时） | 发布后核对本次 PR Checks 的 run/job/log；旧PR的PASS不能替代，精确链接保存PR描述 |
+| 真实信号/GPU/双机验证 | NOT_RUN | 没有本轮主机命令/现场退出码/新原始日志；不将文档检查冒充功能验收 |
 
-- **B-Container 已解除（系统/第三方版本查询）**：新增明确授权使用现有 sudo；没有配置新权限。B05 首次认证失败后，以已提供登录账户凭据查询成功；不枚举未知密码。
-- **B-Workload / B-Signals 持续**：真实任务归属/launcher、Job/Run/Rank、训练进程已加载库、日志/metrics/RAS/FR 配置与信号 UNKNOWN。当前 C1 版本不是任何正在运行训练任务的完整证明。
-- **V-NCCL（事实差异）**：包/header 2.30.7、Torch NCCL API 2.29.7、本次导入进程 ncclGetVersion=23007（2.30.7）；兼容性 INCONCLUSIVE，不修改库来消除差异。
-- **F-ContainerList**：A05 容器列表输出 16 KiB 截断，前缀不是全量统计；06 单独状态聚合成功。本地前缀展示曾 IndexError/exit 1，过滤不完整行后恢复；原始数据未改。
-- **F-MountTemplate**：A/B08 的 .Mounts.Name 对 bind mount 缺键，exit 1；09 仅读 Type 后 exit 0。volume 对象数0不代表没有 bind mount 数据，且用户已取消清理。
-- **F-Draft（已界定）**：旧 PR 的 Draft 转换返回 FORBIDDEN，后来核实 #4 已合并；没有反复调用或改旧分支。已新建 PR #5 并确认 draft=true；直接对最新 main，不再需要以旧分支为 base。
-- 首轮 Docker 拒绝、Chrony 506、dpkg 混合非零、终端推送凭据缺失、upstream refspec 和本地临时脚本编码诊断失败，均保留在调查记录、原 PR #4 与历史提交；不以本轮成功擦除失败。
-- 本轮保留现状，无训练环境部署变更需回滚；原始材料与用户使用入口只在本地受控目录，公开不含身份/凭据。项目许可证仍未指定；待 ChatGPT 审核后由用户决定后续阶段。
+## 阻塞、失败与恢复
+
+- B-Workload / B-Signals / B-Time：无已确认可读本项目任务、launcher/Rank/进度来源、metrics/RAS/FR信号与时钟误差界，继续 UNKNOWN。补证条件 V1～V6 见矩阵，不自行读取未知归属任务。
+- B-Runtime：C1只完成版本/CPU导入，通用运行时来源待环境所有者确认，确认前不作为开发/测试环境。GPU/双机验证为V7后续独立授权项，不为消除NCCL差异换库。
+- B-Predecessor（已解除）：发布前发现PR #5已合并；草稿以命名stash和本机公开文档备份保留后快进最新main，整合M0-2入口。固定SHA仍保留用于可复现；无远端强推/合并。
+- F-Docs：初次NCCL RAS路径错误/PyTorch 2.13文档页与部分候选路径工具访问失败；改查NCCL2.30.7正确归档路径和PyTorch v2.13.0官方源码成功。失败仅表示本次工具未取得资料，不证明HTTP404或功能缺失，详见矩阵。
+- F-Local-M0-2（已恢复）：一次文档辅助命令的嵌套heredoc结束符相同，zsh解析报unmatched backtick/exit 1，整段未执行；改用apply_patch和不同结束符后成功，不涉及服务器。
+- 历史失败不抹去：Docker权限、Chrony506、dpkg混合非零、B05认证、A05截断/本地IndexError、08 mount模板、终端推送凭据/upstream refspec/本地编码诊断，均保留在[首轮记录](M0_1_INVENTORY.md)、PR #4/#5与固定18条证据快照。容器版本访问后来已获准成功，时间/训练信号缺口仍在。
+- 用户取消清理继续有效：删除/停止/重启/新建容器、镜像/卷删除为0；本轮没有服务器配置变更需回滚。文档可经审查revert/后续修复，不覆盖失败历史。
+- 主智能体要求6.1 Sol/High，无可靠模型/档位回读，不声称已核验/切换；本轮未委派子智能体。上下文检查点、发布恢复与独立审核入口见[HANDOFF](HANDOFF.md)。
