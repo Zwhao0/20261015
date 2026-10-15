@@ -1,6 +1,6 @@
 # M0 技术基线
 
-依据：[README](../README.md)、母 [Issue #1](https://github.com/Zwhao0/20261015/issues/1)、当前 [Issue #6](https://github.com/Zwhao0/20261015/issues/6)。2026-10-15（Asia/Shanghai）用户授权启动M0-2，完成离线矩阵待审核。M0-1容器补证已获限调查目的审核PASS，发布前PR #5已合并到main `4d93a08d76a10ff9a52fba68b84cba2d5fc6475a`，18条证据原文不变；未实现监控/检测功能。
+依据：[README](../README.md)、母 [Issue #1](https://github.com/Zwhao0/20261015/issues/1)、当前 [Issue #8](https://github.com/Zwhao0/20261015/issues/8)。2026-10-15（Asia/Shanghai）用户明确授权启动M0-3。M0-2 PR #7 已获[离线矩阵审核PASS](https://github.com/Zwhao0/20261015/pull/7#issuecomment-6189223408)并合并，当前main `d36cdacb77b6b1b08392bf27b9b288952918aa98`。本轮只做V0.1切片设计与验收方案；18条证据和原能力矩阵不变，功能未实现，M1未授权。
 
 ## 路线与门禁
 
@@ -50,9 +50,9 @@ M0-1～M0-3 填充以下材料后，由 ChatGPT 独立审核、用户最终批�
 - 已找到可复用的现有环境，未触发下载/上传/构建条件。仅证明 C1 的版本读取与 CPU 导入；不把候选升级为 GPU/双机训练通过，不复用旧项目代码/构建内容。
 - Torch NCCL API 2.29.7 与本进程 ncclGetVersion 2.30.7 差异已观察；不推断兼容与否，不更换库。实际训练入口/launcher、Runtime 完整版本、训练进程已加载库、Rank、日志/指标配置、RAS/FR 与时钟精度仍 UNKNOWN / NOT_RUN。
 - 清理 CANCELLED / NOT_RUN，无容器/镜像/卷删除；原始数据和既有运行容器保留。
-- [PR #4 独立审核](https://github.com/Zwhao0/20261015/pull/4#issuecomment-6187891676) 仅覆盖旧宿主机快照 `1dced3b…`。原 PR #4 已合并，当时 main 为 `4ae0555c6fca24a6082e8e6af4ac40f107cb6716`。容器补证 [PR #5](https://github.com/Zwhao0/20261015/pull/5)/head `f15050dc1c4b8bf5cd5e49d75576f19ecf7b269d` 已获[独立审核](https://github.com/Zwhao0/20261015/pull/5#issuecomment-6188441126)限调查目的PASS；启动M0-2时尚未合并，发布前已合并为main `4d93a08d76a10ff9a52fba68b84cba2d5fc6475a`。用户明确授权M0-2；M0-Gate与训练层仍INCONCLUSIVE，M0-3/M1未授权。C1通用运行时来源仍需所有者确认，确认前不作为开发/测试环境。
+- [PR #4 独立审核](https://github.com/Zwhao0/20261015/pull/4#issuecomment-6187891676) 仅覆盖旧宿主机快照 `1dced3b…`。原 PR #4 已合并，当时 main 为 `4ae0555c6fca24a6082e8e6af4ac40f107cb6716`。容器补证 [PR #5](https://github.com/Zwhao0/20261015/pull/5)/head `f15050dc1c4b8bf5cd5e49d75576f19ecf7b269d` 已获[独立审核](https://github.com/Zwhao0/20261015/pull/5#issuecomment-6188441126)限调查目的PASS；启动M0-2时尚未合并，发布前已合并为main `4d93a08d76a10ff9a52fba68b84cba2d5fc6475a`。当轮用户明确授权M0-2；当时M0-Gate与训练层仍INCONCLUSIVE，M0-3/M1尚未授权；最新M0-3授权见本文开头。C1通用运行时来源仍需所有者确认，确认前不作为开发/测试环境。
 
-## M0-2 观测能力与兼容性矩阵（离线材料完成，待独立审核）
+## M0-2 观测能力与兼容性矩阵（离线材料审核 PASS，已合并）
 
 完整 [M0-2 矩阵](M0_2_CAPABILITIES.md) 给出9行能力、A/B独立证据、版本适用条件、失败降级、V1～V7补证条件与官方来源。
 
@@ -65,22 +65,22 @@ M0-1～M0-3 填充以下材料后，由 ChatGPT 独立审核、用户最终批�
 | NCCL RAS | 需配置或版本支持；2.30.7归档有路径，实际任务配置与信号 UNKNOWN |
 | PyTorch Flight Recorder | 需配置或版本支持；上游v2.13.0有实现，本地构建/启用/导出 UNKNOWN |
 
-本轮现场测试 NOT_RUN，完整运行兼容性 INCONCLUSIVE；没有证据支持把未知项判“不可得”或健康。仅交付矩阵与补证门禁，不实现采集、不选择M0-3切片、不进入M1。
+M0-2轮现场测试 NOT_RUN，完整运行兼容性 INCONCLUSIVE；没有证据支持把未知项判“不可得”或健康。原矩阵按历史快照保留，其中“待审核/M0-3未授权”是当轮状态；最新审核与授权以上文、STATUS和当前Issue为准。
 
-## M0-3 最小端到端切片及验收（NOT_RUN）
+## M0-3 最小端到端切片及验收（方案完成，待独立审核）
 
-候选方向来自 Issue：真实任务基础观测与异常退出事件，尚未选定或实现。后续授权任务需填：
+选定V0.1：一个明确获准真实任务的基础观测及进程异常退出。完整[切片方案](M0_3_SLICE.md)包含：
 
-- 真实训练证据来源、明确的切片目标与非目标。
-- 数据契约：对象身份、事件/时间戳语义、进度、来源和证据引用。
-- 可用性/开销约束、采集失败降级与 `UNKNOWN` 传播。
-- 本地轻量测试/回放、双机集成步骤、预期结果与验收阈值。
-- 回退步骤、共享训练保护、执行所需授权；M0 仅方案，M1 才实现。
+- 任务所有者清单/启动器权威终止记录作为证据入口；当前真实来源仍UNKNOWN，不依赖旧项目或未核实RAS/FR/step。
+- Job/Run/attempt、Host/boot/namespace/PID/start、Rank/Local Rank/GPU、时间域、退出编码与证据索引契约；缺链只展示局部字段。
+- 进程/任务作用域、重启、缺样本、源失败/轮转/乱序等UNKNOWN规则，以及14类未来回放用例。
+- I0～I5双机接入/验收步骤、量化资源/延迟预算和回退；现场命令须待真实对象批准后在M1 PR落实。
+- M1候选C1～C4及DoD，仅列表不创建/启动任务。M0只做设计；功能回放/双机/开销测试均NOT_RUN。
 
 ## M0-Gate 材料与审核（INCONCLUSIVE）
 
-已有M0-1调查证据与限范围审核、M0-2离线矩阵/待验证假设；M0-2独立审核待完成。待补V0.1切片与可执行验收/回退方案、明确的M1候选Issue列表，均不在本轮实施范围。
-审核时填写：范围、被审核 SHA/PR、证据、`PASS/FAIL/INCONCLUSIVE`、ChatGPT 审核意见、用户最终批准及日期；目前均未完成。
+已有M0-1调查证据/限定审核、M0-2离线矩阵/审核PASS、M0-3方案/待审核与M1候选列表。现场来源、身份/退出样本、C1运行时来源和具体命令仍有缺口；不能据此声明训练功能已验收。
+M0-3独立审核与M0-Gate/用户最终批准尚缺。审核填写范围、被审核SHA/PR、证据、PASS/FAIL/INCONCLUSIVE、ChatGPT意见、用户批准及日期；本轮不自行给Gate PASS或进入M1。
 
 ## 外部来源
 
