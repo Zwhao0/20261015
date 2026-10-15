@@ -29,4 +29,6 @@ jobs:
         with:
           persist-credentials: false
       - name: Deterministic offline unit tests
-        run: python3 -m unittest discover -s tests -v
+        run: |
+          python3 --version
+          python3 -m unittest discover -s tests -v

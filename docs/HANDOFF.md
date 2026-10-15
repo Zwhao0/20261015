@@ -2,8 +2,10 @@
 
 - 用户已在本Codex会话明确授权“启动 M1-C1 离线开发”。[Issue #11](https://github.com/Zwhao0/20261015/issues/11)；PR #10已合并，开发起点 main `801fd156c2d39f696efa38811b0c0b433209b2d3`、tree `1f0136752f63cc2b9bca5a2ce0e2c2bac11394e3`，分支 `codex/m1-c1-offline-replay`。
 - 仅标准库/合成数据/虚拟时间的schema 0.1离线契约、回放、三层聚合及T01～T14；不访问旧项目、H800、凭据或训练数据，不使用历史C1容器，无GPU/服务器/训练/环境或容器操作。不合并，不推进M1-C2。
+- [Draft PR #12](https://github.com/Zwhao0/20261015/pull/12) 已发布，保持Open/Draft/未合并；实现提交 `2386bf43fc54189c40513612b9c9079592b31a1b`、tree `4ed01955e92018e9de9988a2cf6057552aedbddd`。首轮 [CI run38724950172](https://github.com/Zwhao0/20261015/actions/runs/38724950172) 的unit44项与docs检查分别PASS，已读取原始日志；该结论仅对应此实现head。证据跟进提交的最终head/tree/新CI见PR，不套用旧head CI。
 - 实现及44项功能测试已集成；本地标准库unittest PASS（44项、0失败、0跳过），文档与差异检查分开保存于 [M1-C1证据](../evidence/README.md)，最终HEAD/tree/对应CI以Issue #11关联Draft PR为准；独立验收待ChatGPT检查，不自行宣布阶段通过。
 - 保留失败：子任务fixtures施工缺失14项错误、初版schema_version遗漏；首次集成T09序号冲突1失败及原fixture；首次文档检查两个证据文件尚未落盘导致exit1。恢复未放宽断言或文档检查，详情见 [使用及限制](M1_C1_OFFLINE.md)。
+- 发布失败及恢复：普通fetch未包含新分支，merge报not something we can merge（exit1）；显式fetch后ff-only同步成功，但设置跟踪因缺refspec失败（exit128）。仅追加本分支fetch refspec后跟踪成功、工作区干净；远端commit/tree一致，不强推、不改main。Git data工具发布后通过fetch/ff-only核对。
 - 恢复顺序：先核对Issue #11和本分支Draft PR真实head/tree/diff/CI，再读本节、M1_C1_OFFLINE、冻结M0_3_SLICE；保持当前改动，按M1文档分别运行功能与文档命令。仅继续本离线任务；M1-C2/现场/合并仍未授权。
 - 两个子任务分别实现契约与只读反例审查，未修改共享状态或合并；配置请求6Luna/Max但无可靠回读。未声称主智能体切换或完成外部ChatGPT独立验收。
 - 下面原M0状态及其“未授权/待审核”措辞按历史写入时间解释，全文保留，不覆盖本次明确授权。

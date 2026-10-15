@@ -42,8 +42,10 @@
       "kind": "documents"
     }
   ],
+  "scope_note": "Tests rerun on exact published implementation commit; code/fixtures unchanged by evidence follow-up. Final CI head in PR.",
   "skipped": 0,
   "test_count": 44,
+  "tested_commit": "2386bf43fc54189c40513612b9c9079592b31a1b",
   "tested_content_sha256": {
     "observatory/__init__.py": "0d3602fe36a30fca2fcd2607583346e06cbae533d20a24e943c401eb9b3c50e7",
     "observatory/__main__.py": "8552b9d07fb49c0659689b0352505f5f6a2d38a83ab29b6ba2e177c4c99c24ec",
@@ -83,5 +85,6 @@
     "tests/test_boundaries.py": "ef1374ad4e6a91687c9b0cda2aa5f7ab9a134e30719ff15fb6508968eaab2da9",
     "tests/test_contract.py": "b0812894932a5585775421ac35a2092ff21592215f21cb2e77f5ad55016b39c0",
     "tests/test_replay.py": "1df744de5b426ae00f55cbcd1686051bd768e9a99acef343e72c8b247d913692"
-  }
+  },
+  "tested_tree": "4ed01955e92018e9de9988a2cf6057552aedbddd"
 }

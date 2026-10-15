@@ -1,0 +1,22 @@
+{
+  "base": "801fd156c2d39f696efa38811b0c0b433209b2d3",
+  "conclusion": "success",
+  "docs": {
+    "command": "python3 scripts/check_docs.py",
+    "conclusion": "success",
+    "job": 116388371398,
+    "result": "PASS: 5 required documents; 25 text files checked"
+  },
+  "environment": "GitHub-hosted Ubuntu 24.04; Python version not printed by this initial workflow, not inferred",
+  "head": "2386bf43fc54189c40513612b9c9079592b31a1b",
+  "raw_log_source": "GitHub job logs read by connector; only result/commit excerpts recorded here",
+  "run": 38724950172,
+  "tested_merge": "f02876439fe9e4b3971e96c6c01b57c44e7882b5",
+  "tree": "4ed01955e92018e9de9988a2cf6057552aedbddd",
+  "unit": {
+    "command": "python3 -m unittest discover -s tests -v",
+    "conclusion": "success",
+    "job": 116388371797,
+    "result": "Ran 44 tests in 0.133s; OK"
+  }
+}
