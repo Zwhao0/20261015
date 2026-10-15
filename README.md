@@ -3,7 +3,7 @@
 An engineering project for **Training Observability** and **Detection, Localization & Diagnosis** in distributed AI training.
 
 ## Project status
-- **Phase:** M0-Gate — formal review record; final owner approval pending.
+- **Phase:** M0-Gate — approved for the design and engineering baseline; M1 execution not authorized.
 - **Canonical repository:** https://github.com/Zwhao0/20261015
 - **Current task and acceptance criteria:** https://github.com/Zwhao0/20261015/issues/1 (M0-Gate formal review record)
 - **Implementation:** Codex, through small reviewed pull requests.
@@ -21,7 +21,7 @@ See [M0 Issue #1](https://github.com/Zwhao0/20261015/issues/1) for the session h
 
 ## M0 工程入口
 
-用户于 2026-10-15 明确授权“启动：Issue #1 — M0-Gate 正式审核记录”。[PR #9](https://github.com/Zwhao0/20261015/pull/9) 已获[设计修正独立复审 PASS](https://github.com/Zwhao0/20261015/pull/9#issuecomment-6189756035)并合并，审核基线 main 为 `42bce13c5bd925c74856f96de64f431526d142bf`。[M0-Gate 独立技术审查](https://github.com/Zwhao0/20261015/issues/1#issuecomment-6189883744)判定离线设计及 M1-C1 离线编码技术准备 PASS；真实环境接入与低开销 INCONCLUSIVE；整体 Gate INCONCLUSIVE，待用户最终批准，M1 未授权。正式结论与证据见[审核记录](docs/M0_GATE.md)。用户随后明确“批准执行M0-GATE”，作为本轮执行授权登记；最终验收批准仍待明确。本轮仅同步文档和审核事实，无功能实现或现场测试。
+用户于 2026-10-15 明确授权“启动：Issue #1 — M0-Gate 正式审核记录”。[PR #9](https://github.com/Zwhao0/20261015/pull/9) 已获[设计修正独立复审 PASS](https://github.com/Zwhao0/20261015/pull/9#issuecomment-6189756035)并合并，审核基线 main 为 `42bce13c5bd925c74856f96de64f431526d142bf`。[M0-Gate 独立技术审查](https://github.com/Zwhao0/20261015/issues/1#issuecomment-6189883744)判定离线设计及 M1-C1 离线编码技术准备 PASS；真实环境接入与低开销 INCONCLUSIVE；整体 Gate 现为 PASS（限工程基线/离线调查、矩阵、V0.1设计及M1-C1离线编码技术准备），依据2026-10-15的[用户最终批准记录](https://github.com/Zwhao0/20261015/issues/1#issuecomment-6190108253)及[PR #10修正要求](https://github.com/Zwhao0/20261015/pull/10#issuecomment-6190117664)；真实接入/兼容/开销仍INCONCLUSIVE，M1执行未授权。正式结论与证据见[审核记录](docs/M0_GATE.md)。历史上“批准执行M0-GATE”仅作为记录执行授权登记；后续ChatGPT对话已单独取得最终Gate批准，现同步该事实。本轮仅同步文档和审核事实；T01～T14功能回放、CPU子进程、I0～I5、collective及资源测量均NOT_RUN。
 
 - [AGENTS.md](AGENTS.md)：执行边界、角色、上下文与工程规范。
 - [STATUS](docs/STATUS.md)：阶段、验证、阻塞和下一步。

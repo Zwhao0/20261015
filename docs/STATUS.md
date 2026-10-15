@@ -1,6 +1,6 @@
 # 项目状态
 
-更新：2026-10-15（Asia/Shanghai）。当前任务：[Issue #1 — M0-Gate 正式审核记录](https://github.com/Zwhao0/20261015/issues/1)。用户明确授权“启动：Issue #1 — M0-Gate 正式审核记录”，随后明确“批准执行M0-GATE”。两条作为执行授权，仅登记审核、同步状态与提交 Draft PR；最终验收批准未取得，M1 未授权。
+更新：2026-10-15（Asia/Shanghai）。当前任务：[Issue #1 — M0-Gate 正式审核记录](https://github.com/Zwhao0/20261015/issues/1)。用户明确授权“启动：Issue #1 — M0-Gate 正式审核记录”，随后明确“批准执行M0-GATE”。两条是历史执行授权；2026-10-15后续[用户最终批准记录](https://github.com/Zwhao0/20261015/issues/1#issuecomment-6190108253)已登记用户最终Gate验收批准。当前按[PR #10修正要求](https://github.com/Zwhao0/20261015/pull/10#issuecomment-6190117664)及用户“直接按照 PR #10 的新评论执行”追加最小状态修正；M1执行仍未授权。
 
 ## 当前事实与门禁
 
@@ -13,23 +13,27 @@
 | 离线设计与 M1-C1 编码技术准备 | PASS | 复用已存在的独立 Gate 技术审查；不代表执行授权 |
 | 真实训练接入/信号/兼容/开销 | INCONCLUSIVE | 来源、身份、退出、C1通用运行时、存储/权限/保留期、时钟/命令等缺口保留 |
 | 功能回放/CPU子进程/双机/GPU/开销 | NOT_RUN | T01～T14、I0～I5 是未来验收设计，没有功能实现 |
-| 整体 M0-Gate | INCONCLUSIVE | 独立技术审查已完成；用户最终批准未取得，批准栏留待明确指令 |
+| 整体 M0-Gate | PASS（限工程基线/离线调查、矩阵、V0.1设计及M1-C1离线编码技术准备） | 独立技术审查与用户最终批准均已取得；批准来源为Issue #1评论6190108253，不授权M1执行 |
 | M1～M5 执行 | NOT_RUN | 未授权；不新建 M1 执行 Issue，不实现采集器/Detector，不推进阶段 |
 
 ## 本次交付与验证
 
-新增 M0_GATE，同步 README/STATUS/HANDOFF/M0_BASELINE，共五份文档；原18条证据、M0_2矩阵、M0_3方案、AGENTS、检查器、CI保持基线字节不变。Issue #1 仅同步工作项和正式审核入口，保留原目标、验收及协议；Gate不勾选，Issue保持Open，旧PR/Issue #8不改写。精确新head/tree、最终检查及CI发布后存本轮Draft PR，避免自引提交。
+新增 M0_GATE，同步 README/STATUS/HANDOFF/M0_BASELINE，共五份文档；原18条证据、M0_2矩阵、M0_3方案、AGENTS、检查器、CI保持基线字节不变。Issue #1 仅同步工作项和正式审核入口，保留原目标、验收及协议；Gate现按最终批准勾选，Issue保持Open，旧PR/Issue #8不改写。精确新head/tree、最终检查及CI发布后存本轮Draft PR，避免自引提交。
 
 - 基线/历史审核：PASS。`git fetch origin`、`git status --short --branch`、`git rev-parse`，macOS/Git，exit0；GitHub读取Issue #1/#8、PR #2/#4/#5/#7/#9实际元数据及独立审核评论，无shell退出码。PR #9 workflow API success，job116367055675原始日志确认审核head/base和13文件文档检查。
 - 本地文档/diff、范围与原文一致性、有限敏感信息扫描：PASS，macOS/Python3.9.6，exit0；检查器输出5 required documents / 14 text files。命令及范围见[M0_GATE](M0_GATE.md)，精确staged tree及发布后结果存PR。仅文档核对，不能当功能回放。
 - 本次新head CI：INCONCLUSIVE（写入时）；发布后以本轮PR对应run/job/log及head/base为准，不套用PR #9历史CI。
-- B-Approval：待用户最终批准整体Gate/限定范围；本轮启动指令仅授权记录。B-Workload/Identity/Exit/Runtime/Time/Signals及受控存储输入仍未解除，详见正式记录。
+- B-Approval：PASS（限Gate验收），2026-10-15用户最终批准已登记于评论6190108253；首版仅获记录执行授权时INCONCLUSIVE的过程见M0_GATE。M1执行仍未授权。B-Workload/Identity/Exit/Runtime/Time/Signals及受控存储输入仍未解除，详见正式记录。
 - 本轮未访问服务器/凭据/私密索引/日志/metrics/RAS/FR，未执行GPU/训练/collective/环境变更；容器停止/重启/新建/删除、镜像/卷删除均0，取消清理继续有效。主智能体配置无可靠回读，不声称切换；未委派子智能体。
 - 本轮首个可选根AGENTS读取返回exit1（文件不存在），随后正确读取repo/AGENTS.md，exit0；未据此猜测规则。无服务器失败。原失败记录完整保留在下文和对应PR；撤销通过审核revert/后续修正。
 
+## PR #10本次最小修正
+
+修复起点为被审head `f939da8b72844f71d6af5d99373cec01a7ca046a`（tree `85ebf9d2b3649ef0a186ccdb701f8998601096eb`）；原分支追加提交，仅五文档及Issue #1当前摘要/勾选，保留先前INCONCLUSIVE历史，不强推/改史。仅同步用户最终批准，真实接入/兼容/开销INCONCLUSIVE，T01～T14/CPU子进程/I0～I5/collective/资源NOT_RUN。未新建任务书、未重复调查H800、未使用历史C1容器；不合并、不关闭Issue、不启动M1。新head/tree/新CI/最终检查以PR #10记录为准；修复提交待独立复审。本轮macOS/Python3.9.6文档检查PASS（5份必需文档/14文本文件）、diff通过；首次静态一致性核对因README缺少显式NOT_RUN标记触发AssertionError（Python exit1，后续文档检查exit0，未将组合命令整体冒称全部通过），已补齐标记；最终保真/范围/批准边界/有限敏感模式检查及staged验证结果存PR。
+
 ## 历史记录适用说明
 
-下文为 M0-3 原执行/失败记录，保留旧head/base/待审措辞用于追溯；其中“当前”指原记录写入时，不覆盖上方最新事实。原文中的独立复审阻塞现由 PR #9 复审PASS及合并解除，整体Gate批准与现场输入仍待完成。
+下文为 M0-3 原执行/失败记录，保留旧head/base/待审措辞用于追溯；其中“当前”指原记录写入时，不覆盖上方最新事实。原文中的独立复审阻塞现由 PR #9 复审PASS及合并解除，整体Gate批准现已按评论6190108253解除；现场输入与M1执行授权仍缺。
 
 # M0-3 历史执行记录
 
