@@ -3,9 +3,9 @@
 An engineering project for **Training Observability** and **Detection, Localization & Diagnosis** in distributed AI training.
 
 ## Project status
-- **Phase:** M0-3 — V0.1 observation and process-exit slice design; independent review pending.
+- **Phase:** M0-Gate — formal review record; final owner approval pending.
 - **Canonical repository:** https://github.com/Zwhao0/20261015
-- **Current task and acceptance criteria:** https://github.com/Zwhao0/20261015/issues/8 (parent: https://github.com/Zwhao0/20261015/issues/1)
+- **Current task and acceptance criteria:** https://github.com/Zwhao0/20261015/issues/1 (M0-Gate formal review record)
 - **Implementation:** Codex, through small reviewed pull requests.
 - **Planning and independent review:** ChatGPT and project owner.
 
@@ -21,11 +21,12 @@ See [M0 Issue #1](https://github.com/Zwhao0/20261015/issues/1) for the session h
 
 ## M0 工程入口
 
-用户已于 2026-10-15 明确授权“启动 M0-3”。M0-2 [PR #7](https://github.com/Zwhao0/20261015/pull/7) 已获[离线矩阵独立审核 PASS](https://github.com/Zwhao0/20261015/pull/7#issuecomment-6189223408)并合并，当前基线 main 为 `d36cdacb77b6b1b08392bf27b9b288952918aa98`。本轮选定一个获准真实任务的基础观测与异常退出切片，交付数据契约、UNKNOWN降级、回放/双机验收、回退与M1候选列表，待独立审核。真实任务/退出来源仍 UNKNOWN，功能未实现，现场与功能测试 NOT_RUN；M0-Gate 仍 INCONCLUSIVE，M1 未授权。
+用户于 2026-10-15 明确授权“启动：Issue #1 — M0-Gate 正式审核记录”。[PR #9](https://github.com/Zwhao0/20261015/pull/9) 已获[设计修正独立复审 PASS](https://github.com/Zwhao0/20261015/pull/9#issuecomment-6189756035)并合并，审核基线 main 为 `42bce13c5bd925c74856f96de64f431526d142bf`。[M0-Gate 独立技术审查](https://github.com/Zwhao0/20261015/issues/1#issuecomment-6189883744)判定离线设计及 M1-C1 离线编码技术准备 PASS；真实环境接入与低开销 INCONCLUSIVE；整体 Gate INCONCLUSIVE，待用户最终批准，M1 未授权。正式结论与证据见[审核记录](docs/M0_GATE.md)。用户随后明确“批准执行M0-GATE”，作为本轮执行授权登记；最终验收批准仍待明确。本轮仅同步文档和审核事实，无功能实现或现场测试。
 
 - [AGENTS.md](AGENTS.md)：执行边界、角色、上下文与工程规范。
 - [STATUS](docs/STATUS.md)：阶段、验证、阻塞和下一步。
 - [HANDOFF](docs/HANDOFF.md)：从 GitHub 恢复会话及交接模板。
+- [M0-Gate 正式审核记录](docs/M0_GATE.md)：审核对象、证据、分层结论、剩余门禁及用户批准栏。
 - [M0 技术基线](docs/M0_BASELINE.md)：事实、证据、能力矩阵与后续验收骨架。
 - [M0-1 只读调查与容器补证](docs/M0_1_INVENTORY.md)：main 已合并的18条证据、命令、摘要哈希与未验证项。
 - [M0-2 能力与兼容性矩阵](docs/M0_2_CAPABILITIES.md)：能力分类、A/B 证据、版本条件、失败降级与后续补证门禁。
