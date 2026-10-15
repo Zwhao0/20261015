@@ -3,11 +3,11 @@
 ## 当前入口
 
 - 唯一仓库：[Zwhao0/20261015](https://github.com/Zwhao0/20261015)。任务：[Issue #1](https://github.com/Zwhao0/20261015/issues/1)。
-- 当前仅 M0-0；开发分支 `codex/m0-0-bootstrap`，[Draft PR #2](https://github.com/Zwhao0/20261015/pull/2) → main；已交付待 ChatGPT 独立审核，未合并。实施与验证快照见 [STATUS](STATUS.md)。
+- 当前仅修复 M0-0 的 [ChatGPT 审核唯一必修项](https://github.com/Zwhao0/20261015/pull/2#issuecomment-6187217983)：AGENTS 两条临时限制已改为通用任务授权规则，仅同步 STATUS/HANDOFF，待 ChatGPT 复审。开发分支 `codex/m0-0-bootstrap`，[Draft PR #2](https://github.com/Zwhao0/20261015/pull/2) → main。当前仍保持 Draft，不合并、不进入 M0-1、不连接 H800、不读取连接凭据、不开发 Detector/复杂算法、不进行故障注入；阶段状态见 [STATUS](STATUS.md)。
 - 从初始 main `6e80e6ce88ca952d3fbe3f0612b36058e8bd337e` 开始，无旧项目继承。未访问 H800；本地 `服务器.md` 保持仓库外且未读取。
 - 已完成工程文档、轻量检查、正反例抽查、分支发布与 Draft PR；本地检查及首轮 CI 通过。首轮提交为 `bad23bfe5ae62d79e7495592429a5f8e30e0b915`，后续交接提交的精确 SHA/CI 结果以 PR 最新描述与 Checks 为准。
 - 终端无 GitHub 推送凭据，已通过连接的 GitHub Git data 接口发布并核对 tree；后续可沿用创建 tree → 以当前 head 为 parent 创建 commit → 非强制更新开发分支 ref → 本地 fetch/fast-forward 的路径。失败与恢复记录见 STATUS/PR，不需要访问服务器。
-- 本次未启动子智能体；主智能体实际模型/档位无可靠回读接口，未声称已核验。剩余事项为独立审核；环境事实与 M0 后续方案见 [基线](M0_BASELINE.md)，均未执行。
+- 本次未启动子智能体；主智能体实际模型/档位无可靠回读接口，未声称已核验。审核基线为 `bc560436388f7bb96864680ad64242552fb26a07`，剩余事项为本次修复的 ChatGPT 复审；新 HEAD 与对应 CI 结果见 PR 最新描述/Checks。环境事实与 M0 后续方案见 [基线](M0_BASELINE.md)，均未执行。
 
 ## 新会话恢复顺序
 
