@@ -1,3 +1,12 @@
+# PR #12 R1 最小修正（2026-10-15，Asia/Shanghai）
+
+- 用户明确要求直接执行 [审核评论6190850559](https://github.com/Zwhao0/20261015/pull/12#issuecomment-6190850559)；被审HEAD `4624b7dc1f45e0ed1cfafd313966289840cd4bed`，tree `62f22a5442949e57380a6d4cbe895af2d3418eba`；main仍 `801fd156c2d39f696efa38811b0c0b433209b2d3`。在原分支/原Draft PR追加，不合并、不强推、不进入M1-C2。
+- 修复：complete成员清单仅接受attempt作用域且成员为worker；聚合器收取manifests时再次核对identity/payload两处attempt scope。其余进程退出和最终Attempt证明规则不变。
+- 实际反例：修复前新增8项回归在原代码上FAIL/exit1（18个子断言失败），包括伪完整清单+全员0+FINAL_ATTEMPT被误判COMPLETED。修复后8项及全部52项PASS/exit0，0失败/0错误/0跳过；保留局部IDENTITY和合法Attempt清单正例，并单独验证绕过输入校验后聚合器仍拒绝局部清单。
+- [本轮原始失败/恢复/内容哈希证据](../evidence/README.md)已保存；原44项测试、T01～T14全部golden/哈希清单、M0原文及既有失败文件逐字不变。文档检查与功能结果分开；新HEAD/tree/双job新CI发布后以PR #12描述和Issue #11为准，旧44项CI不替代本次52项。
+- 独立审核已发现R1，核心语义验收仍待修复提交复审；本节的PASS仅指实际测试，不能宣布M1-C1最终验收通过。无业务代码修改、低开销、MoE及DP/PP/TP/EP适配是已登记的后续要求，本次未实现或验证现场能力，不扩展schema或改冻结M0文档。本轮未委派子智能体。
+- 恢复：先读上述审核及PR #12最新head/diff/Checks，再读本节和M1_C1_OFFLINE；保留原44项历史证据，按README命令运行52项全套和独立文档检查，等待ChatGPT复审。
+
 # M1-C1 当前执行状态（2026-10-15，Asia/Shanghai）
 
 - 用户已在本Codex会话明确授权“启动 M1-C1 离线开发”。[Issue #11](https://github.com/Zwhao0/20261015/issues/11)；PR #10已合并，开发起点 main `801fd156c2d39f696efa38811b0c0b433209b2d3`、tree `1f0136752f63cc2b9bca5a2ce0e2c2bac11394e3`，分支 `codex/m1-c1-offline-replay`。

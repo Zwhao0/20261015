@@ -71,3 +71,9 @@ run键只有(job_id,run_id)。COMPLETED需独立权威run成功记录，或明�
 契约子任务首次在fixtures尚未建立时运行发现26项，其中12项契约PASS、14项FileNotFoundError；主集成发现初版遗漏schema_version校验，修复为必需且严格0.1并加入版本断言，不能把初版契约测试PASS当完整性证明。后按模块15项PASS；子任务配置请求6Luna/Max，但无可靠运行时回读，不声称已核验。主智能体未声称切换配置。
 
 最终测试对象commit、tree、环境、命令、退出码、数量、CI run/job/实际日志及限制由Draft PR和 [evidence记录](../evidence/README.md)登记，避免文档自引commit。功能、文档、敏感模式/范围检查分开报告。首次文档检查因两个证据目标文件尚未落盘而FAIL/exit1，原日志保存于evidence/local-initial-docs.txt；补齐目标后重新执行原命令恢复。现场/CPU实际子进程/I0～I5/实时采集/训练/GPU/开销均NOT_RUN；不能以本离线输入代替现场验收。M1-C2及后续阶段未启动，不合并本PR。
+
+## PR #12 审核 R1：成员清单作用域
+
+[审核6190850559](https://github.com/Zwhao0/20261015/pull/12#issuecomment-6190850559)发现初版未执行表格中的Attempt清单scope约束。现在membership_complete=true仅允许identity.scope与payload.scope均为attempt、成员全部scope=worker；worker/launcher/run自报complete作为INVALID_RECORD隔离。membership_complete=false的局部IDENTITY仍可保留，但不作为完整Attempt清单；聚合器对进入manifests的IDENTITY再次验证两处attempt scope。
+
+[8项作用域回归](../tests/test_membership_scope.py)覆盖三种伪完整清单及有/无FINAL_ATTEMPT证明、非worker成员、局部身份正例、合法Attempt正例、模拟放宽校验时的聚合保护。修复前实际运行8项触发18个子断言失败，修复后全套52项通过；原T01～T14输入/golden和既有44项测试没有修改。完整失败/恢复和环境见[evidence](../evidence/README.md)，修复提交的新HEAD/tree与双job新CI以PR记录为准。无侵入/低开销/MoE/多维并行现场能力仍NOT_RUN；该项目级后续要求不在本R1修复中实施。

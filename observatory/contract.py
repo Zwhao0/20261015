@@ -256,6 +256,11 @@ class _RecordValidator:
         self._field("payload.membership_complete")
         if type(payload["membership_complete"]) is not bool:
             _fail("payload.membership_complete", "expected boolean")
+        if payload["membership_complete"]:
+            if scope != "attempt":
+                _fail("payload.membership_complete", "complete membership requires attempt scope")
+            if any(member["scope"] != "worker" for member in members):
+                _fail("payload.members", "complete membership requires worker members")
 
     def validate_snapshot_payload(self, payload: Any) -> None:
         payload = _object(

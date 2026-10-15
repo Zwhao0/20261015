@@ -1,0 +1,13 @@
+test_aggregator_checks_scope_even_if_validation_is_bypassed (tests.test_membership_scope.MembershipScopeTests) ... ok
+test_contract_complete_members_are_workers (tests.test_membership_scope.MembershipScopeTests) ... ok
+test_contract_rejects_non_attempt_complete_claims (tests.test_membership_scope.MembershipScopeTests) ... ok
+test_launcher_complete_claim_cannot_complete_attempt_or_run (tests.test_membership_scope.MembershipScopeTests) ... ok
+test_legal_attempt_manifest_can_support_final_proof (tests.test_membership_scope.MembershipScopeTests) ... ok
+test_partial_local_identities_do_not_complete_attempt (tests.test_membership_scope.MembershipScopeTests) ... ok
+test_run_complete_claim_cannot_complete_attempt_or_run (tests.test_membership_scope.MembershipScopeTests) ... ok
+test_worker_complete_claim_cannot_complete_attempt_or_run (tests.test_membership_scope.MembershipScopeTests) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.015s
+
+OK

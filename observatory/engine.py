@@ -273,7 +273,8 @@ class Replay:
                 ats.setdefault(ak, {"evidence": set(), "coverage": []})
                 ats[ak]["evidence"].add(record["evidence_ref"])
                 ats[ak]["coverage"].append(source_coverage)
-            if record["event_type"] == "IDENTITY" and ak:
+            if (record["event_type"] == "IDENTITY" and ak
+                    and ident["scope"] == "attempt" and p["scope"] == "attempt"):
                 manifests.setdefault(ak, []).append(record)
             if record["event_type"] == "RUN_TERMINAL" and rk:
                 proofs.setdefault(rk, []).append(record)
