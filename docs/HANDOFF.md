@@ -2,11 +2,11 @@
 
 ## 当前授权、入口与停止点
 
-- 唯一仓库：[Zwhao0/20261015](https://github.com/Zwhao0/20261015)，当前 [Issue #3](https://github.com/Zwhao0/20261015/issues/3)，只做 M0-1。main `41a30e011b3fb0074aaef7cb8c42070aef4562b1`。
+- 唯一仓库：[Zwhao0/20261015](https://github.com/Zwhao0/20261015)，当前 [Issue #3](https://github.com/Zwhao0/20261015/issues/3)，只做 M0-1。最新 main `4ae0555c6fca24a6082e8e6af4ac40f107cb6716`（PR #4 合并）；初始历史起点为 `41a30e0…`。
 - 用户本轮允许访问所有既有容器、使用已提供凭据与现有 sudo，优先复用 PyTorch；实际只查系统/第三方包和 CPU 导入，没有改权限、安装依赖、下载/上传/构建、运行训练。已找到 A/B 各自运行 C1，候选可导入，不需构建新环境。
 - **最新用户决定：“先不清理了，找到一个可用的就行。”清理取消，删除/停止/重启/新建容器均为 0。不得恢复先前清理请求；不执行 rm/prune/stop/restart。**
-- 原 [PR #4](https://github.com/Zwhao0/20261015/pull/4) 的宿主机快照 1dced3bdbbdf8a091c9bfde74fede838c56406c8 已获 [独立文档交付 PASS](https://github.com/Zwhao0/20261015/pull/4#issuecomment-6187891676)，训练验收仍 INCONCLUSIVE。恢复时 #4 已 Ready，恢复 Draft 被连接以 FORBIDDEN 拒绝；未变更旧分支/旧 HEAD。
-- 当前分支 `codex/m0-1-container-inventory`，补证 Draft PR 待发布，base 为 `codex/m0-1-inventory @ 1dced3b…`。这是叠加在旧快照上的增量；不自动合并/关闭任一 PR，不将旧审核或 CI 套到新 head。精确 PR/head/tree/CI 最终保存于补证 PR 描述。
+- 原 [PR #4](https://github.com/Zwhao0/20261015/pull/4) 的宿主机快照 1dced3bdbbdf8a091c9bfde74fede838c56406c8 已获 [独立文档交付 PASS](https://github.com/Zwhao0/20261015/pull/4#issuecomment-6187891676)，训练验收仍 INCONCLUSIVE。初读 #4 为 Ready，Draft 操作返回 FORBIDDEN；后续 fetch/API 核实已合并为上述 main，未变更旧分支/旧 HEAD，未自行合并。不能把该错误笼统视为开放 PR 的权限限制。
+- 当前分支 `codex/m0-1-container-inventory` → 最新 main；[Draft PR #5](https://github.com/Zwhao0/20261015/pull/5) 已发布，Draft/Open/Unmerged。首个补证提交 `7ee7cc57c99e1af97e7d01eea7dc427975e72ea2`，交接提交整合新 main 的父关系；只展示旧快照之后的增量，不将旧审核/CI 套到新 head。精确 head/tree/CI 保存于 PR #5 描述。
 - M0-2/M0-3/M1 未授权、未执行；M0-Gate 仍 INCONCLUSIVE。当前停在容器补证交付/独立审核门禁，不进行 GPU/训练验收。
 
 ## 事实、证据与缺口
@@ -21,8 +21,8 @@
 ## 新会话恢复顺序
 
 1. 先读唯一仓库 README/AGENTS、Issue #3、原 PR #4 的独立审核及当前补证 Draft PR（diff/讨论/Checks）、STATUS/HANDOFF/M0_BASELINE/M0_1_INVENTORY。
-2. `git status --short --branch`、`git remote -v`；非干净先保留调查，不 reset/覆盖。fetch main、codex/m0-1-inventory、codex/m0-1-container-inventory，核对 base/head 和上游依赖，不强推。
-3. 干净工作区跟踪当前补证分支后 pull --ff-only，核对 HEAD/tree 与补证 PR；旧 #4 的 CI/审核不是新提交验证。若 #4 被合并、分支消失或 PR 被改状态，先核对 GitHub 最新状态，不能擅自重定向/合并。
+2. `git status --short --branch`、`git remote -v`；非干净先保留调查，不 reset/覆盖。fetch main、codex/m0-1-inventory、codex/m0-1-container-inventory，核对 PR #5 的 main base/head，不强推。
+3. 干净工作区跟踪当前补证分支后 pull --ff-only，核对 HEAD/tree 与补证 PR；旧 #4 的 CI/审核不是新提交验证；#4 已合并。若后续 main/PR/分支状态变化，先核对 GitHub 最新状态，不擅自重定向/合并。
 4. 复核 18 条公开摘要只证明摘要完整性；无原始材料不冒称现场复测。未经新明确授权不继续 SSH、重新执行探针、扫描/删除容器或读任务内容。
 5. 只修复当前补证审核指出的问题；用户已取消清理。ChatGPT 独立审核及用户批准前，不推进 M0-2/M0-3/M1。
 
@@ -39,7 +39,8 @@
 唯一仓库：https://github.com/Zwhao0/20261015
 当前：https://github.com/Zwhao0/20261015/issues/3；仅审核M0-1容器补证。
 请读README/AGENTS、docs/STATUS、HANDOFF、M0_BASELINE、M0_1_INVENTORY，以及补证Draft PR和旧PR #4独立审核。
-分支codex/m0-1-container-inventory；base=codex/m0-1-inventory @ 1dced3bdbbdf8a091c9bfde74fede838c56406c8；main仍41a30e0…。
+分支codex/m0-1-container-inventory；PR：https://github.com/Zwhao0/20261015/pull/5（Draft）。
+base/main=4ae0555c6fca24a6082e8e6af4ac40f107cb6716，原PR #4已合并；旧审核只覆盖原1dced3b…快照。
 当前PR/精确HEAD/tree/CI：从补证分支关联Draft PR描述与Checks核实，不猜测。
 18条证据：原8条摘要不变，新增A/B各05～09。现有PyTorch导入成功；NCCL API 2.29.7与探查进程库2.30.7差异保留。
 用户已取消清理，没有删除/停止/重启/新建容器；不得恢复删除请求。

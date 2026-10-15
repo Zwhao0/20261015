@@ -50,7 +50,7 @@ M0-1～M0-3 填充以下材料后，由 ChatGPT 独立审核、用户最终批�
 - 已找到可复用的现有环境，未触发下载/上传/构建条件。仅证明 C1 的版本读取与 CPU 导入；不把候选升级为 GPU/双机训练通过，不复用旧项目代码/构建内容。
 - Torch NCCL API 2.29.7 与本进程 ncclGetVersion 2.30.7 差异已观察；不推断兼容与否，不更换库。实际训练入口/launcher、Runtime 完整版本、训练进程已加载库、Rank、日志/指标配置、RAS/FR 与时钟精度仍 UNKNOWN / NOT_RUN。
 - 清理 CANCELLED / NOT_RUN，无容器/镜像/卷删除；原始数据和既有运行容器保留。
-- [PR #4 独立审核](https://github.com/Zwhao0/20261015/pull/4#issuecomment-6187891676) 仅覆盖旧宿主机快照 `1dced3b…`。本轮以 `codex/m0-1-container-inventory` 提交补证 Draft PR，base=旧 PR 分支，新的 head/CI/审核单独记录。M0-Gate 与训练层仍 INCONCLUSIVE，用户未授权 M0-2/M0-3/M1。
+- [PR #4 独立审核](https://github.com/Zwhao0/20261015/pull/4#issuecomment-6187891676) 仅覆盖旧宿主机快照 `1dced3b…`。原 PR #4 已合并，最新 main 为 `4ae0555c6fca24a6082e8e6af4ac40f107cb6716`。本轮以 `codex/m0-1-container-inventory` 提交 [Draft PR #5](https://github.com/Zwhao0/20261015/pull/5)，base=最新 main，新的 head/CI/审核单独记录。M0-Gate 与训练层仍 INCONCLUSIVE，用户未授权 M0-2/M0-3/M1。
 
 ## M0-2 观测能力与兼容性矩阵（NOT_RUN）
 

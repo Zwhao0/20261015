@@ -532,6 +532,8 @@ print(json.dumps(out,sort_keys=True))
 
 ### 发布与审核状态
 
-PR #4 的 [ChatGPT 独立审核](https://github.com/Zwhao0/20261015/pull/4#issuecomment-6187891676) 只覆盖旧 HEAD `1dced3bdbbdf8a091c9bfde74fede838c56406c8` 的宿主机快照。恢复时 PR #4 已是 Ready/Open/Unmerged；尝试恢复 Draft 被 GitHub GraphQL 以 FORBIDDEN 拒绝。因此保留 PR #4/head，另用分支 `codex/m0-1-container-inventory` 提交**补证 Draft PR**，base 为 `codex/m0-1-inventory @ 1dced3b…`，只展示新增补证，等待新的独立审核；不自动合并、关闭旧 PR 或推进阶段。最新 PR/HEAD/CI 在 STATUS/HANDOFF 与补证 PR 描述定位。
+PR #4 的 [ChatGPT 独立审核](https://github.com/Zwhao0/20261015/pull/4#issuecomment-6187891676) 只覆盖旧 HEAD `1dced3bdbbdf8a091c9bfde74fede838c56406c8` 的宿主机快照。初读 #4 为 Ready/Open；尝试恢复 Draft 返回 GraphQL FORBIDDEN，后续 fetch/API 核实 #4 已合并（2026-10-15 16:34:51 UTC+08:00）为最新 main `4ae0555c6fca24a6082e8e6af4ac40f107cb6716`。不能据该错误认定对开放 PR 通用缺权。最新 main 的 tree 与旧快照完全一致，已核验；未自行合并或修改旧分支。
 
-用户使用入口仅在本地受控指南中，包含连接与现有 C1 定位，不包含密码，不推送 GitHub。清理取消的记录同样留受控索引；本轮没有服务器环境部署或需要回滚的配置变更。
+因此新建 `codex/m0-1-container-inventory` / [Draft PR #5](https://github.com/Zwhao0/20261015/pull/5)，直接以最新 main 为 base；原先考虑的叠加旧分支方案不再采用。首个补证提交 `7ee7cc57c99e1af97e7d01eea7dc427975e72ea2`；交接提交整合新 main 的父关系、修正入口与状态，精确最终 head/tree/CI 以 PR #5 描述为准。只审查补证增量，不套用旧审核，不自动合并或推进阶段。
+
+用户使用入口仅在本地受控指南，包含连接与现有 C1 定位、不含密码，不推送 GitHub。清理取消同样留受控索引；本轮没有服务器环境部署或需要回滚的配置变更。
