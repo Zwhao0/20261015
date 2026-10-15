@@ -1,48 +1,42 @@
 # 项目状态
 
-更新：2026-10-15（Asia/Shanghai）。当前任务：[Issue #3](https://github.com/Zwhao0/20261015/issues/3)，母 [Issue #1](https://github.com/Zwhao0/20261015/issues/1)。
+更新：2026-10-15（Asia/Shanghai）。当前 [Issue #3](https://github.com/Zwhao0/20261015/issues/3)，母 Issue #1。
 
-当前授权仅 M0-1：用户明确允许读取指定的仓库外服务器信息文件并访问两台服务器；实际操作限定只读、低侵入，不使用变更权限。已完成 A/B 独立平台与宿主机元数据调查，训练层仍有 UNKNOWN/访问阻塞，等待 ChatGPT 独立审核。M0-2/M0-3/M1 未授权；不合并、不故障注入、不实现采集/检测器。
+仅 M0-1。用户已新增授权现有容器访问与已提供凭据的 sudo 认证，优先复用已有 PyTorch；本轮完成两台当前运行 C1 的只读版本/CPU 导入补证，没有修改权限或训练环境。用户最新明确取消清理：**容器删除/停止/重启/新建均为 0**。已有可复用候选，未下载/上传/构建环境。M0-2/M0-3/M1 未授权。
 
-## 阶段与范围
+## 阶段与恢复锚点
 
-| 项目 | 状态 | 事实与门禁 |
+| 项目 | 状态 | 证据与边界 |
 | --- | --- | --- |
-| M0-0 | PASS，已合并 | [第二轮独立审核](https://github.com/Zwhao0/20261015/pull/2#issuecomment-6187338743)；PR #2 已于 2026-10-15 合并，main=41a30e0… |
-| M0-1 | 已采集，待独立审核；训练层 INCONCLUSIVE | 两台均真实连接；各 8×H800、Driver 580.178.04、Ubuntu 24.04；内核不同。容器访问 BLOCKED，训练版本/任务来源/实际信号仍 UNKNOWN，不能给全量 PASS |
-| M0-2 / M0-3 | NOT_RUN | 当前未授权，矩阵与切片骨架未填充为结论 |
-| M0-Gate | INCONCLUSIVE | 未完成全部 M0 材料、独立审核及用户最终批准 |
-| M1～M5 | NOT_RUN | 不在本次范围 |
+| M0-0 | PASS，已合并 | PR #2，main 41a30e011b3fb0074aaef7cb8c42070aef4562b1 |
+| M0-1 首轮快照 | 文档交付审核 PASS；训练环境 INCONCLUSIVE | [PR #4 审核](https://github.com/Zwhao0/20261015/pull/4#issuecomment-6187891676)，仅覆盖 1dced3b… 的原 8 条摘要 |
+| M0-1 容器补证 | 版本/CPU 导入 PASS；训练/信号仍 INCONCLUSIVE，待审核 | A/B 各 07/08/09：Torch 2.13.0+cu130、Toolkit 13.0.88；NCCL API 2.29.7 与已加载库 2.30.7 分开；真实 GPU/训练 NOT_RUN |
+| M0-2 / M0-3 / M1～M5 | NOT_RUN | 未执行、未授权 |
+| M0-Gate | INCONCLUSIVE | 缺少后续材料与最终审核/批准 |
 
-## 恢复锚点与当前交付
+- 唯一仓库：[Zwhao0/20261015](https://github.com/Zwhao0/20261015)。main 仍为上述 SHA。
+- 原 PR #4/head `1dced3bdbbdf8a091c9bfde74fede838c56406c8` 保留，恢复时为 Ready/Open/Unmerged；恢复 Draft 被 GraphQL FORBIDDEN 拒绝，未改旧分支。
+- 当前分支 `codex/m0-1-container-inventory`，以 `codex/m0-1-inventory @ 1dced3b…` 为 base 的补证 Draft PR 待发布；只审查本轮增量，不混用旧审核。发布后精确 PR/head/tree/CI 写入该 PR 描述。
+- [完整事实表](M0_BASELINE.md)、[调查/18条证据/命令/哈希](M0_1_INVENTORY.md)、[恢复交接](HANDOFF.md)。首轮 16:08:10～16:12:18；容器补证 16:36:01～16:42:26，均 2026-10-15 UTC+08:00。
+- 主智能体要求 6.1 Sol/High、子智能体 6 Luna/Max；无可靠模型/档位回读接口，未声称核验或切换。本轮未启动子智能体，保留条件委派/回报协议。
 
-- 最新 main 起点：`41a30e011b3fb0074aaef7cb8c42070aef4562b1`；开始工作前 fetch 并核对，和用户提供锚点一致。原始 main `6e80e6c…` 仅为 M0-0 历史。
-- 分支：`codex/m0-1-inventory` → main。[Draft PR #4](https://github.com/Zwhao0/20261015/pull/4) 已发布，保持 Draft/Open/Unmerged；精确 head、tree、最终 CI 以 PR 描述为准。首个调查提交 `e0527e67810916042b5c31d2d5bd125fa6a8388e`（tree `509d253aa987cab2655e080072c52a2a619ebd5a`）已在 GitHub 保存，与本地快照同树；当前交接提交的精确 SHA 由 PR 保存。
-- [基线事实表](M0_BASELINE.md)、[M0-1 调查与证据](M0_1_INVENTORY.md)、[恢复交接](HANDOFF.md)。采集窗口 2026-10-15 16:08:10～16:12:18 UTC+08:00；8 条实际证据、完整命令、子命令退出码与公开摘要哈希已保存。
-- 模型要求为主智能体 6.1 Sol/High、子智能体 6 Luna/Max；本会话没有可靠的实际模型/推理档位回读接口，不声称核验或切换成功。本次未启动子智能体，保留条件委派/回报协议。
+## 验证与失败
 
-## 验证与边界
-
-| 检查 | 结果 | 环境、内容、退出码与证据 |
+| 检查 | 结果 | 命令/环境/退出码/证据 |
 | --- | --- | --- |
-| main / Issue / PR #2 核对 | PASS | git fetch、rev-parse；GitHub API 的 Issue #3、PR #2 merged/merge SHA、独立复审评论；只使用唯一仓库 |
-| A/B 平台只读采集 | PASS（仅字段获取） | 各自 E-A-01/E-B-01，真实 SSH exit 0；GPU 查询、OS/kernel、Python 与时间报告 exit 0；container 检测 exit 1/none 单列解释 |
-| A/B 软件/来源元数据 | INCONCLUSIVE（训练层） | 各自 02/03/04，SSH exit 0；包、进程类别与 API 时钟事实已获取；Docker/Chrony/dpkg 混合查询失败保留，不能按 SSH exit 0 记全通过 |
-| 本地文档 / diff | PASS，exit 0 | macOS / Python 3.9.6；`python3 scripts/check_docs.py`：5 份必需文档、11 个文本文件；`git diff --check`；对本次五份文档内容执行并人工审查范围/链接 |
-| 摘要哈希 / 敏感信息 | PASS，exit 0 | 标准库核对八条 ID、规范 JSON 摘要哈希与受控副本；五份公开文档的指定敏感值/常见身份与密钥模式扫描通过，人工检查通过。不是通用秘密检测器或服务器功能测试 |
-| 首个调查提交 GitHub CI | PASS | `e0527e67810916042b5c31d2d5bd125fa6a8388e`；[run 38705025727](https://github.com/Zwhao0/20261015/actions/runs/38705025727)，completed/success；仅文档质量 |
-| 当前交接提交 CI | INCONCLUSIVE（写入时） | 发布后核验本次新 HEAD 关联的 run/job/日志，精确 SHA、链接及最终结果见 [PR #4 描述/Checks](https://github.com/Zwhao0/20261015/pull/4/checks)；首个调查提交或 PR #2 的 PASS 不替代当前提交 |
-| 范围与公开哈希复跑 | PASS，exit 0 | 已执行调查记录中的公开摘要校验代码；M0-2/M0-3/M0-Gate 骨架逐字一致，AGENTS/检查器/工作流未改。验证对象为首个调查提交及本次交接前内容 |
-| GPU 计算 / 训练 / 映射集成 / RAS / Flight Recorder / 故障注入 | NOT_RUN | 本次不创建负载、不初始化 CUDA、不调用进程内 API、不跑 profiler，不读取任务私有数据，不能从文档检查推断通过 |
+| main/旧 PR/审核核对 | PASS | git fetch、rev-parse、GitHub PR #4/评论/Issue #3；旧 HEAD 未变 |
+| A/B 既有 sudo/Docker 版本访问 | PASS（各自后续成功） | 06/07，exit 0；B05 sudo exit 1 保留，非全程无失败；不改权限 |
+| 容器版本与 CPU 导入 | PASS（限定作用域） | 各 07/08/09；python -I -S -B，隐藏 GPU、限制线程、禁字节码；导入/版本查询 exit 0、CUDA 初始化标记 false |
+| 完整 GPU/训练/分布式/观测能力 | NOT_RUN | 不创建训练、进程组、collective、profiler/RAS；不能把导入通过当训练或兼容通过 |
+| 本地文档/18条摘要/敏感信息 | INCONCLUSIVE（写入时） | 发布前运行 README 检查、公开校验代码、受控副本一致性、敏感值/身份模式和人工审查；结果在发布检查点/PR 保存 |
+| 当前补证 HEAD CI | INCONCLUSIVE（未发布） | 旧 1dced3b… 的 run 38705243418 为历史 PASS；新 HEAD 对应 CI 单独核验 |
+| 清理操作 | NOT_RUN / 用户取消 | 只有预备元数据读取，无 rm/prune/stop/restart/镜像或卷删除；没有清理后状态或磁盘回收量可声称 |
 
-## 失败、阻塞与下一步
-
-- **B-Container（持续）**：A/B 当前账户 `docker ps` exit 1，permission denied（03）；未提权/改权限。容器 Python/Torch/CUDA/NCCL/框架版本 UNKNOWN。恢复需管理员提供批准容器的脱敏版本元数据或既有只读访问方式。
-- **B-Workload（持续）**：04 各有 8 行 PID/GPU 关联，但归属与任务类型未确认；没有读取获准本项目训练入口/日志，Job/Run/Rank/Local Rank UNKNOWN。后续需明确可读任务及字段，不碰旧项目/第三方数据；不启动训练补证。
-- **F-Time（保留）**：A/B chronyc tracking exit 1，`506 Cannot talk to daemon`；timedatectl 报告同步但详细偏差未知，未修改时钟/服务。
-- **F-Package（已界定）**：混合模式 dpkg 查询 exit 1，不等于全部包缺失；03 DCGM 单包查询 exit 0。02 仅保留 stderr 存在标记；03 是另一次诊断复采，未虚构原始 stderr。
-- **B-Publish（连接已恢复）**：初次 GitHub 工具不可调用；终端 dry-run exit 128（缺少 GitHub 凭据）。连接恢复后以 Git data 接口发布同树，fetch/fast-forward 与 tree 核对通过；终端无凭据不需用户提供秘密。
-- **F-Tracking（已恢复）**：首轮 fetch 后设置 upstream exit 128（single-branch clone 无对应 fetch refspec）；添加仅该开发分支的 fetch refspec 后 fetch/upstream 成功（exit 0），没有重置、历史覆盖或强推。
-- **F-Local（已恢复）**：本地临时文档辅助脚本直接执行两次报 source 非 UTF-8（exit 1）；文件 UTF-8 严格解码、tokenize/compile 均通过，显式 UTF-8 读取并 compile/exec 后生成成功（exit 0）。未查明解释器直接读文件差异原因；辅助脚本不进仓库，不改产品代码，后续文档检查通过。
-- 历史 M0-0 的临时夹具路径失败、single-branch upstream 恢复与 CI 变更证据保留在 [PR #2](https://github.com/Zwhao0/20261015/pull/2)，不作为本次调查验证。
-- 当前可安全交付证据与明确缺口；ChatGPT 独立审核前不推进后续阶段。项目自身许可证仍未指定。阻塞恢复模板及上下文检查点见 HANDOFF。
+- **B-Container 已解除（系统/第三方版本查询）**：新增明确授权使用现有 sudo；没有配置新权限。B05 首次认证失败后，以已提供登录账户凭据查询成功；不枚举未知密码。
+- **B-Workload / B-Signals 持续**：真实任务归属/launcher、Job/Run/Rank、训练进程已加载库、日志/metrics/RAS/FR 配置与信号 UNKNOWN。当前 C1 版本不是任何正在运行训练任务的完整证明。
+- **V-NCCL（事实差异）**：包/header 2.30.7、Torch NCCL API 2.29.7、本次导入进程 ncclGetVersion=23007（2.30.7）；兼容性 INCONCLUSIVE，不修改库来消除差异。
+- **F-ContainerList**：A05 容器列表输出 16 KiB 截断，前缀不是全量统计；06 单独状态聚合成功。本地前缀展示曾 IndexError/exit 1，过滤不完整行后恢复；原始数据未改。
+- **F-MountTemplate**：A/B08 的 .Mounts.Name 对 bind mount 缺键，exit 1；09 仅读 Type 后 exit 0。volume 对象数0不代表没有 bind mount 数据，且用户已取消清理。
+- **B-Draft（已选安全替代）**：PR #4 已 Ready，恢复 Draft 被 GitHub 拒绝；保留旧审核快照，在新分支提交补证 Draft PR，不关闭或合并旧 PR。
+- 首轮 Docker 拒绝、Chrony 506、dpkg 混合非零、终端推送凭据缺失、upstream refspec 和本地临时脚本编码诊断失败，均保留在调查记录、原 PR #4 与历史提交；不以本轮成功擦除失败。
+- 本轮保留现状，无训练环境部署变更需回滚；原始材料与用户使用入口只在本地受控目录，公开不含身份/凭据。项目许可证仍未指定；待 ChatGPT 审核后由用户决定后续阶段。

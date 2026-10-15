@@ -23,9 +23,9 @@
 
 OBSERVED = 本次实际直接读取；REPORTED = 用户/元数据间接声明；UNKNOWN = 无足够事实；NOT_RUN = 未执行；INCONCLUSIVE = 已尝试但不能判定。执行结果另用 PASS/FAIL/NOT_RUN/INCONCLUSIVE，连接成功不等于全部调查 PASS。
 
-## 结果、作用域与限制
+## 首轮宿主机快照：结果、作用域与限制
 
-实际采集窗口：2026-10-15 **16:08:10～16:12:18 Asia/Shanghai（UTC+08:00）**；逐条精确 UTC 起止时间见下表/摘要。A/B 各四个独立远程会话，SSH 均 exit 0；子命令失败单独保留，不能把 SSH 成功当作调查全通过。之后不再访问服务器。
+实际采集窗口：2026-10-15 **16:08:10～16:12:18 Asia/Shanghai（UTC+08:00）**；逐条精确 UTC 起止时间见下表/摘要。A/B 各四个独立远程会话，SSH 均 exit 0；子命令失败单独保留，不能把 SSH 成功当作调查全通过。以上为首轮宿主机快照；后续新增授权的容器补证单列于文末，不覆盖此窗口。
 
 - **OBSERVED / PASS（限定平台事实）**：A/B 均为 8×NVIDIA H800，驱动 580.178.04，单卡查询显存 81559 MiB，Ubuntu 24.04，192 个在线逻辑 CPU。内核 A = 6.8.0-146-generic，B = 6.8.0-139-generic。各自证据 E-A-01/E-B-01；没有 GPU 计算测试。
 - **OBSERVED（当前登录命名空间）**：`systemd-detect-virt --container` 返回 `none` / exit 1；未见两个标准容器标记，Docker/容器运行进程存在（01/02）。这支持宿主机视图线索，不能证明所有任务的隔离方式。
@@ -279,15 +279,15 @@ for label,args in commands:
 
 ### 公开摘要完整性检查
 
-在仓库根目录使用已有 Python 标准库执行；核验 8 个独立 ID 和表中哈希，不验证原始主机真实性，也不访问服务器：
+在仓库根目录使用已有 Python 标准库执行；现核验 18 个独立 ID 和表中哈希（首轮 8 条摘要保持原文不变），不验证原始主机真实性，也不访问服务器：
 
 ```python
 from pathlib import Path
 import hashlib, json, re
 report = Path('docs/M0_1_INVENTORY.md').read_text()
-index = dict(re.findall(r'\| (E-[AB]-0[1-4]) \|[^\n]*`([0-9a-f]{64})`', report))
+index = dict(re.findall(r'\| (E-[AB]-0[1-9]) \|[^\n]*`([0-9a-f]{64})`', report))
 blocks = re.findall(r'```json\n([^\n]+)\n```', report)
-assert len(index) == len(blocks) == 8
+assert len(index) == len(blocks) == 18
 seen = set()
 for block in blocks:
     data = json.loads(block)
@@ -295,12 +295,12 @@ for block in blocks:
     seen.add(data['id'])
     canonical = json.dumps(data, ensure_ascii=False, sort_keys=True, separators=(',', ':')) + '\n'
     assert hashlib.sha256(canonical.encode()).hexdigest() == index[data['id']]
-print('PASS: eight unique evidence summaries and hashes')
+print('PASS: eighteen unique evidence summaries and hashes')
 ```
 
 本地另与受控副本逐字比对、检查证据目录权限、五份交付文档的已知敏感值/身份/密钥模式，exit 0。上述扫描有模式覆盖限制，已补人工审查。文档生成阶段临时辅助脚本的源编码诊断失败及恢复见 STATUS 的 F-Local，未影响服务器或改动工程检查器。
 
-## 决定与交付边界
+## 首轮决定与交付边界（后续补证见下）
 
 | 问题 | 选项与选择 | 依据 | 风险与验证 |
 | --- | --- | --- | --- |
@@ -309,3 +309,229 @@ print('PASS: eight unique evidence summaries and hashes')
 | 非零混合查询如何解释 | 保留整体失败及已返回事实；最小独立复采 | 02 的 dpkg 非零、03 单项成功，Docker/Chrony 重现失败 | 不掩盖失败，不跨时间拼装一次成功 |
 
 本次交付为真实只读环境调查及明确缺口，**不自评双机训练环境全量 PASS**。A/B 平台证据已具备；训练层/信号配置仍 INCONCLUSIVE，等待 ChatGPT 独立审核。M0-Gate 仍 INCONCLUSIVE，M0-2/M0-3/M1 未执行且未授权。文档、摘要哈希、敏感信息与 CI 验证见 [STATUS](STATUS.md) 及 Draft PR；新会话按 [HANDOFF](HANDOFF.md) 恢复。
+
+## 容器补证：授权、范围与结果
+
+**最新授权与用户决定**：2026-10-15（Asia/Shanghai），用户进一步明确允许所有现有容器访问，指定使用已有账户/机器/容器凭据，优先复用既有 PyTorch。先写 C1 采集清单，再使用现有 sudo 权限执行限定查询，没有修改 sudoers、用户组或 Docker socket。密码只从指定本地文件读取，经 SSH stdin 供 sudo 认证，不放命令参数/环境变量/日志。用户随后提出清理并确认每台保留一个，但在任何删除前明确取消：“先不清理了，找到一个可用的就行”。**清理 CANCELLED，删除/停止/重启/新建容器均为 0**；只发生清理前元数据盘点，没有执行 rm/prune/stop/restart、删除镜像或卷。
+
+采集窗口 **2026-10-15 16:36:01～16:42:26 Asia/Shanghai（UTC+08:00）**。A/B 各自保留已运行且未暂停的 C1，仅从 `/` 读取系统/第三方发行包元数据；不读取旧项目源码/配置/构建内容、完整容器配置/Env 或任务日志。Docker exec 只启动短暂查询进程，不启动训练；这会产生容器 exec/SSH/sudo 审计事件，不承诺运行时绝对零状态变化。隔离 Python `-I -S -B` 避免当前目录、用户 site、启动 hook 与字节码写入；CPU 导入显式隐藏 GPU、限制线程。未下载/上传/构建/安装任何环境：已有候选，用户条件分支未触发。
+
+| 环境事实（OBSERVED） | A / C1 | B / C1 | 独立证据与边界 |
+| --- | --- | --- | --- |
+| 当前候选 | 已运行、未暂停，Python import 成功 | 同状态，独立采集 | 07/08/09；仅系统和第三方包，不继承旧工程 |
+| OS / Python | Ubuntu 24.04 / 3.12.3 | 同版本，独立采集 | 07；与宿主机默认 Python 分开记录 |
+| PyTorch | 2.13.0+cu130，元数据/常量/import 一致 | 同版本，独立采集 | 07/08/09；CPU 导入成功不是 GPU 或训练验收 |
+| Torch 构建 CUDA | 13.0 | 13.0 | 07/09；构建声明，不冒充 Runtime 完整版本 |
+| CUDA Toolkit | nvcc release 13.0，V13.0.88 | 同版本，独立采集 | 07；编译器版本读取，没有编译程序 |
+| CUDA Runtime | 导入进程映射 libcudart.so.13；完整补丁版本 UNKNOWN | 同左，独立采集 | 08/09；映射主版本，未调用 CUDA 初始化/分配/内核 |
+| NCCL Python 包 / header | nvidia-nccl-cu13=2.30.7 / 2.30.7 | 同版本，独立采集 | 07；不等于 Torch 版本 API 或真实训练进程加载版本 |
+| Torch NCCL 版本 API | (2,29,7)，raw 8591835143 | 同值，独立采集 | 09；公开摘要把原始字段名 nccl_linked_version 澄清为 torch_nccl_api_raw，不能仅凭旧字段名认定运行库版本 |
+| 本次导入进程已映射 NCCL | libnccl.so.2；RTLD_NOLOAD + ncclGetVersion exit 0/code 23007（2.30.7） | 同值，独立采集 | 09；仅查询自己的已映射库，不 attach 他人进程、不创建 communicator |
+| Transformers / Accelerate | 5.17.0 / 1.15.0 | 同版本，独立采集 | 07，已装元数据；未执行框架训练 |
+| 分布式构建 / GPU 初始化标记 | distributed.is_available=True；is_initialized 在导入/版本查询前后均 false | 同值，独立采集 | 08/09；未执行 rendezvous、collective、GPU 或双机训练 |
+
+**判断**：现有 C1 可作为后续工作的环境候选，已证明可读版本且 PyTorch 可导入；用户决定保留现状。Torch NCCL API 2.29.7 与已安装/查询到的库 2.30.7 不同，保留事实，不自评兼容/不兼容。真实训练任务的进程加载库、Job/Run/Rank、launcher、日志/指标及跨机时钟精度仍 UNKNOWN。M0-2/M0-3/M1 未执行，M0-Gate 仍 INCONCLUSIVE。
+
+[官方 ncclGetVersion 语义](https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/api/comms.html#ncclgetversion) 仅用于说明版本查询返回所链接库的编码，不从最新文档推断本机功能支持；上述数值来自各节点实际调用。没有复制外部实现代码。
+
+### 补证命令与失败记录
+
+| 组 / 执行 | 命令与影响 | 结果 / 脱敏与限制 |
+| --- | --- | --- |
+| C1 / A05、B05 | sudo 下已有 Python；docker ps --all 的 ID/state/image 与 image ls 的 ID/tag；8 秒子命令、60 秒 SSH | A sudo/root 与读取成功；容器输出 16 KiB 截断，只能描述完整前缀；B sudo 认证失败，exit 1，原始症状留受控区 |
+| C2 / A06、B06 | docker ps 仅运行容器；全量 state 聚合；不读配置内容 | 各 exit 0；各 1 running / 245 exited / 1 created。B 改用已提供的登录账户密码后成功；不修改权限、不枚举未知密码 |
+| C3 / A07、B07 | 对当前运行且未暂停的最多 4 个容器，docker exec --user 0 --workdir / --env PYTHONDONTWRITEBYTECODE=1；只读 OS/nvcc 与隔离 Python 发行元数据/版本常量 | 实际各 1 个 C1，所有子命令 exit 0；不读项目目录，容器/镜像身份仅受控记录 |
+| C4 / A08、B08 | 清理前 state/选定 mount 字段；隐藏 GPU 的 Torch import 与版本 API；无删除动作 | import exit 0；mount 模板 .Name 在部分 bind mount 缺失，exit 1，stderr 文本截断；不能据其判断卷可删 |
+| C5 / A09、B09 | mount 模板仅取 Type 修复；镜像 ID/卷名计数；再次隔离 import、Torch NCCL API；对本进程已映射 NCCL 以 RTLD_NOLOAD 调 ncclGetVersion | 所有子命令 exit 0；各 247 条选定容器元数据；镜像数 A13/B8、Docker volume 对象数各0，但有 bind mount，**0 volume 对象不等于无数据**。用户取消清理，未修改任何对象 |
+
+失败补充：本地读取 A05 截断前缀时曾因末尾不完整行触发 IndexError / exit 1；改为只统计三字段完整行后 exit 0，不重写原始数据。A05 的运行数前缀与 A06 的后续快照不同，不能混成同一时刻。以上缺陷与 sudo 认证失败均保留；没有把 SSH exit 0 当成子命令全部成功。
+
+可用性判断限定 CPU 导入和版本查询；真实 GPU、NCCL collective、双机训练、RAS/Flight Recorder 均 NOT_RUN。初次 Docker 权限拒绝是历史事实，在本轮明确授权使用现有 sudo 后，**B-Container 已对系统/第三方版本查询解除**。B-Workload 仍未解决。
+
+### 补证索引与脱敏摘要
+
+公开逻辑 `LOCAL/<证据ID>` 对应同一授权本机受控索引（含准确命令与原始返回），不公开服务器身份/容器 ID/镜像名/卷名/内部路径。C1..C5 的程序与命令在受控记录中；下列核心 Python 代码为实际版本/导入查询，外围只做表中 Docker 元数据读取、状态校验、超时与输出限长。C4 失败模板和 C5 修正分别记录，不能以 C5 成功覆盖 C4。公开摘要仍用前述规范 JSON SHA-256；所有 18 条由更新后的公开校验代码检查，首轮 8 条保持原文/哈希不变。
+
+| ID | 节点 | 2026-10-15 UTC 开始～结束 | 命令组 / exit | 摘要 SHA-256 |
+| --- | --- | --- | --- | --- |
+| E-A-05 | A | 08:36:01.055233～08:36:02.172722 | C1 / 0 | `4b1e1e4f13d680f0d351107f6666e434ee539d840e28ea563e09149fcdeeafbd` |
+| E-A-06 | A | 08:37:06.600292～08:37:07.333893 | C2 / 0 | `9c334aca58040cfa764cadeac131cabb74e5613e6b63b890c9b8dc0c8f7bed47` |
+| E-A-07 | A | 08:38:35.997030～08:38:36.980750 | C3 / 0 | `aa727e5ed8ff215f3582756683a4254a61352c3d3e50e038bb71b90c26007915` |
+| E-A-08 | A | 08:40:37.252437～08:40:41.912740 | C4 / 0 | `eccf0d426f790801346615fa3e95631135e0fa4484b39383e0be96e7dd3ea5ac` |
+| E-A-09 | A | 08:42:09.218724～08:42:13.737733 | C5 / 0 | `1412ba72449ab61ca254019e9f173ea8555d51d238db0f3f8b34d8aa69a7a6fb` |
+| E-B-05 | B | 08:36:32.219984～08:36:34.817049 | C1 / 1 | `1094da21d4b967aca3d920011842323d59ee9cbfc7290dabb6cb910af633925a` |
+| E-B-06 | B | 08:37:35.852751～08:37:36.702385 | C2 / 0 | `860f9d5427af762f144d60602ece55d82608dfb5b92fff5d1060e762c4a66984` |
+| E-B-07 | B | 08:39:07.746836～08:39:08.989995 | C3 / 0 | `ebb0d94f4351e8910fc4d5b96279c54ae97c4285c9271d333c37794b72a81036` |
+| E-B-08 | B | 08:40:50.707557～08:40:55.428107 | C4 / 0 | `d8f54b03352ed59dcd63db47db5d51495f7c2c4a0a2140397cd7617e13ca0473` |
+| E-B-09 | B | 08:42:22.043914～08:42:26.769107 | C5 / 0 | `ed619a5b45ddf52763aac804c27f693b2dfffdceca00aa38f11eddd15bcf7ce8` |
+
+<details>
+<summary>C3：隔离 Python 的系统/第三方发行元数据查询</summary>
+
+```python
+import sys,sysconfig,pathlib,glob,json,ast,importlib.metadata as md
+result={'python':sys.version.split()[0],'packages':{},'torch_build':{},'nccl_headers':[]}
+allowed={'torch','nvidia-nccl-cu11','nvidia-nccl-cu12','nvidia-nccl-cu13','nvidia-cuda-runtime-cu11','nvidia-cuda-runtime-cu12','nvidia-cuda-runtime-cu13','deepspeed','transformers','accelerate','lightning','pytorch-lightning','megatron-core'}
+paths={sysconfig.get_path('purelib'),sysconfig.get_path('platlib')}
+for pattern in ['/usr/local/lib/python*/site-packages','/usr/lib/python3/dist-packages','/opt/conda/lib/python*/site-packages']:
+ paths.update(glob.glob(pattern))
+dists={}
+for d in md.distributions(path=sorted(p for p in paths if p)):
+ name=d.metadata.get('Name','').lower().replace('_','-')
+ if name in allowed:
+  result['packages'][name]=d.version;dists[name]=d
+for name in sorted(allowed):result['packages'].setdefault(name,'NOT_IN_SCOPED_METADATA')
+if 'torch' in dists:
+ p=pathlib.Path(dists['torch'].locate_file('torch/version.py'))
+ if p.is_file() and p.stat().st_size<65536:
+  for node in ast.parse(p.read_text()).body:
+   if isinstance(node,(ast.Assign,ast.AnnAssign)):
+    targets=node.targets if isinstance(node,ast.Assign) else [node.target]
+    for t in targets:
+     if isinstance(t,ast.Name) and t.id in ['__version__','cuda','hip']:
+      try:result['torch_build'][t.id]=ast.literal_eval(node.value)
+      except (ValueError,TypeError):result['torch_build'][t.id]='UNKNOWN'
+for p in [pathlib.Path('/usr/include/nccl.h')]+[pathlib.Path(d.locate_file('nvidia/nccl/include/nccl.h')) for n,d in dists.items() if n.startswith('nvidia-nccl-')]:
+ if p.is_file() and p.stat().st_size<131072:
+  import re
+  s=p.read_text();v={key:re.search(r'^#define\s+NCCL_'+key+r'\s+(\d+)',s,re.M) for key in ['MAJOR','MINOR','PATCH']}
+  if all(v.values()):result['nccl_headers'].append('.'.join(v[k].group(1) for k in ['MAJOR','MINOR','PATCH']))
+print(json.dumps(result,sort_keys=True))
+```
+
+</details>
+
+
+<details>
+<summary>C5：GPU 隐藏下的 Torch 导入和本进程 NCCL 版本查询</summary>
+
+```python
+import sys,sysconfig,os,json,pathlib
+os.environ['CUDA_VISIBLE_DEVICES']=''
+os.environ['OMP_NUM_THREADS']='1';os.environ['MKL_NUM_THREADS']='1'
+for p in {sysconfig.get_path('purelib'),sysconfig.get_path('platlib'),'/usr/lib/python3/dist-packages'}:
+ if p and p not in sys.path:sys.path.append(p)
+import torch
+out={'torch_imported':True,'torch_version':torch.__version__,'torch_build_cuda':torch.version.cuda,'cuda_initialized_before':torch.cuda.is_initialized(),'distributed_build_available':torch.distributed.is_available()}
+f=getattr(torch._C,'_nccl_version',None)
+try:out['nccl_linked_version']=f() if callable(f) else 'UNKNOWN'
+except Exception as e:out['nccl_linked_version']='UNKNOWN';out['nccl_query_error_type']=type(e).__name__
+out['torch_nccl_api_version']=list(torch.cuda.nccl.version())
+out['cuda_initialized_after']=torch.cuda.is_initialized()
+names={}
+nccl_paths=set()
+for line in pathlib.Path('/proc/self/maps').read_text().splitlines():
+ if '/' not in line:continue
+ name=pathlib.PurePosixPath(line.split()[-1]).name
+ if name.startswith(('libnccl.so','libcudart.so')):names[name]=True
+ if name.startswith('libnccl.so'):nccl_paths.add(line.split()[-1])
+out['probe_mapped_library_basenames']=sorted(names)
+import ctypes
+out['already_mapped_nccl_queries']=[]
+for path in sorted(nccl_paths):
+ try:
+  lib=ctypes.CDLL(path,mode=os.RTLD_NOLOAD|os.RTLD_LOCAL)
+  value=ctypes.c_int();fn=lib.ncclGetVersion;fn.argtypes=[ctypes.POINTER(ctypes.c_int)];fn.restype=ctypes.c_int
+  rc=fn(ctypes.byref(value));out['already_mapped_nccl_queries'].append({'exit_code':rc,'version_code':value.value})
+ except Exception as e:out['already_mapped_nccl_queries'].append({'error_type':type(e).__name__})
+out['cuda_initialized_after_version_query']=torch.cuda.is_initialized()
+print(json.dumps(out,sort_keys=True))
+```
+
+</details>
+
+<details>
+<summary>E-A-05 / C1</summary>
+
+```json
+{"command_group":"C1","end_utc":"2026-10-15T08:36:02.172722+00:00","executed":true,"id":"E-A-05","node":"A","probes":[{"effective_root":true,"probe":"sudo_identity","time_utc":"2026-10-15T08:36:02.048267+00:00"},{"exit_code":0,"probe":"docker_containers","retained_complete_prefix_rows":114,"retained_prefix_states":{"exited":112,"running":2},"truncated":true},{"exit_code":0,"probe":"docker_images","retained_image_tag_rows":13,"truncated":false}],"scope":"authorized existing container inventory; vendor metadata/probe process only","ssh_exit_code":0,"start_utc":"2026-10-15T08:36:01.055233+00:00"}
+```
+
+</details>
+
+<details>
+<summary>E-A-06 / C2</summary>
+
+```json
+{"command_group":"C2","end_utc":"2026-10-15T08:37:07.333893+00:00","executed":true,"id":"E-A-06","node":"A","probes":[{"exit_code":0,"probe":"running_candidates","running_count":1,"truncated":false},{"exit_code":0,"probe":"container_states","states":{"created":1,"exited":245,"running":1}}],"scope":"authorized existing container inventory; vendor metadata/probe process only","ssh_exit_code":0,"start_utc":"2026-10-15T08:37:06.600292+00:00"}
+```
+
+</details>
+
+<details>
+<summary>E-A-07 / C3</summary>
+
+```json
+{"command_group":"C3","end_utc":"2026-10-15T08:38:36.980750+00:00","executed":true,"id":"E-A-07","node":"A","probes":[{"count":1,"probe":"running_count","probe_limit":4},{"container_alias":"C1","state_check":{"exit_code":0,"probe":"state","stderr":"","stdout":"true\tfalse\n","truncated":false}},{"container_alias":"C1","exit_code":0,"interpreter_candidates":1,"nvcc":{"release":"13.0","version":"13.0.88"},"os":{"OS_NAME":"Ubuntu","OS_VERSION":"24.04"},"probe":"os_interpreters_toolkit","truncated":false},{"container_alias":"C1","exit_code":0,"facts":{"nccl_headers":["2.30.7"],"packages":{"accelerate":"1.15.0","deepspeed":"NOT_IN_SCOPED_METADATA","lightning":"NOT_IN_SCOPED_METADATA","megatron-core":"NOT_IN_SCOPED_METADATA","nvidia-cuda-runtime-cu11":"NOT_IN_SCOPED_METADATA","nvidia-cuda-runtime-cu12":"NOT_IN_SCOPED_METADATA","nvidia-cuda-runtime-cu13":"NOT_IN_SCOPED_METADATA","nvidia-nccl-cu11":"NOT_IN_SCOPED_METADATA","nvidia-nccl-cu12":"NOT_IN_SCOPED_METADATA","nvidia-nccl-cu13":"2.30.7","pytorch-lightning":"NOT_IN_SCOPED_METADATA","torch":"2.13.0+cu130","transformers":"5.17.0"},"python":"3.12.3","torch_build":{"__version__":"2.13.0+cu130","cuda":"13.0","hip":null}},"probe":"vendor_metadata","stderr_present":false,"truncated":false}],"scope":"authorized existing container inventory; vendor metadata/probe process only","ssh_exit_code":0,"start_utc":"2026-10-15T08:38:35.997030+00:00"}
+```
+
+</details>
+
+<details>
+<summary>E-A-08 / C4</summary>
+
+```json
+{"command_group":"C4","end_utc":"2026-10-15T08:40:41.912740+00:00","executed":true,"id":"E-A-08","node":"A","probes":[{"exit_code":0,"probe":"read_only_state_snapshot","states":{"created":1,"exited":245,"running":1}},{"exit_code":1,"probe":"selected_mount_metadata","raw_stderr_truncated":true,"symptom":"DOCKER_TEMPLATE_MISSING_NAME_FIELD"},{"container_alias":"C1","exit_code":0,"facts":{"cuda_initialized_after":false,"cuda_initialized_before":false,"distributed_build_available":true,"probe_mapped_library_basenames":["libcudart.so.13","libnccl.so.2"],"torch_build_cuda":"13.0","torch_imported":true,"torch_nccl_api_raw":8591835143,"torch_version":"2.13.0+cu130"},"probe":"torch_cpu_import","stderr_present":false,"truncated":false}],"scope":"authorized existing container inventory; vendor metadata/probe process only","ssh_exit_code":0,"start_utc":"2026-10-15T08:40:37.252437+00:00"}
+```
+
+</details>
+
+<details>
+<summary>E-A-09 / C5</summary>
+
+```json
+{"command_group":"C5","end_utc":"2026-10-15T08:42:13.737733+00:00","executed":true,"id":"E-A-09","node":"A","probes":[{"exit_code":0,"probe":"read_only_state_snapshot","states":{"created":1,"exited":245,"running":1}},{"exit_code":0,"mount_types":{"bind":736},"probe":"selected_mount_metadata","rows":247,"truncated":false},{"exit_code":0,"probe":"image_ids","truncated":false,"unique_entries":13},{"exit_code":0,"probe":"volume_names","truncated":false,"unique_entries":0},{"container_alias":"C1","exit_code":0,"facts":{"already_mapped_nccl_queries":[{"exit_code":0,"version_code":23007}],"cuda_initialized_after":false,"cuda_initialized_after_version_query":false,"cuda_initialized_before":false,"distributed_build_available":true,"probe_mapped_library_basenames":["libcudart.so.13","libnccl.so.2"],"torch_build_cuda":"13.0","torch_imported":true,"torch_nccl_api_raw":8591835143,"torch_nccl_api_version":[2,29,7],"torch_version":"2.13.0+cu130"},"probe":"torch_cpu_import","stderr_present":false,"truncated":false}],"scope":"authorized existing container inventory; vendor metadata/probe process only","ssh_exit_code":0,"start_utc":"2026-10-15T08:42:09.218724+00:00"}
+```
+
+</details>
+
+<details>
+<summary>E-B-05 / C1</summary>
+
+```json
+{"command_group":"C1","end_utc":"2026-10-15T08:36:34.817049+00:00","executed":true,"id":"E-B-05","node":"B","probes":[],"scope":"authorized existing container inventory; vendor metadata/probe process only","ssh_exit_code":1,"start_utc":"2026-10-15T08:36:32.219984+00:00","symptom":"SUDO_AUTHENTICATION_FAILED"}
+```
+
+</details>
+
+<details>
+<summary>E-B-06 / C2</summary>
+
+```json
+{"command_group":"C2","end_utc":"2026-10-15T08:37:36.702385+00:00","executed":true,"id":"E-B-06","node":"B","probes":[{"exit_code":0,"probe":"running_candidates","running_count":1,"truncated":false},{"exit_code":0,"probe":"container_states","states":{"created":1,"exited":245,"running":1}}],"scope":"authorized existing container inventory; vendor metadata/probe process only","ssh_exit_code":0,"start_utc":"2026-10-15T08:37:35.852751+00:00"}
+```
+
+</details>
+
+<details>
+<summary>E-B-07 / C3</summary>
+
+```json
+{"command_group":"C3","end_utc":"2026-10-15T08:39:08.989995+00:00","executed":true,"id":"E-B-07","node":"B","probes":[{"count":1,"probe":"running_count","probe_limit":4},{"container_alias":"C1","state_check":{"exit_code":0,"probe":"state","stderr":"","stdout":"true\tfalse\n","truncated":false}},{"container_alias":"C1","exit_code":0,"interpreter_candidates":1,"nvcc":{"release":"13.0","version":"13.0.88"},"os":{"OS_NAME":"Ubuntu","OS_VERSION":"24.04"},"probe":"os_interpreters_toolkit","truncated":false},{"container_alias":"C1","exit_code":0,"facts":{"nccl_headers":["2.30.7"],"packages":{"accelerate":"1.15.0","deepspeed":"NOT_IN_SCOPED_METADATA","lightning":"NOT_IN_SCOPED_METADATA","megatron-core":"NOT_IN_SCOPED_METADATA","nvidia-cuda-runtime-cu11":"NOT_IN_SCOPED_METADATA","nvidia-cuda-runtime-cu12":"NOT_IN_SCOPED_METADATA","nvidia-cuda-runtime-cu13":"NOT_IN_SCOPED_METADATA","nvidia-nccl-cu11":"NOT_IN_SCOPED_METADATA","nvidia-nccl-cu12":"NOT_IN_SCOPED_METADATA","nvidia-nccl-cu13":"2.30.7","pytorch-lightning":"NOT_IN_SCOPED_METADATA","torch":"2.13.0+cu130","transformers":"5.17.0"},"python":"3.12.3","torch_build":{"__version__":"2.13.0+cu130","cuda":"13.0","hip":null}},"probe":"vendor_metadata","stderr_present":false,"truncated":false}],"scope":"authorized existing container inventory; vendor metadata/probe process only","ssh_exit_code":0,"start_utc":"2026-10-15T08:39:07.746836+00:00"}
+```
+
+</details>
+
+<details>
+<summary>E-B-08 / C4</summary>
+
+```json
+{"command_group":"C4","end_utc":"2026-10-15T08:40:55.428107+00:00","executed":true,"id":"E-B-08","node":"B","probes":[{"exit_code":0,"probe":"read_only_state_snapshot","states":{"created":1,"exited":245,"running":1}},{"exit_code":1,"probe":"selected_mount_metadata","raw_stderr_truncated":true,"symptom":"DOCKER_TEMPLATE_MISSING_NAME_FIELD"},{"container_alias":"C1","exit_code":0,"facts":{"cuda_initialized_after":false,"cuda_initialized_before":false,"distributed_build_available":true,"probe_mapped_library_basenames":["libcudart.so.13","libnccl.so.2"],"torch_build_cuda":"13.0","torch_imported":true,"torch_nccl_api_raw":8591835143,"torch_version":"2.13.0+cu130"},"probe":"torch_cpu_import","stderr_present":false,"truncated":false}],"scope":"authorized existing container inventory; vendor metadata/probe process only","ssh_exit_code":0,"start_utc":"2026-10-15T08:40:50.707557+00:00"}
+```
+
+</details>
+
+<details>
+<summary>E-B-09 / C5</summary>
+
+```json
+{"command_group":"C5","end_utc":"2026-10-15T08:42:26.769107+00:00","executed":true,"id":"E-B-09","node":"B","probes":[{"exit_code":0,"probe":"read_only_state_snapshot","states":{"created":1,"exited":245,"running":1}},{"exit_code":0,"mount_types":{"bind":736},"probe":"selected_mount_metadata","rows":247,"truncated":false},{"exit_code":0,"probe":"image_ids","truncated":false,"unique_entries":8},{"exit_code":0,"probe":"volume_names","truncated":false,"unique_entries":0},{"container_alias":"C1","exit_code":0,"facts":{"already_mapped_nccl_queries":[{"exit_code":0,"version_code":23007}],"cuda_initialized_after":false,"cuda_initialized_after_version_query":false,"cuda_initialized_before":false,"distributed_build_available":true,"probe_mapped_library_basenames":["libcudart.so.13","libnccl.so.2"],"torch_build_cuda":"13.0","torch_imported":true,"torch_nccl_api_raw":8591835143,"torch_nccl_api_version":[2,29,7],"torch_version":"2.13.0+cu130"},"probe":"torch_cpu_import","stderr_present":false,"truncated":false}],"scope":"authorized existing container inventory; vendor metadata/probe process only","ssh_exit_code":0,"start_utc":"2026-10-15T08:42:22.043914+00:00"}
+```
+
+</details>
+
+### 发布与审核状态
+
+PR #4 的 [ChatGPT 独立审核](https://github.com/Zwhao0/20261015/pull/4#issuecomment-6187891676) 只覆盖旧 HEAD `1dced3bdbbdf8a091c9bfde74fede838c56406c8` 的宿主机快照。恢复时 PR #4 已是 Ready/Open/Unmerged；尝试恢复 Draft 被 GitHub GraphQL 以 FORBIDDEN 拒绝。因此保留 PR #4/head，另用分支 `codex/m0-1-container-inventory` 提交**补证 Draft PR**，base 为 `codex/m0-1-inventory @ 1dced3b…`，只展示新增补证，等待新的独立审核；不自动合并、关闭旧 PR 或推进阶段。最新 PR/HEAD/CI 在 STATUS/HANDOFF 与补证 PR 描述定位。
+
+用户使用入口仅在本地受控指南中，包含连接与现有 C1 定位，不包含密码，不推送 GitHub。清理取消的记录同样留受控索引；本轮没有服务器环境部署或需要回滚的配置变更。

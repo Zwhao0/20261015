@@ -21,7 +21,7 @@ See [M0 Issue #1](https://github.com/Zwhao0/20261015/issues/1) for the session h
 
 ## M0 工程入口
 
-M0-0 已独立审核并合并 PR #2；本次仅执行 M0-1。A/B 只读平台调查已采集，训练层仍有 UNKNOWN/访问阻塞，待独立审核；M0-2/M0-3/M1 未执行、未授权，M0-Gate 仍 INCONCLUSIVE。
+M0-0 已独立审核并合并 PR #2；本次仅执行 M0-1。A/B 平台与容器版本已采集，现有 PyTorch 可导入；真实训练/信号仍有 UNKNOWN，容器补证待独立审核；M0-2/M0-3/M1 未执行、未授权，M0-Gate 仍 INCONCLUSIVE。
 
 - [AGENTS.md](AGENTS.md)：执行边界、角色、上下文与工程规范。
 - [STATUS](docs/STATUS.md)：阶段、验证、阻塞和下一步。
