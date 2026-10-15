@@ -54,7 +54,7 @@ OBSERVED = 本次实际直接读取；REPORTED = 用户/元数据间接声明；
 
 全部作用范围为本次指定节点当前登录环境；执行=True。表中 exit 为远程 SSH/脚本退出码，**不覆盖摘要内各子命令退出码**。受控原始材料按逻辑编号 `LOCAL/<证据ID>` 私下定位，不公开实际路径；其中包含准确执行代码、时间、返回输出与失败文本。摘要并非主机签名证明，独立审核可要求受控复核或新采集，不从公开仓库获取凭据。
 
-摘要哈希 = UTF-8 `json.dumps(summary, ensure_ascii=False, sort_keys=True, separators=(',', ':')) + '\n'` 的 SHA-256；下方每个 JSON 代码块就是参与哈希的单行摘要。仅对脱敏摘要做公开哈希，不对低熵身份/密码做哈希发布。原始材料、本地连接解析器、密码、known_hosts 均未提交。对应 Git commit/PR：本分支 Draft PR 的 head 与首个调查提交；避免文档自引自身 SHA，以 PR 描述中精确值为准。
+摘要哈希 = UTF-8 `json.dumps(summary, ensure_ascii=False, sort_keys=True, separators=(',', ':')) + '\n'` 的 SHA-256；下方每个 JSON 代码块就是参与哈希的单行摘要。仅对脱敏摘要做公开哈希，不对低熵身份/密码做哈希发布。原始材料、本地连接解析器、密码、known_hosts 均未提交。对应 Git commit/PR：首个调查提交 `e0527e67810916042b5c31d2d5bd125fa6a8388e` / [Draft PR #4](https://github.com/Zwhao0/20261015/pull/4)；避免文档自引自身 SHA，后续交接提交精确值以 PR 描述为准。
 
 | ID | 节点 | 2026-10-15 UTC 开始～结束 | 命令组 / exit | 摘要 SHA-256 |
 | --- | --- | --- | --- | --- |

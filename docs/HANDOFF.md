@@ -5,7 +5,7 @@
 - 唯一仓库：[Zwhao0/20261015](https://github.com/Zwhao0/20261015)。当前 [Issue #3](https://github.com/Zwhao0/20261015/issues/3)，母 Issue #1 继续打开。
 - 仅 M0-1 只读环境事实调查。用户在当前会话明确批准访问指定服务器信息文件及两台服务器；连接信息不进入公开仓库。只读范围不包括未知归属任务的私有数据、旧项目文件、依赖/训练环境变更或故障注入。M0-2/M0-3/M1 未执行、未授权，不自动合并。
 - M0-0 已获 [ChatGPT 第二轮 PASS](https://github.com/Zwhao0/20261015/pull/2#issuecomment-6187338743)，PR #2 已合并。当前起点 main `41a30e011b3fb0074aaef7cb8c42070aef4562b1`；旧 STATUS/HANDOFF 的 M0-0 限制仅为历史状态，已由本次正式授权更新。
-- 分支 `codex/m0-1-inventory` → main，Draft PR 发布进行中。精确 head/tree/最终 CI 由关联 Draft PR 描述及 Checks 保存；写入时尚未合并。不要将 M0-0 或某个旧 HEAD 的 PASS 套到当前提交。
+- 分支 `codex/m0-1-inventory` → main，[Draft PR #4](https://github.com/Zwhao0/20261015/pull/4) 已发布，保持 Draft/Open/Unmerged。首个调查提交 `e0527e67810916042b5c31d2d5bd125fa6a8388e` 的 [CI](https://github.com/Zwhao0/20261015/actions/runs/38705025727) PASS；本次交接提交的精确 head/tree/最终 CI 由 PR 描述及 Checks 保存。不要将 M0-0 或某个旧 HEAD 的 PASS 套到当前提交。
 
 ## 已完成、缺口与受控证据
 
@@ -14,6 +14,7 @@
 - Docker 读取 permission denied，容器证据 BLOCKED；Chrony tracking exit 1/506，详细时间偏差 UNKNOWN；dpkg 混合查询非零与独立成功均保留。恢复需管理员/任务所有者明确可读环境和元数据来源，不绕过权限，不触碰旧项目。
 - 原始证据与连接解析器只在本机 Git 忽略受控目录中，权限目录 0700/文件 0600，公开仅逻辑引用 `LOCAL/<证据ID>`；公开 GitHub 无真实路径、凭据或主机身份。新本地会话向用户私下获取该索引；没有受控材料时只能核对公开摘要，不冒称重验原始输出。仅从 GitHub 恢复不提供服务器登录能力，仍需本会话同等明确授权。
 - GitHub 工具最初不可调用、终端 dry-run exit 128；工具随后恢复。发布使用 Git data：树 → 指向该树/当前 head 的 commit → 仅开发分支非强制 ref 更新 → fetch 和 staged tree 一致性校验。不能重置/强推；终端不需要配置或输出秘密。
+- 首轮设置 upstream 因 single-branch fetch refspec 缺失失败，已为开发分支补 refspec 并恢复；本地辅助文档脚本的编码诊断失败/恢复见 STATUS。初始本地快照留在独立备份分支，不推送；正式 PR commit 通过 GitHub 接口创建，按 tree 校验而不混用本地快照 SHA。
 - 本次没有子智能体。主模型/档位要求 6.1 Sol/High，但缺少可靠回读接口，不声称核验；子智能体仅明确委派时使用 6 Luna/Max，不能未获限定权限并发访问服务器。
 
 ## 新会话恢复顺序
@@ -38,7 +39,8 @@
 当前任务：https://github.com/Zwhao0/20261015/issues/3；只审核 M0-1。
 请从 GitHub 读取 README、AGENTS、docs/STATUS、docs/HANDOFF、docs/M0_BASELINE、docs/M0_1_INVENTORY 和关联 Draft PR。
 分支：codex/m0-1-inventory；base 起点 main 41a30e011b3fb0074aaef7cb8c42070aef4562b1。
-PR URL / 最新 head SHA / CI run/job：从该分支 Draft PR 描述与 Checks 核实，不猜测。
+PR：https://github.com/Zwhao0/20261015/pull/4（Draft/Open/Unmerged）。
+最新 head SHA / CI run/job：从 PR 描述与 Checks 核实，不猜测。
 已完成：A/B 各四次真实只读平台/元数据调查、八条脱敏证据与摘要哈希、命令/失败记录。
 未完成：容器访问 BLOCKED；训练版本/任务来源/Rank/信号配置和详细同步误差 UNKNOWN；GPU/训练/API/故障注入测试 NOT_RUN。
 验证：核对精确 head 的文档检查、哈希/敏感审查及 CI；不能用旧 HEAD 的 PASS 替代。
