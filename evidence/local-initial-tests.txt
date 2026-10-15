@@ -1,0 +1,49 @@
+test_evidence_reference_must_be_logical_and_synthetic (test_contract.ValidateRecordTests) ... ok
+test_exit_declaration_must_match_raw_encoding (test_contract.ValidateRecordTests) ... ok
+test_invalid_utc_is_downgraded_with_reason (test_contract.ValidateRecordTests) ... ok
+test_metric_error_and_sentinel_are_normalized (test_contract.ValidateRecordTests) ... ok
+test_null_requires_reason_and_partial_identity_is_allowed (test_contract.ValidateRecordTests) ... ok
+test_process_exit_posix_wait_is_decoded_and_copy_is_independent (test_contract.ValidateRecordTests) ... ok
+test_real_origin_is_rejected_without_echoing_record_values (test_contract.ValidateRecordTests) ... ok
+test_run_outcome_requires_matching_authoritative_proof (test_contract.ValidateRecordTests) ... ok
+test_run_terminal_partial_proof_can_remain_unknown (test_contract.ValidateRecordTests) ... ok
+test_schema_version_required_and_exact (test_contract.ValidateRecordTests) ... ok
+test_source_status_contract_and_cross_source_rejection (test_contract.ValidateRecordTests) ... ok
+test_subprocess_negative_returncode_is_signal (test_contract.ValidateRecordTests) ... ok
+test_unknown_fields_and_nonfinite_or_boolean_numbers_are_rejected (test_contract.ValidateRecordTests) ... ok
+test_unverified_shell_code_stays_unknown (test_contract.ValidateRecordTests) ... ok
+test_zero_null_and_large_sequence_are_distinct (test_contract.ValidateRecordTests) ... ok
+test_T01_process_attempt_run_success_are_separate (test_replay.ReplayCases) ... ok
+test_T02_one_nonzero_is_not_whole_run_failure (test_replay.ReplayCases) ... ok
+test_T03_signal_does_not_prove_intent_or_root_cause (test_replay.ReplayCases) ... ok
+test_T04_unknown_shell_encoding_stays_unknown (test_replay.ReplayCases) ... ok
+test_T05_partial_identity_never_binds (test_replay.ReplayCases) ... ok
+test_T06_pid_reuse_new_attempt_and_boot_are_isolated (test_replay.ReplayCases) ... ok
+test_T07_periodic_stale_event_idle_failure_recovery (test_replay.ReplayCases) ... ok
+test_T08_duplicate_late_snapshot_conflict (test_replay.ReplayCases) ... ok
+test_T09_time_domains_and_wall_clock_rollback (test_replay.ReplayCases) ... FAIL
+test_T10_bad_frames_schema_gap_and_recovery (test_replay.ReplayCases) ... ok
+test_T11_progress_missing_unchanged_and_metrics_error (test_replay.ReplayCases) ... ok
+test_T12_launcher_locality_and_expected_cancel (test_replay.ReplayCases) ... ok
+test_T13_privacy_unknown_fields_limits_and_cli (test_replay.ReplayCases) ... ok
+test_T14_missing_members_restart_and_final_proofs (test_replay.ReplayCases) ... ok
+
+======================================================================
+FAIL: test_T09_time_domains_and_wall_clock_rollback (test_replay.ReplayCases)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>/tests/test_replay.py", line 133, in test_T09_time_domains_and_wall_clock_rollback
+    self.assertEqual([p["last_observed_age_ms"] for p in r["processes"]], [2.0, None])
+AssertionError: Lists differ: [None, None] != [2.0, None]
+
+First differing element 0:
+None
+2.0
+
+- [None, None]
++ [2.0, None]
+
+----------------------------------------------------------------------
+Ran 29 tests in 0.170s
+
+FAILED (failures=1)

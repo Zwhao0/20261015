@@ -1,3 +1,13 @@
+# M1-C1 当前执行状态（2026-10-15，Asia/Shanghai）
+
+- 用户已在本Codex会话明确授权“启动 M1-C1 离线开发”。[Issue #11](https://github.com/Zwhao0/20261015/issues/11)；PR #10已合并，开发起点 main `801fd156c2d39f696efa38811b0c0b433209b2d3`、tree `1f0136752f63cc2b9bca5a2ce0e2c2bac11394e3`，分支 `codex/m1-c1-offline-replay`。
+- 仅标准库/合成数据/虚拟时间的schema 0.1离线契约、回放、三层聚合及T01～T14；不访问旧项目、H800、凭据或训练数据，不使用历史C1容器，无GPU/服务器/训练/环境或容器操作。不合并，不推进M1-C2。
+- 实现及44项功能测试已集成；本地标准库unittest PASS（44项、0失败、0跳过），文档与差异检查分开保存于 [M1-C1证据](../evidence/README.md)，最终HEAD/tree/对应CI以Issue #11关联Draft PR为准；独立验收待ChatGPT检查，不自行宣布阶段通过。
+- 保留失败：子任务fixtures施工缺失14项错误、初版schema_version遗漏；首次集成T09序号冲突1失败及原fixture；首次文档检查两个证据文件尚未落盘导致exit1。恢复未放宽断言或文档检查，详情见 [使用及限制](M1_C1_OFFLINE.md)。
+- 恢复顺序：先核对Issue #11和本分支Draft PR真实head/tree/diff/CI，再读本节、M1_C1_OFFLINE、冻结M0_3_SLICE；保持当前改动，按M1文档分别运行功能与文档命令。仅继续本离线任务；M1-C2/现场/合并仍未授权。
+- 两个子任务分别实现契约与只读反例审查，未修改共享状态或合并；配置请求6Luna/Max但无可靠回读。未声称主智能体切换或完成外部ChatGPT独立验收。
+- 下面原M0状态及其“未授权/待审核”措辞按历史写入时间解释，全文保留，不覆盖本次明确授权。
+
 # 可恢复交接
 
 ## 当前授权与恢复锚点

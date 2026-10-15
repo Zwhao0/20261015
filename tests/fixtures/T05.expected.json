@@ -1,0 +1,91 @@
+{
+  "attempts": [],
+  "counts": {
+    "accepted": 1,
+    "arrivals": 1,
+    "duplicates": 0,
+    "invalid": 0
+  },
+  "diagnostics": [],
+  "events": [
+    {
+      "arrival_index": 1,
+      "record": {
+        "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "event_id": "evt_a83922ba07c84a629c973557f75e4fc3f6fc984f75bc26c51bf8f6d9bffa689a",
+        "event_type": "PROCESS_EXIT",
+        "evidence_ref": "SYN_EVIDENCE_SYN_SOURCE_A_0",
+        "identity": {
+          "attempt_id": "SYN_ATTEMPT_0",
+          "boot_id": "SYN_BOOT_A",
+          "gpu_uuids": null,
+          "host_id": "SYN_HOST_A",
+          "job_id": null,
+          "local_rank": 0,
+          "pid": 100,
+          "pid_namespace_id": null,
+          "process_start_ticks": null,
+          "rank": null,
+          "run_id": "SYN_RUN",
+          "scope": "worker",
+          "start_ticks_hz": 100,
+          "world_size": 1
+        },
+        "origin": "SYNTHETIC",
+        "payload": {
+          "authority": "parent_wait",
+          "exit_code": 0,
+          "expected_stop": false,
+          "raw_status": 0,
+          "raw_status_format": "posix_wait",
+          "scope": "worker",
+          "signal": null,
+          "status_kind": "EXITED"
+        },
+        "schema_version": "0.1",
+        "source_cursor": "SYN_CURSOR_0",
+        "source_epoch": "SYN_EPOCH_0",
+        "source_id": "SYN_SOURCE_A",
+        "source_seq": 0,
+        "time": {
+          "event_clock_domain_id": "SYN_CLOCK_A",
+          "event_monotonic_ns": 0,
+          "event_time_utc": "2026-10-15T00:00:00Z",
+          "observed_clock_domain_id": "SYN_CLOCK_A",
+          "observed_monotonic_ns": 0,
+          "observed_time_utc": "2026-10-15T00:00:00Z",
+          "uncertainty_ms": 0
+        },
+        "unknown_reasons": {
+          "identity.gpu_uuids": "not_supplied",
+          "identity.job_id": "not_supplied",
+          "identity.pid_namespace_id": "not_supplied",
+          "identity.process_start_ticks": "not_supplied",
+          "identity.rank": "not_supplied",
+          "payload.signal": "not_supplied"
+        }
+      },
+      "type": "NORMALIZED_EVENT"
+    }
+  ],
+  "exits": [],
+  "input_integrity": "COMPLETE",
+  "processes": [],
+  "runs": [],
+  "schema_version": "0.1",
+  "sources": [
+    {
+      "coverage_status": "UNKNOWN",
+      "history": [],
+      "last_record_age_ms": null,
+      "last_successful_read_monotonic_ns": null,
+      "producer_liveness": "UNKNOWN",
+      "read_status": "UNKNOWN",
+      "sequence_gap": false,
+      "source_epoch": "SYN_EPOCH_0",
+      "source_id": "SYN_SOURCE_A",
+      "source_mode": "UNKNOWN",
+      "status": "UNKNOWN"
+    }
+  ]
+}
